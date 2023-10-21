@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using System.Runtime.CompilerServices;
 
-#if NET8_0
+#if NET8_0_OR_GREATER
 using BitCaster = System.Runtime.CompilerServices.Unsafe;
 #else
 using BitCaster = GenericVector.Vector3;
@@ -102,7 +102,7 @@ public static class Vector3
     public static Vector3<T> AtanPi<T>(Vector3<T> x) where T : IFloatingPointIeee754<T> => new(T.AtanPi(x.X), T.AtanPi(x.Y), T.AtanPi(x.Z));
     public static Vector3<T> Cos<T>(Vector3<T> x) where T : IFloatingPointIeee754<T> => new(T.Cos(x.X), T.Cos(x.Y), T.Cos(x.Z));
     public static Vector3<T> CosPi<T>(Vector3<T> x) where T : IFloatingPointIeee754<T> => new(T.CosPi(x.X), T.CosPi(x.Y), T.CosPi(x.Z));
-#if NET8_0
+#if NET8_0_OR_GREATER
     public static Vector3<T> DegreesToRadians<T>(Vector3<T> degrees) where T : INumber<T>, ITrigonometricFunctions<T> => new(T.DegreesToRadians(degrees.X), T.DegreesToRadians(degrees.Y), T.DegreesToRadians(degrees.Z));
     public static Vector3<T> RadiansToDegrees<T>(Vector3<T> radians) where T : INumber<T>, ITrigonometricFunctions<T> => new(T.RadiansToDegrees(radians.X), T.RadiansToDegrees(radians.Y), T.RadiansToDegrees(radians.Z));
 #endif

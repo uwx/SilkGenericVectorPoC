@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Text;
 
-#if NET8_0
+#if NET8_0_OR_GREATER
 using BitCaster = System.Runtime.CompilerServices.Unsafe;
 #else
 using BitCaster = GenericVector.Vector3;
@@ -67,12 +67,7 @@ file static class Vector
     }
 }
 
-// [InlineArray(3)]
-// public struct Vec3Components<T>
-// {
-//     private T _element0;
-// }
-
+[StructLayout(LayoutKind.Sequential)]
 public partial struct Vector3<T> : IEquatable<Vector3<T>>, IEquatable<System.Numerics.Vector3>, ISpanFormattable
     where T : INumber<T>
 {
@@ -84,8 +79,6 @@ public partial struct Vector3<T> : IEquatable<Vector3<T>>, IEquatable<System.Num
 
     /// <summary>The Z component of the vector.</summary>
     public T Z;
-
-    // private unsafe fixed T Components[3];
     
     /// <summary>
     /// Returns the vector (0,0,0).
