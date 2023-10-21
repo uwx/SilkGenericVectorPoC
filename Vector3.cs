@@ -67,6 +67,10 @@ file static class Vector
     }
 }
 
+// internal interface IVectorN<TSelf, TComponent> : IEquatable<TSelf>, ISpanFormattable, IUtf8SpanFormattable, INumber<TSelf>
+//     where TSelf : IVectorN<TSelf, TComponent>
+//     where TComponent : INumber<TComponent>;
+
 [StructLayout(LayoutKind.Sequential)]
 public partial struct Vector3<T> : IEquatable<Vector3<T>>, IEquatable<System.Numerics.Vector3>, ISpanFormattable
     where T : INumber<T>
@@ -105,7 +109,7 @@ public partial struct Vector3<T> : IEquatable<Vector3<T>>, IEquatable<System.Num
     /// </summary>
     public static Vector3<T> UnitZ => new(T.Zero, T.Zero, T.One);
 
-    public const int Count = 3;
+    internal const int Count = 3;
 
     /// <summary>Gets or sets the element at the specified index.</summary>
     /// <param name="index">The index of the element to get or set.</param>
