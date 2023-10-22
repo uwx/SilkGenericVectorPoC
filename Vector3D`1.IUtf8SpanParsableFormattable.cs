@@ -1,14 +1,14 @@
-﻿#if NET8_0_OR_GREATER
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text.Unicode;
 
 namespace GenericVector;
 
-public partial struct Vector3<T> : IUtf8SpanFormattable, IUtf8SpanParsable<Vector3<T>>
+public partial struct Vector3D<T> :
+    IUtf8SpanFormattable,
+    IUtf8SpanParsable<Vector3D<T>>
 {
-    public readonly bool TryFormat(Span<byte> utf8Destination, out int bytesWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+    public bool TryFormat(Span<byte> utf8Destination, out int bytesWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
     {
         // Possible fast path for failure case:
         // if (destination.Length < 4) return false;
@@ -48,10 +48,10 @@ public partial struct Vector3<T> : IUtf8SpanFormattable, IUtf8SpanParsable<Vecto
         return Utf8.TryWrite(utf8Destination, ref handler, out bytesWritten);
     }
 
-    public static Vector3<T> Parse(ReadOnlySpan<byte> utf8Text, IFormatProvider? provider)
-        => TryParse(utf8Text, provider, out var result) ? result : throw new ArgumentException($"Failed to parse {nameof(Vector3)}<{typeof(T)}>");
+    public static Vector3D<T> Parse(ReadOnlySpan<byte> utf8Text, IFormatProvider? provider)
+        => TryParse(utf8Text, provider, out var result) ? result : throw new ArgumentException($"Failed to parse {nameof(Vector3D)}<{typeof(T)}>");
 
-    public static bool TryParse(ReadOnlySpan<byte> s, IFormatProvider? provider, out Vector3<T> result)
+    public static bool TryParse(ReadOnlySpan<byte> s, IFormatProvider? provider, out Vector3D<T> result)
     {
         result = default;
 
@@ -97,10 +97,10 @@ public partial struct Vector3<T> : IUtf8SpanFormattable, IUtf8SpanParsable<Vecto
             if (!T.TryParse(s, provider, out z)) return false;
         }
 
-        result = new Vector3<T>(x, y, z);
+        result = new Vector3D<T>(x, y, z);
         return true;
 
-        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = nameof(NumberGroupSeparatorTChar))] static extern ReadOnlySpan<TChar> NumberGroupSeparatorTChar<TChar>(NumberFormatInfo? c) where TChar : unmanaged;
+        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = nameof(NumberGroupSeparatorTChar))]
+        static extern ReadOnlySpan<TChar> NumberGroupSeparatorTChar<TChar>(NumberFormatInfo? c) where TChar : unmanaged;
     }
 }
-#endif
