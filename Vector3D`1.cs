@@ -13,7 +13,7 @@ namespace GenericVector;
 //     where TComponent : INumber<TComponent>;
 
 [StructLayout(LayoutKind.Sequential), DataContract, Serializable]
-public readonly partial struct Vector3D<T> : IVector<Vector3D<T>, T>, IVectorAlso<Vector3D<T>, T>, IEquatable<System.Numerics.Vector3>, ISpanFormattable
+public readonly partial struct Vector3D<T> : IVector<Vector3D<T>, T>, IVectorAlso<Vector3D<T>, T>, IEquatable<Vector3>, ISpanFormattable
     where T : INumberBase<T>
 {
     public ReadOnlySpan<T> Components
@@ -164,11 +164,11 @@ public readonly partial struct Vector3D<T> : IVector<Vector3D<T>, T>, IVectorAls
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Equals(System.Numerics.Vector3 other)
+    public bool Equals(Vector3 other)
     {
         if (typeof(T) == typeof(float) && Vector128.IsHardwareAccelerated)
         {
-            return Unsafe.BitCast<Vector3D<T>, System.Numerics.Vector3>(this).AsVector128().Equals(other.AsVector128());
+            return Unsafe.BitCast<Vector3D<T>, Vector3>(this).AsVector128().Equals(other.AsVector128());
         }
         
         return float.CreateTruncating(X).Equals(other.X) &&
@@ -224,25 +224,39 @@ public readonly partial struct Vector3D<T> : IVector<Vector3D<T>, T>, IVectorAls
 
     public Vector3D<TOther> As<TOther>() where TOther : INumberBase<TOther>
     {
+        if (SpeedHelpers.TryFastConvert<Vector3D<T>, T, Vector3D<TOther>, TOther>(this, out var result))
+        {
+            return result;
+        }
+
         return new Vector3D<TOther>(
             TOther.CreateTruncating(X),
             TOther.CreateTruncating(Y),
             TOther.CreateTruncating(Z)
         );
     } 
-
-    public static explicit operator System.Numerics.Vector3(Vector3D<T> self)
+    
+    private Vector3D<TOther> AsChecked<TOther>() where TOther : INumberBase<TOther>
     {
-        return new System.Numerics.Vector3(
+        return new Vector3D<TOther>(
+            TOther.CreateChecked(X),
+            TOther.CreateChecked(Y),
+            TOther.CreateChecked(Z)
+        );
+    } 
+
+    public static explicit operator Vector3(Vector3D<T> self)
+    {
+        return new Vector3(
             float.CreateTruncating(self.X),
             float.CreateTruncating(self.Y),
             float.CreateTruncating(self.Z)
         );
     }
     
-    public static explicit operator checked System.Numerics.Vector3(Vector3D<T> self)
+    public static explicit operator checked Vector3(Vector3D<T> self)
     {
-        return new System.Numerics.Vector3(
+        return new Vector3(
             float.CreateChecked(self.X),
             float.CreateChecked(self.Y),
             float.CreateChecked(self.Z)
@@ -265,30 +279,45 @@ public readonly partial struct Vector3D<T> : IVector<Vector3D<T>, T>, IVectorAls
     public static explicit operator Vector3D<decimal>(Vector3D<T> self) => self.As<decimal>();
     public static explicit operator Vector3D<Complex>(Vector3D<T> self) => self.As<Complex>();
     public static explicit operator Vector3D<BigInteger>(Vector3D<T> self) => self.As<BigInteger>();
+    
+    public static explicit operator checked Vector3D<byte>(Vector3D<T> self) => self.AsChecked<byte>();
+    public static explicit operator checked Vector3D<sbyte>(Vector3D<T> self) => self.AsChecked<sbyte>();
+    public static explicit operator checked Vector3D<short>(Vector3D<T> self) => self.AsChecked<short>();
+    public static explicit operator checked Vector3D<ushort>(Vector3D<T> self) => self.AsChecked<ushort>();
+    public static explicit operator checked Vector3D<int>(Vector3D<T> self) => self.AsChecked<int>();
+    public static explicit operator checked Vector3D<uint>(Vector3D<T> self) => self.AsChecked<uint>();
+    public static explicit operator checked Vector3D<long>(Vector3D<T> self) => self.AsChecked<long>();
+    public static explicit operator checked Vector3D<ulong>(Vector3D<T> self) => self.AsChecked<ulong>();
+    public static explicit operator checked Vector3D<Int128>(Vector3D<T> self) => self.AsChecked<Int128>();
+    public static explicit operator checked Vector3D<UInt128>(Vector3D<T> self) => self.AsChecked<UInt128>();
+    public static explicit operator checked Vector3D<Half>(Vector3D<T> self) => self.AsChecked<Half>();
+    public static explicit operator checked Vector3D<float>(Vector3D<T> self) => self.AsChecked<float>();
+    public static explicit operator checked Vector3D<double>(Vector3D<T> self) => self.AsChecked<double>();
+    public static explicit operator checked Vector3D<decimal>(Vector3D<T> self) => self.AsChecked<decimal>();
+    public static explicit operator checked Vector3D<Complex>(Vector3D<T> self) => self.AsChecked<Complex>();
+    public static explicit operator checked Vector3D<BigInteger>(Vector3D<T> self) => self.AsChecked<BigInteger>();
+
+    public static explicit operator Vector3D<T>(Vector3 self) => new(T.CreateTruncating(self.X), T.CreateTruncating(self.Y), T.CreateTruncating(self.Z));
+    public static explicit operator checked Vector3D<T>(Vector3 self) => new(T.CreateChecked(self.X), T.CreateChecked(self.Y), T.CreateChecked(self.Z));
 
     public static explicit operator Vector2D<T>(Vector3D<T> self) => new(self.X, self.Y);
     public static explicit operator Vector4D<T>(Vector3D<T> self) => new(self, T.Zero);
+
+    public static explicit operator Vector3D<T>(Vector2 self) => new(T.CreateTruncating(self.X), T.CreateTruncating(self.Y), T.Zero);
+    public static explicit operator Vector3D<T>(Vector4 self) => new(T.CreateTruncating(self.X), T.CreateTruncating(self.Y), T.CreateTruncating(self.Z));
     
-    public static explicit operator Vector3D<T>(System.Numerics.Vector3 self)
-    {
-        return new Vector3D<T>(
-            T.CreateTruncating(self.X),
-            T.CreateTruncating(self.Y),
-            T.CreateTruncating(self.Z)
-        );
-    }
-    
-    public static explicit operator checked Vector3D<T>(System.Numerics.Vector3 self)
-    {
-        return new Vector3D<T>(
-            T.CreateChecked(self.X),
-            T.CreateChecked(self.Y),
-            T.CreateChecked(self.Z)
-        );
-    }
+    public static explicit operator checked Vector3D<T>(Vector2 self) => new(T.CreateChecked(self.X), T.CreateChecked(self.Y), T.Zero);
+    public static explicit operator checked Vector3D<T>(Vector4 self) => new(T.CreateChecked(self.X), T.CreateChecked(self.Y), T.CreateChecked(self.Z));
 
     public static implicit operator Vector3D<T>((T x, T y, T z) components)
         => new(components.x, components.y, components.z);
+
+    public void Deconstruct(out T x, out T y, out T z)
+    {
+        x = X;
+        y = Y;
+        z = Z;
+    }
 
     #region Operators
 

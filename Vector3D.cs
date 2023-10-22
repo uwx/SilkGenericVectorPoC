@@ -517,6 +517,7 @@ public static partial class Vector3D
     // Equivalent implementing ILogarithmicFunctions<System.Runtime.Intrinsics.Vector3>
     public static Vector3D<T> Log<T>(Vector3D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log(x.X), T.Log(x.Y), T.Log(x.Z));
     public static Vector3D<T> Log<T>(Vector3D<T> x, Vector3D<T> newBase) where T : ILogarithmicFunctions<T> => new(T.Log(x.X, newBase.X), T.Log(x.Y, newBase.Y), T.Log(x.Z, newBase.Z));
+    public static Vector3D<T> Log<T>(Vector3D<T> x, T newBase) where T : ILogarithmicFunctions<T> => new(T.Log(x.X, newBase), T.Log(x.Y, newBase), T.Log(x.Z, newBase));
     public static Vector3D<T> LogP1<T>(Vector3D<T> x) where T : ILogarithmicFunctions<T> => Log(x + Vector3D<T>.One);
     public static Vector3D<T> Log2<T>(Vector3D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log2(x.X), T.Log2(x.Y), T.Log2(x.Z));
     public static Vector3D<T> Log2P1<T>(Vector3D<T> x) where T : ILogarithmicFunctions<T> => Log2(x + Vector3D<T>.One);
@@ -533,12 +534,52 @@ public static partial class Vector3D
 
     // Equivalent implementing IPowerFunctions<System.Runtime.Intrinsics.Vector3>
     public static Vector3D<T> Pow<T>(Vector3D<T> x, Vector3D<T> y) where T : IPowerFunctions<T> => new(T.Pow(x.X, y.X), T.Pow(x.Y, y.Y), T.Pow(x.Z, y.Z));
+    public static Vector3D<T> Pow<T>(Vector3D<T> x, T y) where T : IPowerFunctions<T> => new(T.Pow(x.X, y), T.Pow(x.Y, y), T.Pow(x.Z, y));
 
     // Equivalent implementing IRootFunctions<System.Runtime.Intrinsics.Vector3>
     public static Vector3D<T> Cbrt<T>(Vector3D<T> x) where T : IRootFunctions<T> => new(T.Cbrt(x.X), T.Cbrt(x.Y), T.Cbrt(x.Z));
     public static Vector3D<T> Hypot<T>(Vector3D<T> x, Vector3D<T> y) where T : IRootFunctions<T> => new(T.Hypot(x.X, y.X), T.Hypot(x.Y, y.Y), T.Hypot(x.Z, y.Z));
+    public static Vector3D<T> Hypot<T>(Vector3D<T> x, T y) where T : IRootFunctions<T> => new(T.Hypot(x.X, y), T.Hypot(x.Y, y), T.Hypot(x.Z, y));
     public static Vector3D<T> RootN<T>(Vector3D<T> x, int n) where T : IRootFunctions<T> => new(T.RootN(x.X, n), T.RootN(x.Y, n), T.RootN(x.Z, n));
+    
+    // IFloatingPoint<TSelf>
+    public static Vector3D<T> Round<T>(Vector3D<T> x) where T : IFloatingPoint<T> => new(T.Round(x.X), T.Round(x.Y), T.Round(x.Z));
+    public static Vector3D<T> Round<T>(Vector3D<T> x, int digits) where T : IFloatingPoint<T> => new(T.Round(x.X, digits), T.Round(x.Y, digits), T.Round(x.Z, digits));
+    public static Vector3D<T> Round<T>(Vector3D<T> x, MidpointRounding mode) where T : IFloatingPoint<T> => new(T.Round(x.X, mode), T.Round(x.Y, mode), T.Round(x.Z, mode));
+    public static Vector3D<T> Round<T>(Vector3D<T> x, int digits, MidpointRounding mode) where T : IFloatingPoint<T> => new(T.Round(x.X, digits, mode), T.Round(x.Y, digits, mode), T.Round(x.Z, digits, mode));
+    public static Vector3D<T> Truncate<T>(Vector3D<T> x) where T : IFloatingPoint<T> => new(T.Truncate(x.X), T.Truncate(x.Y), T.Truncate(x.Z));
 
+    // IFloatingPointIeee754<TSelf>
+    public static Vector3D<T> Atan2<T>(Vector3D<T> x, Vector3D<T> y) where T : IFloatingPointIeee754<T> => new(T.Atan2(x.X, y.X), T.Atan2(x.Y, y.Y), T.Atan2(x.Z, y.Z));
+    public static Vector3D<T> Atan2Pi<T>(Vector3D<T> x, Vector3D<T> y) where T : IFloatingPointIeee754<T> => new(T.Atan2Pi(x.X, y.X), T.Atan2Pi(x.Y, y.Y), T.Atan2Pi(x.Z, y.Z));
+    public static Vector3D<T> Atan2<T>(Vector3D<T> x, T y) where T : IFloatingPointIeee754<T> => new(T.Atan2(x.X, y), T.Atan2(x.Y, y), T.Atan2(x.Z, y));
+    public static Vector3D<T> Atan2Pi<T>(Vector3D<T> x, T y) where T : IFloatingPointIeee754<T> => new(T.Atan2Pi(x.X, y), T.Atan2Pi(x.Y, y), T.Atan2Pi(x.Z, y));
+    public static Vector3D<T> BitDecrement<T>(Vector3D<T> x) where T : IFloatingPointIeee754<T> => new(T.BitDecrement(x.X), T.BitDecrement(x.Y), T.BitDecrement(x.Z));
+    public static Vector3D<T> BitIncrement<T>(Vector3D<T> x) where T : IFloatingPointIeee754<T> => new(T.BitIncrement(x.X), T.BitIncrement(x.Y), T.BitIncrement(x.Z));
+    public static Vector3D<T> FusedMultiplyAdd<T>(Vector3D<T> left, Vector3D<T> right, Vector3D<T> addend) where T : IFloatingPointIeee754<T> => new(T.FusedMultiplyAdd(left.X, right.X, addend.X), T.FusedMultiplyAdd(left.Y, right.Y, addend.Y), T.FusedMultiplyAdd(left.Z, right.Z, addend.Z));
+    public static Vector3D<T> Lerp<T>(Vector3D<T> value1, Vector3D<T> value2, Vector3D<T> amount) where T : IFloatingPointIeee754<T> => new(T.Lerp(value1.X, value2.X, amount.X), T.Lerp(value1.Y, value2.Y, amount.Y), T.Lerp(value1.Z, value2.Z, amount.Z));
+    public static Vector3D<T> ReciprocalEstimate<T>(Vector3D<T> x) where T : IFloatingPointIeee754<T> => new(T.ReciprocalEstimate(x.X), T.ReciprocalEstimate(x.Y), T.ReciprocalEstimate(x.Z));
+    public static Vector3D<T> ReciprocalSqrtEstimate<T>(Vector3D<T> x) where T : IFloatingPointIeee754<T> => new(T.ReciprocalSqrtEstimate(x.X), T.ReciprocalSqrtEstimate(x.Y), T.ReciprocalSqrtEstimate(x.Z));
+    
+    // INumber<T>
+    // public static Vector3D<T> Clamp<T>(Vector3D<T> value, Vector3D<T> min, Vector3D<T> max) where T : INumber<T> => new(T.Clamp(x.X), T.Clamp(x.Y), T.Clamp(x.Z));
+    public static Vector3D<T> CopySign<T>(Vector3D<T> value, Vector3D<T> sign) where T : INumber<T> => new(T.CopySign(value.X, sign.X), T.CopySign(value.Y, sign.Y), T.CopySign(value.Z, sign.Z));
+    public static Vector3D<T> CopySign<T>(Vector3D<T> value, T sign) where T : INumber<T> => new(T.CopySign(value.X, sign), T.CopySign(value.Y, sign), T.CopySign(value.Z, sign));
+    public static Vector3D<T> MaxNumber<T>(Vector3D<T> x, Vector3D<T> y) where T : INumber<T> => new(T.MaxNumber(x.X, y.X), T.MaxNumber(x.Y, y.Y), T.MaxNumber(x.Z, y.Z));
+    public static Vector3D<T> MinNumber<T>(Vector3D<T> x, Vector3D<T> y) where T : INumber<T> => new(T.MinNumber(x.X, y.X), T.MinNumber(x.Y, y.Y), T.MinNumber(x.Z, y.Z));
+
+    // INumberBase<T>
+    // public static Vector3D<T> MaxMagnitude<T>(Vector3D<T> x, Vector3D<T> y) where T : INumberBase<T> => new(T.MaxMagnitude(x.X, y.X), T.MaxMagnitude(x.Y, y.Y), T.MaxMagnitude(x.Z, y.Z));
+    // public static Vector3D<T> MaxMagnitudeNumber<T>(Vector3D<T> x, Vector3D<T> y) where T : INumberBase<T> => new(T.MaxMagnitudeNumber(x.X, y.X), T.MaxMagnitudeNumber(x.Y, y.Y), T.MaxMagnitudeNumber(x.Z, y.Z));
+    // public static Vector3D<T> MinMagnitude<T>(Vector3D<T> x, Vector3D<T> y) where T : INumberBase<T> => new(T.MinMagnitude(x.X, y.X), T.MinMagnitude(x.Y, y.Y), T.MinMagnitude(x.Z, y.Z));
+    // public static Vector3D<T> MinMagnitudeNumber<T>(Vector3D<T> x, Vector3D<T> y) where T : INumberBase<T> => new(T.MinMagnitudeNumber(x.X, y.X), T.MinMagnitudeNumber(x.Y, y.Y), T.MinMagnitudeNumber(x.Z, y.Z));
+    // (there's no reason you would want these.)
+
+    // IFloatingPointIeee754<TSelf>
+    public static Vector3D<int> ILogB<T>(Vector3D<T> x) where T : IFloatingPointIeee754<T> => new(T.ILogB(x.X), T.ILogB(x.Y), T.ILogB(x.Z));
+    public static Vector3D<T> ScaleB<T>(Vector3D<T> x, Vector3D<int> n) where T : IFloatingPointIeee754<T> => new(T.ScaleB(x.X, n.X), T.ScaleB(x.Y, n.Y), T.ScaleB(x.Z, n.Z));
+    public static Vector3D<T> ScaleB<T>(Vector3D<T> x, int n) where T : IFloatingPointIeee754<T> => new(T.ScaleB(x.X, n), T.ScaleB(x.Y, n), T.ScaleB(x.Z, n));
+    
     public static Vector3D<int> RoundToInt<T>(Vector3D<T> vector) where T : IFloatingPoint<T>
     {
         return new Vector3D<int>(

@@ -1,5 +1,8 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 
 namespace GenericVector;
 
@@ -33,6 +36,226 @@ internal static class SpeedHelpers
 
         return Unsafe.As<Storage128<T>, TOut>(ref storage);
     }
+
+    public static unsafe bool TryFastConvert<T, TElem, TOut, TOutElem>(T value, [MaybeNullWhen(false)] out TOut result)
+    {
+        if (Vector64.IsHardwareAccelerated && Vector64<TElem>.IsSupported && Vector64<TElem>.Count >= sizeof(T) / sizeof(TElem))
+        {
+            if (typeof(TElem) == typeof(Int64) && typeof(TOutElem) == typeof(Double)) {
+                var v = Vector64.ConvertToDouble(PadToVector<T, TElem, Vector64<Int64>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector64<Double>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(UInt64) && typeof(TOutElem) == typeof(Double)) {
+                var v = Vector64.ConvertToDouble(PadToVector<T, TElem, Vector64<UInt64>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector64<Double>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Single) && typeof(TOutElem) == typeof(Int32)) {
+                var v = Vector64.ConvertToInt32(PadToVector<T, TElem, Vector64<Single>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector64<Int32>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Double) && typeof(TOutElem) == typeof(Int64)) {
+                var v = Vector64.ConvertToInt64(PadToVector<T, TElem, Vector64<Double>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector64<Int64>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Int32) && typeof(TOutElem) == typeof(Single)) {
+                var v = Vector64.ConvertToSingle(PadToVector<T, TElem, Vector64<Int32>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector64<Single>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(UInt32) && typeof(TOutElem) == typeof(Single)) {
+                var v = Vector64.ConvertToSingle(PadToVector<T, TElem, Vector64<UInt32>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector64<Single>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Single) && typeof(TOutElem) == typeof(UInt32)) {
+                var v = Vector64.ConvertToUInt32(PadToVector<T, TElem, Vector64<Single>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector64<UInt32>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Double) && typeof(TOutElem) == typeof(UInt64)) {
+                var v = Vector64.ConvertToUInt64(PadToVector<T, TElem, Vector64<Double>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector64<UInt64>, byte>(ref v));
+                return true;
+            }
+        }
+
+        if (Vector128.IsHardwareAccelerated && Vector128<TElem>.IsSupported && Vector128<TElem>.Count >= sizeof(T) / sizeof(TElem))
+        {
+            if (typeof(TElem) == typeof(Int64) && typeof(TOutElem) == typeof(Double)) {
+                var v = Vector128.ConvertToDouble(PadToVector<T, TElem, Vector128<Int64>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector128<Double>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(UInt64) && typeof(TOutElem) == typeof(Double)) {
+                var v = Vector128.ConvertToDouble(PadToVector<T, TElem, Vector128<UInt64>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector128<Double>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Single) && typeof(TOutElem) == typeof(Int32)) {
+                var v = Vector128.ConvertToInt32(PadToVector<T, TElem, Vector128<Single>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector128<Int32>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Double) && typeof(TOutElem) == typeof(Int64)) {
+                var v = Vector128.ConvertToInt64(PadToVector<T, TElem, Vector128<Double>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector128<Int64>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Int32) && typeof(TOutElem) == typeof(Single)) {
+                var v = Vector128.ConvertToSingle(PadToVector<T, TElem, Vector128<Int32>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector128<Single>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(UInt32) && typeof(TOutElem) == typeof(Single)) {
+                var v = Vector128.ConvertToSingle(PadToVector<T, TElem, Vector128<UInt32>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector128<Single>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Single) && typeof(TOutElem) == typeof(UInt32)) {
+                var v = Vector128.ConvertToUInt32(PadToVector<T, TElem, Vector128<Single>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector128<UInt32>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Double) && typeof(TOutElem) == typeof(UInt64)) {
+                var v = Vector128.ConvertToUInt64(PadToVector<T, TElem, Vector128<Double>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector128<UInt64>, byte>(ref v));
+                return true;
+            }
+        }
+
+        if (Vector256.IsHardwareAccelerated && Vector256<TElem>.IsSupported && Vector256<TElem>.Count >= sizeof(T) / sizeof(TElem))
+        {
+            if (typeof(TElem) == typeof(Int64) && typeof(TOutElem) == typeof(Double)) {
+                var v = Vector256.ConvertToDouble(PadToVector<T, TElem, Vector256<Int64>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector256<Double>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(UInt64) && typeof(TOutElem) == typeof(Double)) {
+                var v = Vector256.ConvertToDouble(PadToVector<T, TElem, Vector256<UInt64>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector256<Double>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Single) && typeof(TOutElem) == typeof(Int32)) {
+                var v = Vector256.ConvertToInt32(PadToVector<T, TElem, Vector256<Single>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector256<Int32>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Double) && typeof(TOutElem) == typeof(Int64)) {
+                var v = Vector256.ConvertToInt64(PadToVector<T, TElem, Vector256<Double>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector256<Int64>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Int32) && typeof(TOutElem) == typeof(Single)) {
+                var v = Vector256.ConvertToSingle(PadToVector<T, TElem, Vector256<Int32>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector256<Single>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(UInt32) && typeof(TOutElem) == typeof(Single)) {
+                var v = Vector256.ConvertToSingle(PadToVector<T, TElem, Vector256<UInt32>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector256<Single>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Single) && typeof(TOutElem) == typeof(UInt32)) {
+                var v = Vector256.ConvertToUInt32(PadToVector<T, TElem, Vector256<Single>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector256<UInt32>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Double) && typeof(TOutElem) == typeof(UInt64)) {
+                var v = Vector256.ConvertToUInt64(PadToVector<T, TElem, Vector256<Double>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector256<UInt64>, byte>(ref v));
+                return true;
+            }
+        }
+
+        if (Vector512.IsHardwareAccelerated && Vector512<TElem>.IsSupported && Vector512<TElem>.Count >= sizeof(T) / sizeof(TElem))
+        {
+            if (typeof(TElem) == typeof(Int64) && typeof(TOutElem) == typeof(Double)) {
+                var v = Vector512.ConvertToDouble(PadToVector<T, TElem, Vector512<Int64>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector512<Double>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(UInt64) && typeof(TOutElem) == typeof(Double)) {
+                var v = Vector512.ConvertToDouble(PadToVector<T, TElem, Vector512<UInt64>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector512<Double>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Single) && typeof(TOutElem) == typeof(Int32)) {
+                var v = Vector512.ConvertToInt32(PadToVector<T, TElem, Vector512<Single>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector512<Int32>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Double) && typeof(TOutElem) == typeof(Int64)) {
+                var v = Vector512.ConvertToInt64(PadToVector<T, TElem, Vector512<Double>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector512<Int64>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Int32) && typeof(TOutElem) == typeof(Single)) {
+                var v = Vector512.ConvertToSingle(PadToVector<T, TElem, Vector512<Int32>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector512<Single>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(UInt32) && typeof(TOutElem) == typeof(Single)) {
+                var v = Vector512.ConvertToSingle(PadToVector<T, TElem, Vector512<UInt32>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector512<Single>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Single) && typeof(TOutElem) == typeof(UInt32)) {
+                var v = Vector512.ConvertToUInt32(PadToVector<T, TElem, Vector512<Single>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector512<UInt32>, byte>(ref v));
+                return true;
+            }
+            if (typeof(TElem) == typeof(Double) && typeof(TOutElem) == typeof(UInt64)) {
+                var v = Vector512.ConvertToUInt64(PadToVector<T, TElem, Vector512<Double>>(ref value));
+                result = Unsafe.ReadUnaligned<TOut>(ref Unsafe.As<Vector512<UInt64>, byte>(ref v));
+                return true;
+            }
+        }
+
+        result = default;
+        return false;
+    }
+
+    public static unsafe bool TryFastDotUpTo4<T, TElem>(T value1, T value2, [MaybeNullWhen(false)] out TElem result)
+    {
+        if (Vector64.IsHardwareAccelerated && Vector64<TElem>.IsSupported && Vector64<TElem>.Count >= sizeof(T) / sizeof(TElem))
+        {
+            var a = PadToVector<T, TElem, Vector64<TElem>>(ref value1);
+            var b = PadToVector<T, TElem, Vector64<TElem>>(ref value2);
+            result = Vector64.Sum(a * b);
+            return true;
+        }
+
+        if (Vector128.IsHardwareAccelerated && Vector128<TElem>.IsSupported && Vector128<TElem>.Count >= sizeof(T) / sizeof(TElem))
+        {
+            var a = PadToVector<T, TElem, Vector128<TElem>>(ref value1);
+            var b = PadToVector<T, TElem, Vector128<TElem>>(ref value2);
+            result = Vector128.Sum(a * b);
+            return true;
+        }
+
+        if (Vector256.IsHardwareAccelerated && Vector256<TElem>.IsSupported && Vector256<TElem>.Count >= sizeof(T) / sizeof(TElem))
+        {
+            var a = PadToVector<T, TElem, Vector256<TElem>>(ref value1);
+            var b = PadToVector<T, TElem, Vector256<TElem>>(ref value2);
+            result = Vector256.Sum(a * b);
+            return true;
+        }
+
+        if (Vector512.IsHardwareAccelerated && Vector512<TElem>.IsSupported && Vector512<TElem>.Count >= sizeof(T) / sizeof(TElem))
+        {
+            var a = PadToVector<T, TElem, Vector512<TElem>>(ref value1);
+            var b = PadToVector<T, TElem, Vector512<TElem>>(ref value2);
+            result = Vector512.Sum(a * b);
+            return true;
+        }
+
+        result = default;
+        return false;
+    }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static unsafe bool FastEqualsUpTo4<T, TElem>(T value1, T value2)
@@ -58,6 +281,11 @@ internal static class SpeedHelpers
         if (Vector256.IsHardwareAccelerated && Vector256<TElem>.IsSupported && Vector256<TElem>.Count >= sizeof(T) / sizeof(TElem))
         {
             return PadToVector<T, TElem, Vector256<TElem>>(ref value1).Equals(PadToVector<T, TElem, Vector256<TElem>>(ref value2));
+        }
+        
+        if (Vector512.IsHardwareAccelerated && Vector512<TElem>.IsSupported && Vector512<TElem>.Count >= sizeof(T) / sizeof(TElem))
+        {
+            return PadToVector<T, TElem, Vector512<TElem>>(ref value1).Equals(PadToVector<T, TElem, Vector512<TElem>>(ref value2));
         }
 
         return SoftwareFallback(in value1, in value2);
