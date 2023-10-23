@@ -22,7 +22,7 @@ public readonly partial struct Vector2D<T> : IVector<Vector2D<T>, T>, IVectorAls
 
     internal const int Count = 2;
 
-    /// <summary>Creates a new <see cref="Vector2D<T>" /> object whose two elements have the same value.</summary>
+    /// <summary>Creates a new <see cref="Vector2D{T}" /> object whose two elements have the same value.</summary>
     /// <param name="value">The value to assign to both elements.</param>
     public Vector2D(T value) : this(value, value)
     {
@@ -87,7 +87,7 @@ public readonly partial struct Vector2D<T> : IVector<Vector2D<T>, T>, IVectorAls
     /// <param name="left">The first vector to add.</param>
     /// <param name="right">The second vector to add.</param>
     /// <returns>The summed vector.</returns>
-    /// <remarks>The <see cref="op_Addition" /> method defines the addition operation for <see cref="Vector2D<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="op_Addition" /> method defines the addition operation for <see cref="Vector2D{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2D<T> operator +(Vector2D<T> left, Vector2D<T> right)
     {
@@ -101,7 +101,7 @@ public readonly partial struct Vector2D<T> : IVector<Vector2D<T>, T>, IVectorAls
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>The vector that results from dividing <paramref name="left" /> by <paramref name="right" />.</returns>
-    /// <remarks>The <see cref="Vector2D<T>.op_Division" /> method defines the division operation for <see cref="Vector2D<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="Vector2D{T}.op_Division" /> method defines the division operation for <see cref="Vector2D{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2D<T> operator /(Vector2D<T> left, Vector2D<T> right)
     {
@@ -115,7 +115,7 @@ public readonly partial struct Vector2D<T> : IVector<Vector2D<T>, T>, IVectorAls
     /// <param name="value1">The vector.</param>
     /// <param name="value2">The scalar value.</param>
     /// <returns>The result of the division.</returns>
-    /// <remarks>The <see cref="Vector2D<T>.op_Division" /> method defines the division operation for <see cref="Vector2D<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="Vector2D{T}.op_Division" /> method defines the division operation for <see cref="Vector2D{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2D<T> operator /(Vector2D<T> value1, T value2)
     {
@@ -126,7 +126,7 @@ public readonly partial struct Vector2D<T> : IVector<Vector2D<T>, T>, IVectorAls
     /// <param name="left">The first vector to compare.</param>
     /// <param name="right">The second vector to compare.</param>
     /// <returns><see langword="true" /> if <paramref name="left" /> and <paramref name="right" /> are equal; otherwise, <see langword="false" />.</returns>
-    /// <remarks>Two <see cref="Vector2D<T>" /> objects are equal if each value in <paramref name="left" /> is equal to the corresponding value in <paramref name="right" />.</remarks>
+    /// <remarks>Two <see cref="Vector2D{T}" /> objects are equal if each value in <paramref name="left" /> is equal to the corresponding value in <paramref name="right" />.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(Vector2D<T> left, Vector2D<T> right)
     {
@@ -148,7 +148,7 @@ public readonly partial struct Vector2D<T> : IVector<Vector2D<T>, T>, IVectorAls
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>The element-wise product vector.</returns>
-    /// <remarks>The <see cref="Vector2D<T>.op_Multiply" /> method defines the multiplication operation for <see cref="Vector2D<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="Vector2D{T}.op_Multiply" /> method defines the multiplication operation for <see cref="Vector2D{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2D<T> operator *(Vector2D<T> left, Vector2D<T> right)
     {
@@ -162,7 +162,7 @@ public readonly partial struct Vector2D<T> : IVector<Vector2D<T>, T>, IVectorAls
     /// <param name="left">The vector.</param>
     /// <param name="right">The scalar value.</param>
     /// <returns>The scaled vector.</returns>
-    /// <remarks>The <see cref="Vector2D<T>.op_Multiply" /> method defines the multiplication operation for <see cref="Vector2D<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="Vector2D{T}.op_Multiply" /> method defines the multiplication operation for <see cref="Vector2D{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2D<T> operator *(Vector2D<T> left, T right)
     {
@@ -173,7 +173,7 @@ public readonly partial struct Vector2D<T> : IVector<Vector2D<T>, T>, IVectorAls
     /// <param name="left">The vector.</param>
     /// <param name="right">The scalar value.</param>
     /// <returns>The scaled vector.</returns>
-    /// <remarks>The <see cref="Vector2D<T>.op_Multiply" /> method defines the multiplication operation for <see cref="Vector2D<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="Vector2D{T}.op_Multiply" /> method defines the multiplication operation for <see cref="Vector2D{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2D<T> operator *(T left, Vector2D<T> right)
     {
@@ -184,7 +184,7 @@ public readonly partial struct Vector2D<T> : IVector<Vector2D<T>, T>, IVectorAls
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>The vector that results from subtracting <paramref name="right" /> from <paramref name="left" />.</returns>
-    /// <remarks>The <see cref="op_Subtraction" /> method defines the subtraction operation for <see cref="Vector2D<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="op_Subtraction" /> method defines the subtraction operation for <see cref="Vector2D{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2D<T> operator -(Vector2D<T> left, Vector2D<T> right)
     {
@@ -197,7 +197,7 @@ public readonly partial struct Vector2D<T> : IVector<Vector2D<T>, T>, IVectorAls
     /// <summary>Negates the specified vector.</summary>
     /// <param name="value">The vector to negate.</param>
     /// <returns>The negated vector.</returns>
-    /// <remarks>The <see cref="op_UnaryNegation" /> method defines the unary negation operation for <see cref="Vector2D<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="op_UnaryNegation" /> method defines the unary negation operation for <see cref="Vector2D{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2D<T> operator -(Vector2D<T> value)
     {
@@ -270,7 +270,7 @@ public readonly partial struct Vector2D<T> : IVector<Vector2D<T>, T>, IVectorAls
     /// <summary>Returns a value that indicates whether this instance and a specified object are equal.</summary>
     /// <param name="obj">The object to compare with the current instance.</param>
     /// <returns><see langword="true" /> if the current instance and <paramref name="obj" /> are equal; otherwise, <see langword="false" />. If <paramref name="obj" /> is <see langword="null" />, the method returns <see langword="false" />.</returns>
-    /// <remarks>The current instance and <paramref name="obj" /> are equal if <paramref name="obj" /> is a <see cref="Vector2D<T>" /> object and their <see cref="X" /> and <see cref="Y" /> elements are equal.</remarks>
+    /// <remarks>The current instance and <paramref name="obj" /> are equal if <paramref name="obj" /> is a <see cref="Vector2D{T}" /> object and their <see cref="X" /> and <see cref="Y" /> elements are equal.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals([NotNullWhen(true)] object? obj)
     {

@@ -66,7 +66,7 @@ public static class Quaternion
     /// <param name="axis">The unit vector to rotate around.</param>
     /// <param name="angle">The angle, in radians, to rotate around the vector.</param>
     /// <returns>The newly created quaternion.</returns>
-    /// <remarks><paramref name="axis" /> vector must be normalized before calling this method or the resulting <see cref="Quaternion<T>" /> will be incorrect.</remarks>
+    /// <remarks><paramref name="axis" /> vector must be normalized before calling this method or the resulting <see cref="Quaternion{T}" /> will be incorrect.</remarks>
     public static Quaternion<T> CreateFromAxisAngle<T>(Vector3D<T> axis, T angle)
         where T : IRootFunctions<T>, ITrigonometricFunctions<T>
     {
@@ -323,7 +323,7 @@ public static class Quaternion
         return -value;
     }
 
-    /// <summary>Divides each component of a specified <see cref="Quaternion<T>" /> by its length.</summary>
+    /// <summary>Divides each component of a specified <see cref="Quaternion{T}" /> by its length.</summary>
     /// <param name="value">The quaternion to normalize.</param>
     /// <returns>The normalized quaternion.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -13,7 +13,7 @@ public readonly struct Plane<T> where T : INumberBase<T>
     /// <summary>The distance of the plane along its normal from the origin.</summary>
     public readonly T D;
 
-    /// <summary>Creates a <see cref="Plane<T>" /> object from the X, Y, and Z components of its normal, and its distance from the origin on that normal.</summary>
+    /// <summary>Creates a <see cref="Plane{T}" /> object from the X, Y, and Z components of its normal, and its distance from the origin on that normal.</summary>
     /// <param name="x">The X component of the normal.</param>
     /// <param name="y">The Y component of the normal.</param>
     /// <param name="z">The Z component of the normal.</param>
@@ -24,7 +24,7 @@ public readonly struct Plane<T> where T : INumberBase<T>
         D = d;
     }
 
-    /// <summary>Creates a <see cref="Plane<T>" /> object from a specified normal and the distance along the normal from the origin.</summary>
+    /// <summary>Creates a <see cref="Plane{T}" /> object from a specified normal and the distance along the normal from the origin.</summary>
     /// <param name="normal">The plane's normal vector.</param>
     /// <param name="d">The plane's distance from the origin along its normal vector.</param>
     public Plane(Vector3D<T> normal, T d)
@@ -33,8 +33,8 @@ public readonly struct Plane<T> where T : INumberBase<T>
         D = d;
     }
 
-    /// <summary>Creates a <see cref="Plane<T>" /> object from a specified four-dimensional vector.</summary>
-    /// <param name="value">A vector whose first three elements describe the normal vector, and whose <see cref="Vector4D<T>.W" /> defines the distance along that normal from the origin.</param>
+    /// <summary>Creates a <see cref="Plane{T}" /> object from a specified four-dimensional vector.</summary>
+    /// <param name="value">A vector whose first three elements describe the normal vector, and whose <see cref="Vector4D{T}.W" /> defines the distance along that normal from the origin.</param>
     public Plane(Vector4D<T> value)
     {
         Normal = new Vector3D<T>(value.X, value.Y, value.Z);
@@ -45,8 +45,8 @@ public readonly struct Plane<T> where T : INumberBase<T>
     /// <param name="value1">The first plane to compare.</param>
     /// <param name="value2">The second plane to compare.</param>
     /// <returns><see langword="true" /> if <paramref name="value1" /> and <paramref name="value2" /> are equal; otherwise, <see langword="false" />.</returns>
-    /// <remarks>Two <see cref="Plane<T>" /> objects are equal if their <see cref="Normal" /> and <see cref="D" /> fields are equal.
-    /// The <see cref="op_Equality" /> method defines the operation of the equality operator for <see cref="Plane<T>" /> objects.</remarks>
+    /// <remarks>Two <see cref="Plane{T}" /> objects are equal if their <see cref="Normal" /> and <see cref="D" /> fields are equal.
+    /// The <see cref="op_Equality" /> method defines the operation of the equality operator for <see cref="Plane{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(Plane<T> value1, Plane<T> value2)
     {
@@ -58,7 +58,7 @@ public readonly struct Plane<T> where T : INumberBase<T>
     /// <param name="value1">The first plane to compare.</param>
     /// <param name="value2">The second plane to compare.</param>
     /// <returns><see langword="true" /> if <paramref name="value1" /> and <paramref name="value2" /> are not equal; otherwise, <see langword="false" />.</returns>
-    /// <remarks>The <see cref="op_Inequality" /> method defines the operation of the inequality operator for <see cref="Plane<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="op_Inequality" /> method defines the operation of the inequality operator for <see cref="Plane{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(Plane<T> value1, Plane<T> value2)
     {
@@ -68,7 +68,7 @@ public readonly struct Plane<T> where T : INumberBase<T>
     /// <summary>Returns a value that indicates whether this instance and a specified object are equal.</summary>
     /// <param name="obj">The object to compare with the current instance.</param>
     /// <returns><see langword="true" /> if the current instance and <paramref name="obj" /> are equal; otherwise, <see langword="false" />. If <paramref name="obj" /> is <see langword="null" />, the method returns <see langword="false" />.</returns>
-    /// <remarks>The current instance and <paramref name="obj" /> are equal if <paramref name="obj" /> is a <see cref="Plane<T>" /> object and their <see cref="Normal" /> and <see cref="D" /> fields are equal.</remarks>
+    /// <remarks>The current instance and <paramref name="obj" /> are equal if <paramref name="obj" /> is a <see cref="Plane{T}" /> object and their <see cref="Normal" /> and <see cref="D" /> fields are equal.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals([NotNullWhen(true)] object? obj)
     {
@@ -78,7 +78,7 @@ public readonly struct Plane<T> where T : INumberBase<T>
     /// <summary>Returns a value that indicates whether this instance and another plane object are equal.</summary>
     /// <param name="other">The other plane.</param>
     /// <returns><see langword="true" /> if the two planes are equal; otherwise, <see langword="false" />.</returns>
-    /// <remarks>Two <see cref="Plane<T>" /> objects are equal if their <see cref="Normal" /> and <see cref="D" /> fields are equal.</remarks>
+    /// <remarks>Two <see cref="Plane{T}" /> objects are equal if their <see cref="Normal" /> and <see cref="D" /> fields are equal.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Equals(Plane<T> other)
     {
@@ -93,15 +93,15 @@ public readonly struct Plane<T> where T : INumberBase<T>
     }
 
     /// <summary>Returns the string representation of this plane object.</summary>
-    /// <returns>A string that represents this <see cref="Plane<T>" /> object.</returns>
-    /// <remarks>The string representation of a <see cref="Plane<T>" /> object use the formatting conventions of the current culture to format the numeric values in the returned string. For example, a <see cref="Plane<T>" /> object whose string representation is formatted by using the conventions of the en-US culture might appear as <c>{Normal:&lt;1.1, 2.2, 3.3&gt; D:4.4}</c>.</remarks>
+    /// <returns>A string that represents this <see cref="Plane{T}" /> object.</returns>
+    /// <remarks>The string representation of a <see cref="Plane{T}" /> object use the formatting conventions of the current culture to format the numeric values in the returned string. For example, a <see cref="Plane{T}" /> object whose string representation is formatted by using the conventions of the en-US culture might appear as <c>{Normal:&lt;1.1, 2.2, 3.3&gt; D:4.4}</c>.</remarks>
     public override string ToString() => $"{{Normal:{Normal} D:{D}}}";
 }
 
 public static class Plane
 {
     
-    /// <summary>Creates a <see cref="Plane<T>" /> object that contains three specified points.</summary>
+    /// <summary>Creates a <see cref="Plane{T}" /> object that contains three specified points.</summary>
     /// <param name="point1">The first point defining the plane.</param>
     /// <param name="point2">The second point defining the plane.</param>
     /// <param name="point3">The third point defining the plane.</param>
@@ -209,7 +209,7 @@ public static class Plane
         }
     }
 
-    /// <summary>Creates a new <see cref="Plane<T>" /> object whose normal vector is the source plane's normal vector normalized.</summary>
+    /// <summary>Creates a new <see cref="Plane{T}" /> object whose normal vector is the source plane's normal vector normalized.</summary>
     /// <param name="value">The source plane.</param>
     /// <returns>The normalized plane.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

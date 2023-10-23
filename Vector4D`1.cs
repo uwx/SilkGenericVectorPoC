@@ -30,13 +30,13 @@ public readonly partial struct Vector4D<T> : IVector<Vector4D<T>, T>, IVectorAls
 
     internal const int Count = 4;
 
-    /// <summary>Creates a new <see cref="Vector4D<T>" /> object whose four elements have the same value.</summary>
+    /// <summary>Creates a new <see cref="Vector4D{T}" /> object whose four elements have the same value.</summary>
     /// <param name="value">The value to assign to all four elements.</param>
     public Vector4D(T value) : this(value, value, value, value)
     {
     }
 
-    /// <summary>Creates a   new <see cref="Vector4D<T>" /> object from the specified <see cref="Vector2D<T>" /> object and a Z and a W component.</summary>
+    /// <summary>Creates a   new <see cref="Vector4D{T}" /> object from the specified <see cref="Vector2D{T}" /> object and a Z and a W component.</summary>
     /// <param name="value">The vector to use for the X and Y components.</param>
     /// <param name="z">The Z component.</param>
     /// <param name="w">The W component.</param>
@@ -44,7 +44,7 @@ public readonly partial struct Vector4D<T> : IVector<Vector4D<T>, T>, IVectorAls
     {
     }
 
-    /// <summary>Constructs a new <see cref="Vector4D<T>" /> object from the specified <see cref="Vector3D<T>" /> object and a W component.</summary>
+    /// <summary>Constructs a new <see cref="Vector4D{T}" /> object from the specified <see cref="Vector3D{T}" /> object and a W component.</summary>
     /// <param name="value">The vector to use for the X, Y, and Z components.</param>
     /// <param name="w">The W component.</param>
     public Vector4D(Vector3D<T> value, T w) : this(value.X, value.Y, value.Z, w)
@@ -82,7 +82,7 @@ public readonly partial struct Vector4D<T> : IVector<Vector4D<T>, T>, IVectorAls
     public static Vector4D<T> Zero => new(T.Zero);
 
     /// <summary>Gets a vector whose 4 elements are equal to one.</summary>
-    /// <value>Returns <see cref="Vector4D<T>" />.</value>
+    /// <value>Returns <see cref="Vector4D{T}" />.</value>
     /// <remarks>A vector whose four elements are equal to one (that is, it returns the vector <c>(1,1,1,1)</c>.</remarks>
     public static Vector4D<T> One => new(T.One);
 
@@ -130,7 +130,7 @@ public readonly partial struct Vector4D<T> : IVector<Vector4D<T>, T>, IVectorAls
     /// <param name="left">The first vector to add.</param>
     /// <param name="right">The second vector to add.</param>
     /// <returns>The summed vector.</returns>
-    /// <remarks>The <see cref="op_Addition" /> method defines the addition operation for <see cref="Vector4D<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="op_Addition" /> method defines the addition operation for <see cref="Vector4D{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector4D<T> operator +(Vector4D<T> left, Vector4D<T> right)
     {
@@ -146,7 +146,7 @@ public readonly partial struct Vector4D<T> : IVector<Vector4D<T>, T>, IVectorAls
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>The vector that results from dividing <paramref name="left" /> by <paramref name="right" />.</returns>
-    /// <remarks>The <see cref="Vector4D<T>.op_Division" /> method defines the division operation for <see cref="Vector4D<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="Vector4D{T}.op_Division" /> method defines the division operation for <see cref="Vector4D{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector4D<T> operator /(Vector4D<T> left, Vector4D<T> right)
     {
@@ -162,7 +162,7 @@ public readonly partial struct Vector4D<T> : IVector<Vector4D<T>, T>, IVectorAls
     /// <param name="value1">The vector.</param>
     /// <param name="value2">The scalar value.</param>
     /// <returns>The result of the division.</returns>
-    /// <remarks>The <see cref="Vector4D<T>.op_Division" /> method defines the division operation for <see cref="Vector4D<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="Vector4D{T}.op_Division" /> method defines the division operation for <see cref="Vector4D{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector4D<T> operator /(Vector4D<T> value1, T value2)
     {
@@ -173,7 +173,7 @@ public readonly partial struct Vector4D<T> : IVector<Vector4D<T>, T>, IVectorAls
     /// <param name="left">The first vector to compare.</param>
     /// <param name="right">The second vector to compare.</param>
     /// <returns><see langword="true" /> if <paramref name="left" /> and <paramref name="right" /> are equal; otherwise, <see langword="false" />.</returns>
-    /// <remarks>Two <see cref="Vector4D<T>" /> objects are equal if each element in <paramref name="left" /> is equal to the corresponding element in <paramref name="right" />.</remarks>
+    /// <remarks>Two <see cref="Vector4D{T}" /> objects are equal if each element in <paramref name="left" /> is equal to the corresponding element in <paramref name="right" />.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(Vector4D<T> left, Vector4D<T> right)
     {
@@ -197,7 +197,7 @@ public readonly partial struct Vector4D<T> : IVector<Vector4D<T>, T>, IVectorAls
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>The element-wise product vector.</returns>
-    /// <remarks>The <see cref="Vector4D<T>.op_Multiply" /> method defines the multiplication operation for <see cref="Vector4D<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="Vector4D{T}.op_Multiply" /> method defines the multiplication operation for <see cref="Vector4D{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector4D<T> operator *(Vector4D<T> left, Vector4D<T> right)
     {
@@ -213,7 +213,7 @@ public readonly partial struct Vector4D<T> : IVector<Vector4D<T>, T>, IVectorAls
     /// <param name="left">The vector.</param>
     /// <param name="right">The scalar value.</param>
     /// <returns>The scaled vector.</returns>
-    /// <remarks>The <see cref="Vector4D<T>.op_Multiply" /> method defines the multiplication operation for <see cref="Vector4D<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="Vector4D{T}.op_Multiply" /> method defines the multiplication operation for <see cref="Vector4D{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector4D<T> operator *(Vector4D<T> left, T right)
     {
@@ -224,7 +224,7 @@ public readonly partial struct Vector4D<T> : IVector<Vector4D<T>, T>, IVectorAls
     /// <param name="left">The vector.</param>
     /// <param name="right">The scalar value.</param>
     /// <returns>The scaled vector.</returns>
-    /// <remarks>The <see cref="Vector4D<T>.op_Multiply" /> method defines the multiplication operation for <see cref="Vector4D<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="Vector4D{T}.op_Multiply" /> method defines the multiplication operation for <see cref="Vector4D{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector4D<T> operator *(T left, Vector4D<T> right)
     {
@@ -235,7 +235,7 @@ public readonly partial struct Vector4D<T> : IVector<Vector4D<T>, T>, IVectorAls
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>The vector that results from subtracting <paramref name="right" /> from <paramref name="left" />.</returns>
-    /// <remarks>The <see cref="op_Subtraction" /> method defines the subtraction operation for <see cref="Vector4D<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="op_Subtraction" /> method defines the subtraction operation for <see cref="Vector4D{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector4D<T> operator -(Vector4D<T> left, Vector4D<T> right)
     {
@@ -250,7 +250,7 @@ public readonly partial struct Vector4D<T> : IVector<Vector4D<T>, T>, IVectorAls
     /// <summary>Negates the specified vector.</summary>
     /// <param name="value">The vector to negate.</param>
     /// <returns>The negated vector.</returns>
-    /// <remarks>The <see cref="op_UnaryNegation" /> method defines the unary negation operation for <see cref="Vector4D<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="op_UnaryNegation" /> method defines the unary negation operation for <see cref="Vector4D{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector4D<T> operator -(Vector4D<T> value)
     {
@@ -333,7 +333,7 @@ public readonly partial struct Vector4D<T> : IVector<Vector4D<T>, T>, IVectorAls
     /// <summary>Returns a value that indicates whether this instance and a specified object are equal.</summary>
     /// <param name="obj">The object to compare with the current instance.</param>
     /// <returns><see langword="true" /> if the current instance and <paramref name="obj" /> are equal; otherwise, <see langword="false" />. If <paramref name="obj" /> is <see langword="null" />, the method returns <see langword="false" />.</returns>
-    /// <remarks>The current instance and <paramref name="obj" /> are equal if <paramref name="obj" /> is a <see cref="Vector4D<T>" /> object and their corresponding elements are equal.</remarks>
+    /// <remarks>The current instance and <paramref name="obj" /> are equal if <paramref name="obj" /> is a <see cref="Vector4D{T}" /> object and their corresponding elements are equal.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals([NotNullWhen(true)] object? obj)
     {

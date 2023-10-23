@@ -320,7 +320,6 @@ public readonly partial struct Vector3D<T> : IVector<Vector3D<T>, T>, IVectorAls
     }
 
     #region Operators
-
     /// <summary>Adds two vectors together.</summary>
     /// <param name="left">The first vector to add.</param>
     /// <param name="right">The second vector to add.</param>

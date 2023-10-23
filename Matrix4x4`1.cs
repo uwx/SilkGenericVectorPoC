@@ -155,7 +155,7 @@ public readonly partial struct Matrix4X4<T> : IEquatable<Matrix4X4<T>>
         W = new Vector4D<T>(m41, m42, m43, m44);
     }
 
-    // /// <summary>Creates a <see cref="Matrix4X4<T>" /> object from a specified <see cref="Matrix3x2" /> object.</summary>
+    // /// <summary>Creates a <see cref="Matrix4X4{T}" /> object from a specified <see cref="Matrix3x2" /> object.</summary>
     // /// <param name="value">A 3x2 matrix.</param>
     // /// <remarks>This constructor creates a 4x4 matrix whose <see cref="M13" />, <see cref="M14" />, <see cref="M23" />, <see cref="M24" />, <see cref="M31" />, <see cref="M32" />, <see cref="M34" />, and <see cref="M43" /> components are zero, and whose <see cref="M33" /> and <see cref="M44" /> components are one.</remarks>
     // public Matrix4X4(Matrix3X2<T> value)
@@ -237,7 +237,7 @@ public readonly partial struct Matrix4X4<T> : IEquatable<Matrix4X4<T>>
     /// <param name="value1">The first matrix.</param>
     /// <param name="value2">The second matrix.</param>
     /// <returns>The matrix that contains the summed values.</returns>
-    /// <remarks>The <see cref="op_Addition" /> method defines the operation of the addition operator for <see cref="Matrix4X4<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="op_Addition" /> method defines the operation of the addition operator for <see cref="Matrix4X4{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Matrix4X4<T> operator +(Matrix4X4<T> value1, Matrix4X4<T> value2)
     {
@@ -274,7 +274,7 @@ public readonly partial struct Matrix4X4<T> : IEquatable<Matrix4X4<T>>
     /// <param name="value1">The first matrix.</param>
     /// <param name="value2">The second matrix.</param>
     /// <returns>The product matrix.</returns>
-    /// <remarks>The <see cref="Matrix4X4<T>.op_Multiply" /> method defines the operation of the multiplication operator for <see cref="Matrix4X4<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="Matrix4X4{T}.op_Multiply" /> method defines the operation of the multiplication operator for <see cref="Matrix4X4{T}" /> objects.</remarks>
     public static Matrix4X4<T> operator *(Matrix4X4<T> value1, Matrix4X4<T> value2)
     {
         return new Matrix4X4<T>(
@@ -305,7 +305,7 @@ public readonly partial struct Matrix4X4<T> : IEquatable<Matrix4X4<T>>
     /// <param name="value1">The matrix to scale.</param>
     /// <param name="value2">The scaling value to use.</param>
     /// <returns>The scaled matrix.</returns>
-    /// <remarks>The <see cref="Matrix4X4<T>.op_Multiply" /> method defines the operation of the multiplication operator for <see cref="Matrix4X4<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="Matrix4X4{T}.op_Multiply" /> method defines the operation of the multiplication operator for <see cref="Matrix4X4{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Matrix4X4<T> operator *(Matrix4X4<T> value1, T value2)
     {
@@ -321,7 +321,7 @@ public readonly partial struct Matrix4X4<T> : IEquatable<Matrix4X4<T>>
     /// <param name="value1">The first matrix.</param>
     /// <param name="value2">The second matrix.</param>
     /// <returns>The matrix containing the values that result from subtracting each element in <paramref name="value2" /> from its corresponding element in <paramref name="value1" />.</returns>
-    /// <remarks>The <see cref="op_Subtraction" /> method defines the operation of the subtraction operator for <see cref="Matrix4X4<T>" /> objects.</remarks>
+    /// <remarks>The <see cref="op_Subtraction" /> method defines the operation of the subtraction operator for <see cref="Matrix4X4{T}" /> objects.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Matrix4X4<T> operator -(Matrix4X4<T> value1, Matrix4X4<T> value2)
     {
@@ -361,7 +361,7 @@ public readonly partial struct Matrix4X4<T> : IEquatable<Matrix4X4<T>>
     /// <summary>Returns a value that indicates whether this instance and a specified object are equal.</summary>
     /// <param name="obj">The object to compare with the current instance.</param>
     /// <returns><see langword="true" /> if the current instance and <paramref name="obj" /> are equal; otherwise, <see langword="false" />. If <paramref name="obj" /> is <see langword="null" />, the method returns <see langword="false" />.</returns>
-    /// <remarks>The current instance and <paramref name="obj" /> are equal if <paramref name="obj" /> is a <see cref="Matrix4X4<T>" /> object and the corresponding elements of each matrix are equal.</remarks>
+    /// <remarks>The current instance and <paramref name="obj" /> are equal if <paramref name="obj" /> is a <see cref="Matrix4X4{T}" /> object and the corresponding elements of each matrix are equal.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is Matrix4X4<T> other && Equals(other);

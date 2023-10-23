@@ -247,7 +247,7 @@ public readonly struct Quaternion<T> : IEquatable<Quaternion<T>>
     /// <summary>Returns a value that indicates whether this instance and a specified object are equal.</summary>
     /// <param name="obj">The object to compare with the current instance.</param>
     /// <returns><see langword="true" /> if the current instance and <paramref name="obj" /> are equal; otherwise, <see langword="false" />. If <paramref name="obj" /> is <see langword="null" />, the method returns <see langword="false" />.</returns>
-    /// <remarks>The current instance and <paramref name="obj" /> are equal if <paramref name="obj" /> is a <see cref="Quaternion<T>" /> object and the corresponding components of each matrix are equal.</remarks>
+    /// <remarks>The current instance and <paramref name="obj" /> are equal if <paramref name="obj" /> is a <see cref="Quaternion{T}" /> object and the corresponding components of each matrix are equal.</remarks>
     public override bool Equals([NotNullWhen(true)] object? obj)
     {
         return (obj is Quaternion<T> other) && Equals(other);
