@@ -897,7 +897,7 @@ public readonly partial struct {{TypeNameT}} :
 
     static {{TypeNameT}} INumberBase<{{TypeNameT}}>.MinMagnitudeNumber({{TypeNameT}} x, {{TypeNameT}} y) => new({{ wrap forEachDimension ', ' newline:false; $"T.MinMagnitudeNumber(x.{c}, y.{c})"; end }});
 
-    static bool INumberBase<{{TypeNameT}}>.TryConvertFromChecked<TOther>(TOther value, out {{TypeNameT}} result) where TOther : INumberBase<TOther>
+    static bool INumberBase<{{TypeNameT}}>.TryConvertFromChecked<TOther>(TOther value, out {{TypeNameT}} result)
     {
         if (value is {{TypeNameT}} v)
         {
@@ -915,7 +915,7 @@ public readonly partial struct {{TypeNameT}} :
         return false;
     }
 
-    static bool INumberBase<{{TypeNameT}}>.TryConvertFromSaturating<TOther>(TOther value, out {{TypeNameT}} result) where TOther : INumberBase<TOther>
+    static bool INumberBase<{{TypeNameT}}>.TryConvertFromSaturating<TOther>(TOther value, out {{TypeNameT}} result)
     {
         if (value is {{TypeNameT}} v)
         {
@@ -933,7 +933,7 @@ public readonly partial struct {{TypeNameT}} :
         return false;
     }
 
-    static bool INumberBase<{{TypeNameT}}>.TryConvertFromTruncating<TOther>(TOther value, out {{TypeNameT}} result) where TOther : INumberBase<TOther>
+    static bool INumberBase<{{TypeNameT}}>.TryConvertFromTruncating<TOther>(TOther value, out {{TypeNameT}} result)
     {
         if (value is {{TypeNameT}} v)
         {
@@ -951,13 +951,13 @@ public readonly partial struct {{TypeNameT}} :
         return false;
     }
 
-    static bool INumberBase<{{TypeNameT}}>.TryConvertToChecked<TOther>({{TypeNameT}} value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
+    static bool INumberBase<{{TypeNameT}}>.TryConvertToChecked<TOther>({{TypeNameT}} value, [MaybeNullWhen(false)] out TOther result)
         => TOther.TryConvertFromChecked(value, out result);
 
-    static bool INumberBase<{{TypeNameT}}>.TryConvertToSaturating<TOther>({{TypeNameT}} value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
+    static bool INumberBase<{{TypeNameT}}>.TryConvertToSaturating<TOther>({{TypeNameT}} value, [MaybeNullWhen(false)] out TOther result)
         => TOther.TryConvertFromSaturating(value, out result);
 
-    static bool INumberBase<{{TypeNameT}}>.TryConvertToTruncating<TOther>({{TypeNameT}} value, [MaybeNullWhen(false)]out TOther result) where TOther : INumberBase<TOther>
+    static bool INumberBase<{{TypeNameT}}>.TryConvertToTruncating<TOther>({{TypeNameT}} value, [MaybeNullWhen(false)]out TOther result)
         => TOther.TryConvertFromTruncating(value, out result);
 
     {{TypeName}}<T1>? IVec{{vecN}}.GetChecked<T1>() => T1.TryConvertFromChecked(X, out var x) ? new(x, {{ wrap forEachDimension ', ' newline:false dimensionOffset:1; $"T1.CreateChecked({c})"; end }}) : null;

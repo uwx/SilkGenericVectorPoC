@@ -919,7 +919,7 @@ public readonly partial struct Vector2D<T> :
         return false;
     }
 
-    static bool INumberBase<Vector2D<T>>.TryConvertFromTruncating<TOther>(TOther value, out Vector2D<T> result) where TOther : INumberBase<TOther>
+    static bool INumberBase<Vector2D<T>>.TryConvertFromTruncating<TOther>(TOther value, out Vector2D<T> result)
     {
         if (value is Vector2D<T> v)
         {
@@ -937,20 +937,14 @@ public readonly partial struct Vector2D<T> :
         return false;
     }
 
-    static bool INumberBase<Vector2D<T>>.TryConvertToChecked<TOther>(Vector2D<T> value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
-    {
-        return TOther.TryConvertFromChecked(value, out result);
-    }
+    static bool INumberBase<Vector2D<T>>.TryConvertToChecked<TOther>(Vector2D<T> value, [MaybeNullWhen(false)] out TOther result)
+        => TOther.TryConvertFromChecked(value, out result);
 
-    static bool INumberBase<Vector2D<T>>.TryConvertToSaturating<TOther>(Vector2D<T> value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
-    {
-        return TOther.TryConvertFromSaturating(value, out result);
-    }
+    static bool INumberBase<Vector2D<T>>.TryConvertToSaturating<TOther>(Vector2D<T> value, [MaybeNullWhen(false)] out TOther result)
+        => TOther.TryConvertFromSaturating(value, out result);
 
-    static bool INumberBase<Vector2D<T>>.TryConvertToTruncating<TOther>(Vector2D<T> value, [MaybeNullWhen(false)]out TOther result) where TOther : INumberBase<TOther>
-    {
-        return TOther.TryConvertFromTruncating(value, out result);
-    }
+    static bool INumberBase<Vector2D<T>>.TryConvertToTruncating<TOther>(Vector2D<T> value, [MaybeNullWhen(false)]out TOther result)
+        => TOther.TryConvertFromTruncating(value, out result);
 
     Vector2D<T1>? IVec2.GetChecked<T1>() => T1.TryConvertFromChecked(X, out var x) ? new(x, T1.CreateChecked(Y)) : null;
     Vector2D<T1>? IVec2.GetSaturating<T1>() => T1.TryConvertFromSaturating(X, out var x) ? new(x, T1.CreateSaturating(Y)) : null;
