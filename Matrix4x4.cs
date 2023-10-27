@@ -1818,13 +1818,13 @@ public static class Matrix4X4
     /// <returns>The interpolated matrix.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Matrix4X4<T> Lerp<T>(Matrix4X4<T> left, Matrix4X4<T> right, T amount)
-        where T : INumberBase<T>
+        where T : INumberBase<T>, IFloatingPoint<T>
     {
         return new Matrix4X4<T>(
-            Vector4D.Lerp(left.X, right.X, amount),
-            Vector4D.Lerp(left.Y, right.Y, amount),
-            Vector4D.Lerp(left.Z, right.Z, amount),
-            Vector4D.Lerp(left.W, right.W, amount)
+            Vector4D.Lerp<T>(left.X, right.X, amount),
+            Vector4D.Lerp<T>(left.Y, right.Y, amount),
+            Vector4D.Lerp<T>(left.Z, right.Z, amount),
+            Vector4D.Lerp<T>(left.W, right.W, amount)
         );
     }
 
@@ -1941,10 +1941,10 @@ public static class Matrix4X4
         {
             if (typeof(T) == typeof(float))
             {
-                var x = matrix.X.AsVector128<float>();
-                var y = matrix.Y.AsVector128<float>();
-                var z = matrix.Z.AsVector128<float>();
-                var w = matrix.W.AsVector128<float>();
+                var x = matrix.X.AsVector128<T, float>();
+                var y = matrix.Y.AsVector128<T, float>();
+                var z = matrix.Z.AsVector128<T, float>();
+                var w = matrix.W.AsVector128<T, float>();
 
                 var lowerXZ = AdvSimd.Arm64.ZipLow(x, z); // x[0], z[0], x[1], z[1]
                 var lowerYW = AdvSimd.Arm64.ZipLow(y, w); // y[0], w[0], y[1], w[1]
@@ -1958,10 +1958,10 @@ public static class Matrix4X4
             }
             else // if (typeof(T) == typeof(double))
             {
-                var x = matrix.X.AsVector128<double>();
-                var y = matrix.Y.AsVector128<double>();
-                var z = matrix.Z.AsVector128<double>();
-                var w = matrix.W.AsVector128<double>();
+                var x = matrix.X.AsVector128<T, double>();
+                var y = matrix.Y.AsVector128<T, double>();
+                var z = matrix.Z.AsVector128<T, double>();
+                var w = matrix.W.AsVector128<T, double>();
 
                 var lowerXZ = AdvSimd.Arm64.ZipLow(x, z); // x[0], z[0], x[1], z[1]
                 var lowerYW = AdvSimd.Arm64.ZipLow(y, w); // y[0], w[0], y[1], w[1]
@@ -1976,10 +1976,10 @@ public static class Matrix4X4
         }
         else if (Sse.IsSupported && typeof(T) == typeof(float))
         {
-            var x = matrix.X.AsVector128<float>();
-            var y = matrix.Y.AsVector128<float>();
-            var z = matrix.Z.AsVector128<float>();
-            var w = matrix.W.AsVector128<float>();
+            var x = matrix.X.AsVector128<T, float>();
+            var y = matrix.Y.AsVector128<T, float>();
+            var z = matrix.Z.AsVector128<T, float>();
+            var w = matrix.W.AsVector128<T, float>();
 
             var lowerXZ = Sse.UnpackLow(x, z); // x[0], z[0], x[1], z[1]
             var lowerYW = Sse.UnpackLow(y, w); // y[0], w[0], y[1], w[1]
@@ -1993,10 +1993,10 @@ public static class Matrix4X4
         }
         else if (Sse2.IsSupported && typeof(T) == typeof(double))
         {
-            var x = matrix.X.AsVector128<double>();
-            var y = matrix.Y.AsVector128<double>();
-            var z = matrix.Z.AsVector128<double>();
-            var w = matrix.W.AsVector128<double>();
+            var x = matrix.X.AsVector128<T, double>();
+            var y = matrix.Y.AsVector128<T, double>();
+            var z = matrix.Z.AsVector128<T, double>();
+            var w = matrix.W.AsVector128<T, double>();
 
             var lowerXZ = Sse2.UnpackLow(x, z); // x[0], z[0], x[1], z[1]
             var lowerYW = Sse2.UnpackLow(y, w); // y[0], w[0], y[1], w[1]

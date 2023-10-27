@@ -7,10 +7,7 @@ public interface IVectorAlso<TVector, T> :
     IDivisionOperators<TVector, T, TVector>,
     IMultiplyOperators<TVector, T, TVector>
     where TVector : IVectorAlso<TVector, T>, IVector<TVector, T>
-    where T : INumberBase<T>
-{
-    
-}
+    where T : INumberBase<T>;
 
 public interface IVector<TVector, T> :
     IAdditionOperators<TVector, TVector, TVector>,

@@ -2,7 +2,101 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 
-namespace GenericVector.Generated;
+namespace GenericVector;
+
+public static partial class Vector2D
+{
+    // /// <summary>Transforms a vector by a specified 3x2 matrix.</summary>
+    // /// <param name="position">The vector to transform.</param>
+    // /// <param name="matrix">The transformation matrix.</param>
+    // /// <returns>The transformed vector.</returns>
+    // [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    // public static Vector2D<T> Transform<T>(Vector2D<T> position, Matrix3X2<T> matrix)
+    //     where T : INumberBase<T>
+    // {
+    //     Vector2D<T> result = matrix.X * position.X;
+    //
+    //     result += matrix.Y * position.Y;
+    //     result += matrix.Z;
+    //
+    //     return result;
+    // }
+
+    /// <summary>Transforms a vector by a specified 4x4 matrix.</summary>
+    /// <param name="position">The vector to transform.</param>
+    /// <param name="matrix">The transformation matrix.</param>
+    /// <returns>The transformed vector.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2D<T> Transform<T>(Vector2D<T> position, Matrix4X4<T> matrix)
+        where T : INumberBase<T>
+    {
+        return (Vector2D<T>)Vector4D.Transform(position, matrix);
+    }
+
+    /// <summary>Transforms a vector by the specified Quaternion<T> rotation value.</summary>
+    /// <param name="value">The vector to rotate.</param>
+    /// <param name="rotation">The rotation to apply.</param>
+    /// <returns>The transformed vector.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2D<T> Transform<T>(Vector2D<T> value, Quaternion<T> rotation)
+        where T : ITrigonometricFunctions<T>, IRootFunctions<T>
+    {
+        T x2 = rotation.X + rotation.X;
+        T y2 = rotation.Y + rotation.Y;
+        T z2 = rotation.Z + rotation.Z;
+
+        T wz2 = rotation.W * z2;
+        T xx2 = rotation.X * x2;
+        T xy2 = rotation.X * y2;
+        T yy2 = rotation.Y * y2;
+        T zz2 = rotation.Z * z2;
+
+        return new Vector2D<T>(
+            value.X * (T.One - yy2 - zz2) + value.Y * (xy2 - wz2),
+            value.X * (xy2 + wz2) + value.Y * (T.One - xx2 - zz2)
+        );
+    }
+
+    // /// <summary>Transforms a vector normal by the given 3x2 matrix.</summary>
+    // /// <param name="normal">The source vector.</param>
+    // /// <param name="matrix">The matrix.</param>
+    // /// <returns>The transformed vector.</returns>
+    // [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    // public static Vector2D<T> TransformNormal<T>(Vector2D<T> normal, Matrix3X2<T> matrix) where T : INumberBase<T>
+    // {
+    //     Vector2D<T> result = matrix.X * normal.X;
+    //
+    //     result += matrix.Y * normal.Y;
+    //
+    //     return result;
+    // }
+
+    /// <summary>Transforms a vector normal by the given 4x4 matrix.</summary>
+    /// <param name="normal">The source vector.</param>
+    /// <param name="matrix">The matrix.</param>
+    /// <returns>The transformed vector.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2D<T> TransformNormal<T>(Vector2D<T> normal, Matrix4X4<T> matrix) where T : INumberBase<T>
+    {
+        Vector4D<T> result = matrix.X * normal.X;
+
+        result += matrix.Y * normal.Y;
+
+        return (Vector2D<T>)result;
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector128<T> AsVector128<T>(this Vector2D<T> self) where T : INumberBase<T>
+    {
+        return new Vector4D<T>(self, T.Zero, T.Zero).AsVector128();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector128<TOut> AsVector128<T, TOut>(this Vector2D<T> self) where T : INumberBase<T>
+    {
+        return new Vector4D<T>(self, T.Zero, T.Zero).AsVector128<T, TOut>();
+    }
+}
 
 public static partial class Vector3D
 {
@@ -80,6 +174,17 @@ public static partial class Vector3D
         return Unsafe.BitCast<Vector4D<T>, Vector3D<T>>(result);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector128<T> AsVector128<T>(this Vector3D<T> self) where T : INumberBase<T>
+    {
+        return new Vector4D<T>(self, T.Zero).AsVector128();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector128<TOut> AsVector128<T, TOut>(this Vector3D<T> self) where T : INumberBase<T>
+    {
+        return new Vector4D<T>(self, T.Zero).AsVector128<T, TOut>();
+    }
 }
 
 public static partial class Vector4D
@@ -221,5 +326,33 @@ public static partial class Vector4D
             value.X * (xy2 + wz2) + value.Y * (T.One - xx2 - zz2) + value.Z * (yz2 - wx2),
             value.X * (xz2 - wy2) + value.Y * (yz2 + wx2) + value.Z * (T.One - xx2 - yy2),
             value.W);
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector128<T> AsVector128<T>(this Vector4D<T> self) where T : INumberBase<T>
+    {
+        if (!Vector128<T>.IsSupported)
+        {
+            throw new ArgumentException($"{typeof(T)} cannot be in a Vector128");
+        }
+        return Unsafe.BitCast<Vector4D<T>, Vector128<T>>(self);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector128<TOut> AsVector128<T, TOut>(this Vector4D<T> self) where T : INumberBase<T>
+    {
+        unsafe
+        {
+            if (sizeof(T) != sizeof(TOut))
+            {
+                throw new ArgumentException($"Sizes do not match");
+            }
+        }
+
+        if (!Vector128<TOut>.IsSupported)
+        {
+            throw new ArgumentException($"{typeof(T)} cannot be in a Vector128");
+        }
+        return Unsafe.BitCast<Vector4D<T>, Vector128<TOut>>(self);
     }
 }

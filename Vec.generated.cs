@@ -8,7 +8,7 @@ using System.Runtime.Intrinsics;
 using System.Runtime.Serialization;
 using System.Text.Unicode;
 
-namespace GenericVector.Generated;
+namespace GenericVector;
 
 
 // Vector2D<T>
@@ -1074,6 +1074,8 @@ public static partial class Vector2D
         );
     }
 
+    // CANNOT BE DONE
+    /*
     /// <summary>Transforms a vector by a specified 4x4 matrix.</summary>
     /// <param name="position">The vector to transform.</param>
     /// <param name="matrix">The transformation matrix.</param>
@@ -1084,8 +1086,6 @@ public static partial class Vector2D
         return (Vector2D<T>)Vector4D.Transform(position, matrix);
     }
 
-    // CANNOT BE DONE
-    /*
     /// <summary>Transforms a vector by the specified Quaternion rotation value.</summary>
     /// <param name="value">The vector to rotate.</param>
     /// <param name="rotation">The rotation to apply.</param>
@@ -1217,6 +1217,8 @@ public static partial class Vector2D
         return Sqrt<T, T>(value);
     }
 
+    // CANNOT BE DONE
+    /*
     /// <summary>Transforms a vector by the specified Quaternion rotation value.</summary>
     /// <param name="value">The vector to rotate.</param>
     /// <param name="rotation">The rotation to apply.</param>
@@ -1240,6 +1242,7 @@ public static partial class Vector2D
     {
         return Transform<T, TQuat, T>(value, rotation);
     }
+    */
     #endregion
 
     // Equivalent implementing IHyperbolicFunctions<System.Runtime.Intrinsics.Vector3>
@@ -1441,7 +1444,7 @@ public readonly partial struct Vector3D<T> : IVector<Vector3D<T>, T>, IVectorAls
     /// <summary>Creates a new <see cref="Vector3D{T}" /> object from the specified <see cref="Vector3D{T}" /> object X and a Y and a Z and a W component.</summary>
     /// <param name="value">The vector to use for the [,  and ] components.</param>
     /// <param name="z">The Z component.</param>
-    public Vector3D(Vector2D<T> value, T x, T y, T z) : this(value.X, value.Y, z)
+    public Vector3D(Vector2D<T> value, T z) : this(value.X, value.Y, z)
     {
     }
 
@@ -2542,6 +2545,8 @@ public static partial class Vector3D
         );
     }
 
+    // CANNOT BE DONE
+    /*
     /// <summary>Transforms a vector by a specified 4x4 matrix.</summary>
     /// <param name="position">The vector to transform.</param>
     /// <param name="matrix">The transformation matrix.</param>
@@ -2552,8 +2557,6 @@ public static partial class Vector3D
         return (Vector3D<T>)Vector4D.Transform(position, matrix);
     }
 
-    // CANNOT BE DONE
-    /*
     /// <summary>Transforms a vector by the specified Quaternion rotation value.</summary>
     /// <param name="value">The vector to rotate.</param>
     /// <param name="rotation">The rotation to apply.</param>
@@ -2690,6 +2693,8 @@ public static partial class Vector3D
         return Sqrt<T, T>(value);
     }
 
+    // CANNOT BE DONE
+    /*
     /// <summary>Transforms a vector by the specified Quaternion rotation value.</summary>
     /// <param name="value">The vector to rotate.</param>
     /// <param name="rotation">The rotation to apply.</param>
@@ -2713,6 +2718,7 @@ public static partial class Vector3D
     {
         return Transform<T, TQuat, T>(value, rotation);
     }
+    */
     #endregion
 
     // Equivalent implementing IHyperbolicFunctions<System.Runtime.Intrinsics.Vector3>
@@ -2926,13 +2932,13 @@ public readonly partial struct Vector4D<T> : IVector<Vector4D<T>, T>, IVectorAls
     /// <param name="value">The vector to use for the [,  and ] components.</param>
     /// <param name="z">The Z component.</param>
     /// <param name="w">The W component.</param>
-    public Vector4D(Vector2D<T> value, T x, T y, T z, T w) : this(value.X, value.Y, z, w)
+    public Vector4D(Vector2D<T> value, T z, T w) : this(value.X, value.Y, z, w)
     {
     }
     /// <summary>Creates a new <see cref="Vector4D{T}" /> object from the specified <see cref="Vector4D{T}" /> object X and a Y and a Z and a W component.</summary>
     /// <param name="value">The vector to use for the [,  and ] components.</param>
     /// <param name="w">The W component.</param>
-    public Vector4D(Vector3D<T> value, T x, T y, T z, T w) : this(value.X, value.Y, value.Z, w)
+    public Vector4D(Vector3D<T> value, T w) : this(value.X, value.Y, value.Z, w)
     {
     }
 
@@ -4086,6 +4092,8 @@ public static partial class Vector4D
         );
     }
 
+    // CANNOT BE DONE
+    /*
     /// <summary>Transforms a vector by a specified 4x4 matrix.</summary>
     /// <param name="position">The vector to transform.</param>
     /// <param name="matrix">The transformation matrix.</param>
@@ -4096,8 +4104,6 @@ public static partial class Vector4D
         return (Vector4D<T>)Vector4D.Transform(position, matrix);
     }
 
-    // CANNOT BE DONE
-    /*
     /// <summary>Transforms a vector by the specified Quaternion rotation value.</summary>
     /// <param name="value">The vector to rotate.</param>
     /// <param name="rotation">The rotation to apply.</param>
@@ -4239,6 +4245,8 @@ public static partial class Vector4D
         return Sqrt<T, T>(value);
     }
 
+    // CANNOT BE DONE
+    /*
     /// <summary>Transforms a vector by the specified Quaternion rotation value.</summary>
     /// <param name="value">The vector to rotate.</param>
     /// <param name="rotation">The rotation to apply.</param>
@@ -4262,6 +4270,7 @@ public static partial class Vector4D
     {
         return Transform<T, TQuat, T>(value, rotation);
     }
+    */
     #endregion
 
     // Equivalent implementing IHyperbolicFunctions<System.Runtime.Intrinsics.Vector3>

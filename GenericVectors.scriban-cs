@@ -8,7 +8,7 @@ using System.Runtime.Intrinsics;
 using System.Runtime.Serialization;
 using System.Text.Unicode;
 
-namespace GenericVector.Generated;
+namespace GenericVector;
 
 {{~ for vecN in min_dimensions..max_dimensions
     #for vecN in 3..3
@@ -134,6 +134,22 @@ namespace GenericVector.Generated;
         end
         ret list | array.join sep
     end
+
+    func forEachDimension(sep = null, newline = true, endingNewline = false, dimensionLimit = null, dimensionOffset = null)
+        dimensionLimit = (dimensionLimit ?? vecN) - 1
+        dimensionOffset = dimensionOffset ?? 0
+        for x in dimensionOffset..dimensionLimit
+            c = xyzw[x]
+            cl = c | string.downcase
+            $$
+            if !for.last && sep != null
+                sep
+            end
+            if newline && (endingNewline || !for.last)
+                '\n'
+            end
+        end
+    end
 ~}}
 
 // {{ TypeNameT }}
@@ -161,7 +177,7 @@ public readonly partial struct {{TypeNameT}} : IVector<{{TypeNameT}}, T>, IVecto
         {{~ for x in xyzw | slice smallerVecN vecN ~}}
     /// <param name="{{ x | string.downcase }}">The {{ x }} component.</param>
         {{~ end ~}}
-    public {{ TypeName }}(Vector{{smallerVecN}}D<T> value, {{ Parameters | array.limit vecN  | array.offset dimensions2 | array.join ', ' }}) : this(
+    public {{ TypeName }}(Vector{{smallerVecN}}D<T> value, {{ Parameters | slice smallerVecN vecN | array.join ', ' }}) : this(
         {{- valueValue 'value.' | slice 0 smallerVecN | array.concat (xyzw | slice smallerVecN vecN | array.each @string.downcase) | array.join ', ' -}}
     )
     {
@@ -245,27 +261,7 @@ public readonly partial struct {{TypeNameT}} : IVector<{{TypeNameT}}, T>, IVecto
     public static {{ TypeNameT }} operator +({{ TypeNameT }} left, {{ TypeNameT }} right)
     {
         return new {{ TypeNameT }}(
-            {{
-                func forEachDimension(sep = null, newline = true, endingNewline = false, dimensionLimit = null, dimensionOffset = null)
-                    dimensionLimit = (dimensionLimit ?? vecN) - 1
-                    dimensionOffset = dimensionOffset ?? 0
-                    for x in dimensionOffset..dimensionLimit
-                        c = xyzw[x]
-                        cl = c | string.downcase
-                        $$
-                        if !for.last && sep != null
-                            sep
-                        end
-                        if newline && (endingNewline || !for.last)
-                            '\n'
-                        end
-                    end
-                end
-
-                wrap forEachDimension ','
-                    $"left.{c} + right.{c}"
-                end
-            }}
+            {{ wrap forEachDimension ','; $"left.{c} + right.{c}"; end }}
         );
     }
 
@@ -1268,6 +1264,8 @@ public static partial class {{ TypeName }}
         );
     }
 
+    // CANNOT BE DONE
+    /*
     /// <summary>Transforms a vector by a specified 4x4 matrix.</summary>
     /// <param name="position">The vector to transform.</param>
     /// <param name="matrix">The transformation matrix.</param>
@@ -1278,8 +1276,6 @@ public static partial class {{ TypeName }}
         return ({{ TypeNameT }})Vector4D.Transform(position, matrix);
     }
 
-    // CANNOT BE DONE
-    /*
     /// <summary>Transforms a vector by the specified Quaternion rotation value.</summary>
     /// <param name="value">The vector to rotate.</param>
     /// <param name="rotation">The rotation to apply.</param>
@@ -1432,6 +1428,8 @@ public static partial class {{ TypeName }}
         return Sqrt<T, T>(value);
     }
 
+    // CANNOT BE DONE
+    /*
     /// <summary>Transforms a vector by the specified Quaternion rotation value.</summary>
     /// <param name="value">The vector to rotate.</param>
     /// <param name="rotation">The rotation to apply.</param>
@@ -1455,6 +1453,7 @@ public static partial class {{ TypeName }}
     {
         return Transform<T, TQuat, T>(value, rotation);
     }
+    */
     #endregion
 
     // Equivalent implementing IHyperbolicFunctions<System.Runtime.Intrinsics.Vector3>
@@ -1547,7 +1546,7 @@ public static partial class {{ TypeName }}
     public static {{ TypeNameT }} BitIncrement<T>({{ TypeNameT }} x) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.BitIncrement(x.{c})"; end }});
 
     public static {{ TypeNameT }} FusedMultiplyAdd<T>({{ TypeNameT }} left, {{ TypeNameT }} right, {{ TypeNameT }} addend) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.FusedMultiplyAdd(left.{c}, right.{c}, addend.{c})"; end }});
-    public static {{ TypeNameT }} Lerp<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2, {{ TypeNameT }} amount) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Lerp(value1.{c}, value2.{c}, amount.{c})"; end }});
+    // public static {{ TypeNameT }} Lerp<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2, {{ TypeNameT }} amount) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Lerp(value1.{c}, value2.{c}, amount.{c})"; end }});
     public static {{ TypeNameT }} ReciprocalEstimate<T>({{ TypeNameT }} x) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.ReciprocalEstimate(x.{c})"; end }});
     public static {{ TypeNameT }} ReciprocalSqrtEstimate<T>({{ TypeNameT }} x) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.ReciprocalSqrtEstimate(x.{c})"; end }});
 
