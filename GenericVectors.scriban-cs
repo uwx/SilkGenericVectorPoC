@@ -235,6 +235,7 @@ namespace GenericVector;
 ~}}
 
 // {{ TypeNameT }}
+/// <summary>A structure encapsulating {{AmountName}} values, usually geometric vectors, and provides hardware accelerated methods.</summary>
 [StructLayout(LayoutKind.Sequential), DataContract, Serializable]
 public readonly partial struct {{TypeNameT}} : IVector<{{TypeNameT}}, T>, IVectorAlso<{{TypeNameT}}, T>, IEquatable<Vector{{vecN}}>, ISpanFormattable
     where T : INumberBase<T>
