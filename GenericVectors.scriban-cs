@@ -10,10 +10,8 @@ using System.Text.Unicode;
 
 namespace GenericVector;
 
-{{~ for vecN in min_dimensions..max_dimensions
-    #for vecN in 3..3
--}}
 {{~
+    vecN = vec_n
     dimensionIndex = vecN - 1
 
     TypeName = $"Vector{vecN}D"
@@ -150,6 +148,90 @@ namespace GenericVector;
             end
         end
     end
+
+    func vectorize(argNames...)
+        a = 'v0'
+        b = 'v1'
+        c = 'v2'
+        d = 'v3'
+        e = 'v4'
+        f = 'v5'
+        g = 'v6'
+        h = 'v7'
+        i = 'v8'
+        "// NOTE: COMPLETELY UNTESTED. MIGHT BE SLOW.\n"
+        "unsafe\n"
+        "{\n"
+        "    if (Vector64<T>.IsSupported && Vector64.IsHardwareAccelerated)\n"
+        "    {\n"
+        for argName in argNames
+            $"        Vector64<T> v{for.index} = default;\n"
+        end
+        "        \n"
+        for argName in argNames
+            $"        Unsafe.WriteUnaligned<{TypeNameT}>(ref Unsafe.As<Vector64<T>, byte>(ref v{for.index}), {argName});\n"
+        end
+        "        \n"
+        "        v0 = "
+        vector = 'Vector64'
+        $$
+        ";\n"
+        $"        return Unsafe.ReadUnaligned<{TypeNameT}>(ref Unsafe.As<Vector64<T>, byte>(ref v0));\n"
+        "    }\n"
+        "\n"
+        "    if (Vector128<T>.IsSupported && Vector128.IsHardwareAccelerated)\n"
+        "    {\n"
+        for argName in argNames
+            $"        Vector128<T> v{for.index} = default;\n"
+        end
+        "        \n"
+        for argName in argNames
+            $"        Unsafe.WriteUnaligned<{TypeNameT}>(ref Unsafe.As<Vector128<T>, byte>(ref v{for.index}), {argName});\n"
+        end
+        "        \n"
+        "        v0 = "
+        vector = 'Vector128'
+        $$
+        ";\n"
+        $"        return Unsafe.ReadUnaligned<{TypeNameT}>(ref Unsafe.As<Vector128<T>, byte>(ref v0));\n"
+        "    }\n"
+        "\n"
+        "    if (Vector256<T>.IsSupported && Vector256.IsHardwareAccelerated)\n"
+        "    {\n"
+        for argName in argNames
+            $"        Vector256<T> v{for.index} = default;\n"
+        end
+        "        \n"
+        for argName in argNames
+            $"        Unsafe.WriteUnaligned<{TypeNameT}>(ref Unsafe.As<Vector256<T>, byte>(ref v{for.index}), {argName});\n"
+        end
+        "        \n"
+        "        v0 = "
+        vector = 'Vector256'
+        $$
+        ";\n"
+        $"        return Unsafe.ReadUnaligned<{TypeNameT}>(ref Unsafe.As<Vector256<T>, byte>(ref v0));\n"
+        "    }\n"
+        "\n"
+        "    if (Vector512<T>.IsSupported && Vector512.IsHardwareAccelerated)\n"
+        "    {\n"
+        for argName in argNames
+            $"        Vector512<T> v{for.index} = default;\n"
+        end
+        "        \n"
+        for argName in argNames
+            $"        Unsafe.WriteUnaligned<{TypeNameT}>(ref Unsafe.As<Vector512<T>, byte>(ref v{for.index}), {argName});\n"
+        end
+        "        \n"
+        "        v0 = "
+        vector = 'Vector512'
+        $$
+        ";\n"
+        $"        return Unsafe.ReadUnaligned<{TypeNameT}>(ref Unsafe.As<Vector512<T>, byte>(ref v0));\n"
+        "    }\n"
+        "}\n"
+    end
+
 ~}}
 
 // {{ TypeNameT }}
@@ -260,6 +342,8 @@ public readonly partial struct {{TypeNameT}} : IVector<{{TypeNameT}}, T>, IVecto
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static {{ TypeNameT }} operator +({{ TypeNameT }} left, {{ TypeNameT }} right)
     {
+        {{ wrap vectorize 'left' 'right'; $"{a} + {b}"; end }}
+
         return new {{ TypeNameT }}(
             {{ wrap forEachDimension ','; $"left.{c} + right.{c}"; end }}
         );
@@ -273,6 +357,8 @@ public readonly partial struct {{TypeNameT}} : IVector<{{TypeNameT}}, T>, IVecto
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static {{ TypeNameT }} operator -({{ TypeNameT }} left, {{ TypeNameT }} right)
     {
+        {{ wrap vectorize 'left' 'right'; $"{a} - {b}"; end }}
+
         return new {{ TypeNameT }}(
             {{ wrap forEachDimension ','; $"left.{c} - right.{c}"; end }}
         );
@@ -296,6 +382,8 @@ public readonly partial struct {{TypeNameT}} : IVector<{{TypeNameT}}, T>, IVecto
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static {{ TypeNameT }} operator *({{ TypeNameT }} left, {{ TypeNameT }} right)
     {
+        {{ wrap vectorize 'left' 'right'; $"{a} * {b}"; end }}
+
         return new {{ TypeNameT }}(
             {{ wrap forEachDimension ','; $"left.{c} * right.{c}"; end }}
         );
@@ -331,6 +419,8 @@ public readonly partial struct {{TypeNameT}} : IVector<{{TypeNameT}}, T>, IVecto
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static {{ TypeNameT }} operator /({{ TypeNameT }} left, {{ TypeNameT }} right)
     {
+        {{ wrap vectorize 'left' 'right'; $"{a} / {b}"; end }}
+
         return new {{ TypeNameT }}(
             {{ wrap forEachDimension ','; $"left.{c} / right.{c}"; end }}
         );
@@ -355,8 +445,7 @@ public readonly partial struct {{TypeNameT}} : IVector<{{TypeNameT}}, T>, IVecto
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==({{ TypeNameT }} left, {{ TypeNameT }} right)
     {
-        return
-            {{ wrap forEachDimension ' &&'; $"left.{c} == right.{c}"; end }};
+        return left.Equals(right);
     }
 
     /// <summary>Returns a value that indicates whether two specified vectors are not equal.</summary>
@@ -443,7 +532,11 @@ public readonly partial struct {{TypeNameT}} : IVector<{{TypeNameT}}, T>, IVecto
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Equals({{ TypeNameT }} other)
     {
-        return SpeedHelpers.FastEqualsUpTo4<{{ TypeNameT }}, T>(this, other);
+        /*{{ wrap vectorize 'left' 'right'; $"{a}.Equals({b})"; end }}*/
+
+        //return SpeedHelpers.FastEqualsUpTo4<{{ TypeNameT }}, T>(this, other);
+        return
+            {{ wrap forEachDimension ' &&'; $"{c}.Equals(other.{c})"; end }};
     }
 
     /// <summary>Returns a value that indicates whether this instance and a specified object are equal.</summary>
@@ -466,11 +559,7 @@ public readonly partial struct {{TypeNameT}} : IVector<{{TypeNameT}}, T>, IVecto
 
 
         return
-            {{
-                wrap forEachDimension ' &&'
-                    $"float.CreateTruncating({c}).Equals(other.{c})"
-                end
-            }};
+            {{ wrap forEachDimension ' &&'; $"float.CreateTruncating({c}).Equals(other.{c})"; end }};
     }
 
     /// <summary>Returns the hash code for this instance.</summary>
@@ -1113,7 +1202,12 @@ public static partial class {{ TypeName }}
     /// <param name="value">A vector.</param>
     /// <returns>The absolute value vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Abs<T>({{ TypeNameT }} value) where T : INumberBase<T> => new({{ repeatCall 'T.Abs' 'value' }});
+    public static {{ TypeNameT }} Abs<T>({{ TypeNameT }} value) where T : INumberBase<T>
+    {
+        {{ wrap vectorize 'value'; $"{vector}.Abs({a})"; end }}
+
+        return new({{ repeatCall 'T.Abs' 'value' }});
+    }
 
     /// <summary>Restricts a vector between a minimum and a maximum value.</summary>
     /// <param name="value1">The vector to restrict.</param>
@@ -1123,6 +1217,8 @@ public static partial class {{ TypeName }}
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static {{ TypeNameT }} Clamp<T>({{ TypeNameT }} value1, {{ TypeNameT }} min, {{ TypeNameT }} max) where T : INumberBase<T>, IComparisonOperators<T, T, bool>
     {
+        {{ wrap vectorize 'value1' 'min' 'max'; $"{vector}.Min({vector}.Max({a}, {b}), {c})"; end }}
+
         // We must follow HLSL behavior in the case user specified min value is bigger than max value.
         return Min(Max(value1, min), max);
     }
@@ -1167,6 +1263,7 @@ public static partial class {{ TypeName }}
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static T Dot<T>({{ TypeNameT }} vector1, {{ TypeNameT }} vector2) where T : INumberBase<T>
     {
+        // TODO: vectorize return scalar
         return
             {{ wrap forEachDimension ' +'; $"vector1.{c} * vector2.{c}"; end -}};
     }
@@ -1178,6 +1275,7 @@ public static partial class {{ TypeName }}
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TReturn Dot<T, TReturn>({{ TypeNameT }} vector1, {{ TypeNameT }} vector2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
     {
+        // TODO vectorize return converted (maybe not possible)
         return
             {{ wrap forEachDimension ' +'; $"TReturn.CreateTruncating(vector1.{c}) * TReturn.CreateTruncating(vector2.{c})"; end -}};
     }
@@ -1619,5 +1717,3 @@ public static partial class {{ TypeName }}
     public static Vector{{vecN}} AsNumerics(this {{ TypeName }}<float> vector)
         => Unsafe.BitCast<{{ TypeName }}<float>, Vector{{vecN}}>(vector);
 }
-
-{{ end }}
