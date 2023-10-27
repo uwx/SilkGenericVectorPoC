@@ -6,6 +6,15 @@ namespace GenericVector;
 
 public static class Helpers
 {
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static void CheckTypeAndThrow<T, TScalar>(Type type)
+    {
+        if (!type.MakeGenericType(typeof(TScalar)).IsAssignableFrom(typeof(T)))
+        {
+            throw new ArgumentException();
+        }
+    }
+    
     public static Vector4D<T> AsVector4D<T>(this Vector128<T> vec) where T : INumberBase<T>
     {
         return Unsafe.BitCast<Vector128<T>, Vector4D<T>>(vec);

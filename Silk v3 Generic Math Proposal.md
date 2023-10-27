@@ -1,9 +1,9 @@
 Silk v3 Generic Math Proposal
 
 Types to implement:
-- Vector2&lt;T>
-- Vector3&lt;T>
-- Vector4&lt;T>
+- Vector2D&lt;T>
+- Vector3D&lt;T>
+- Vector4D&lt;T>
 - Quaternion&lt;T>
 - Matrix3x2&lt;T>
 - Matrix4x4&lt;T>

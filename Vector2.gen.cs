@@ -12,6 +12,7 @@ namespace GenericVector;
 
 
 // Vector2D<T>
+/// <summary>A structure encapsulating two values, usually geometric vectors, and provides hardware accelerated methods.</summary>
 [StructLayout(LayoutKind.Sequential), DataContract, Serializable]
 public readonly partial struct Vector2D<T> : IVector<Vector2D<T>, T>, IVectorAlso<Vector2D<T>, T>, IEquatable<Vector2>, ISpanFormattable
     where T : INumberBase<T>
@@ -593,7 +594,7 @@ unsafe
     /// <remarks>This method returns a string in which each element of the vector is formatted using the "G" (general) format string and the formatting conventions of the current thread culture. The "&lt;" and "&gt;" characters are used to begin and end the string, and the current culture's <see cref="NumberFormatInfo.NumberGroupSeparator" /> property followed by a space is used to separate each element.</remarks>
     public override string ToString()
     {
-        return ToString("G", CultureInfo.CurrentCulture);
+        return ToString("G", null);
     }
 
     /// <summary>Returns the string representation of the current instance using the specified format string to format individual elements.</summary>
@@ -604,7 +605,7 @@ unsafe
     /// <related type="Article" href="/dotnet/standard/base-types/custom-numeric-format-strings">Custom Numeric Format Strings</related>
     public string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format)
     {
-        return ToString(format, CultureInfo.CurrentCulture);
+        return ToString(format, null);
     }
 
     /// <summary>Returns the string representation of the current instance using the specified format string to format individual elements and the specified format provider to define culture-specific formatting.</summary>
@@ -840,14 +841,6 @@ public readonly partial struct Vector2D<T> :
         return true;
     }
 
-    static Vector2D<T> IAdditiveIdentity<Vector2D<T>, Vector2D<T>>.AdditiveIdentity => Zero;
-    static Vector2D<T> IMultiplicativeIdentity<Vector2D<T>, Vector2D<T>>.MultiplicativeIdentity => One;
-
-    static Vector2D<T> IDecrementOperators<Vector2D<T>>.operator --(Vector2D<T> value) => value - One;
-    static Vector2D<T> IIncrementOperators<Vector2D<T>>.operator ++(Vector2D<T> value) => value + One;
-
-    static Vector2D<T> IUnaryPlusOperators<Vector2D<T>, Vector2D<T>>.operator +(Vector2D<T> value) => value;
-
     static bool INumberBase<Vector2D<T>>.IsCanonical(Vector2D<T> value) => T.IsCanonical(value.X) && T.IsCanonical(value.Y);
 
     static bool INumberBase<Vector2D<T>>.IsComplexNumber(Vector2D<T> value) => T.IsComplexNumber(value.X) || T.IsComplexNumber(value.Y);
@@ -890,7 +883,7 @@ public readonly partial struct Vector2D<T> :
 
     static Vector2D<T> INumberBase<Vector2D<T>>.MinMagnitudeNumber(Vector2D<T> x, Vector2D<T> y) => new(T.MinMagnitudeNumber(x.X, y.X), T.MinMagnitudeNumber(x.Y, y.Y));
 
-    public static bool TryConvertFromChecked<TOther>(TOther value, out Vector2D<T> result) where TOther : INumberBase<TOther>
+    static bool INumberBase<Vector2D<T>>.TryConvertFromChecked<TOther>(TOther value, out Vector2D<T> result)
     {
         if (value is Vector2D<T> v)
         {
@@ -908,7 +901,7 @@ public readonly partial struct Vector2D<T> :
         return false;
     }
 
-    public static bool TryConvertFromSaturating<TOther>(TOther value, out Vector2D<T> result) where TOther : INumberBase<TOther>
+    static bool INumberBase<Vector2D<T>>.TryConvertFromSaturating<TOther>(TOther value, out Vector2D<T> result)
     {
         if (value is Vector2D<T> v)
         {
@@ -926,7 +919,7 @@ public readonly partial struct Vector2D<T> :
         return false;
     }
 
-    public static bool TryConvertFromTruncating<TOther>(TOther value, out Vector2D<T> result) where TOther : INumberBase<TOther>
+    static bool INumberBase<Vector2D<T>>.TryConvertFromTruncating<TOther>(TOther value, out Vector2D<T> result) where TOther : INumberBase<TOther>
     {
         if (value is Vector2D<T> v)
         {
@@ -944,22 +937,20 @@ public readonly partial struct Vector2D<T> :
         return false;
     }
 
-    public static bool TryConvertToChecked<TOther>(Vector2D<T> value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
+    static bool INumberBase<Vector2D<T>>.TryConvertToChecked<TOther>(Vector2D<T> value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
     {
         return TOther.TryConvertFromChecked(value, out result);
     }
 
-    public static bool TryConvertToSaturating<TOther>(Vector2D<T> value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
+    static bool INumberBase<Vector2D<T>>.TryConvertToSaturating<TOther>(Vector2D<T> value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
     {
         return TOther.TryConvertFromSaturating(value, out result);
     }
 
-    public static bool TryConvertToTruncating<TOther>(Vector2D<T> value, [MaybeNullWhen(false)]out TOther result) where TOther : INumberBase<TOther>
+    static bool INumberBase<Vector2D<T>>.TryConvertToTruncating<TOther>(Vector2D<T> value, [MaybeNullWhen(false)]out TOther result) where TOther : INumberBase<TOther>
     {
         return TOther.TryConvertFromTruncating(value, out result);
     }
-
-    static int INumberBase<Vector2D<T>>.Radix => T.Radix;
 
     Vector2D<T1>? IVec2.GetChecked<T1>() => T1.TryConvertFromChecked(X, out var x) ? new(x, T1.CreateChecked(Y)) : null;
     Vector2D<T1>? IVec2.GetSaturating<T1>() => T1.TryConvertFromSaturating(X, out var x) ? new(x, T1.CreateSaturating(Y)) : null;
@@ -1240,7 +1231,7 @@ public static partial class Vector2D
     /// <param name="max">The maximum value.</param>
     /// <returns>The restricted vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Clamp<T>(Vector2D<T> value1, Vector2D<T> min, Vector2D<T> max) where T : INumberBase<T>, IComparisonOperators<T, T, bool>
+    public static Vector2D<T> Clamp<T>(Vector2D<T> value1, Vector2D<T> min, Vector2D<T> max) where T : INumberBase<T>
     {
         // NOTE: COMPLETELY UNTESTED. MIGHT BE SLOW.
         unsafe
@@ -1378,10 +1369,29 @@ public static partial class Vector2D
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector2D<T> LerpUnchecked<T>(Vector2D<T> value1, Vector2D<T> value2, T amount) where T : INumberBase<T>
+    {
+        return (value1.As<T>() * (T.One - amount)) + (value2.As<T>() * amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2D<TFloat> LerpClamped<T, TFloat>(Vector2D<T> value1, Vector2D<T> value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         amount = TFloat.Clamp(amount, TFloat.Zero, TFloat.One);
         return Lerp(value1, value2, amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector2D<T> LerpClampedUnchecked<T>(Vector2D<T> value1, Vector2D<T> value2, T amount) where T : INumberBase<T>
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static T ClampT(T value, T min, T max)
+        {
+            return T.MaxMagnitude(T.MaxMagnitude(value, min), max);
+        }
+
+        amount = ClampT(amount, T.Zero, T.One);
+        return LerpUnchecked(value1, value2, amount);
     }
 
     /// <summary>Returns a vector whose elements are the maximum of each of the pairs of elements in two specified vectors.</summary>
@@ -1389,11 +1399,11 @@ public static partial class Vector2D
     /// <param name="value2">The second vector.</param>
     /// <returns>The maximized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Max<T>(Vector2D<T> value1, Vector2D<T> value2) where T : INumberBase<T>, IComparisonOperators<T, T, bool>
+    public static Vector2D<T> Max<T>(Vector2D<T> value1, Vector2D<T> value2) where T : INumberBase<T>
     {
-        return new Vector2D<T>( // using T.Max here would add an IsNaN check
-            (value1.X > value2.X) ? value1.X : value2.X, 
-            (value1.Y > value2.Y) ? value1.Y : value2.Y
+        return new Vector2D<T>(
+            T.MaxMagnitudeNumber(value1.X, value2.X), 
+            T.MaxMagnitudeNumber(value1.Y, value2.Y)
         );
     }
 
@@ -1402,11 +1412,11 @@ public static partial class Vector2D
     /// <param name="value2">The second vector.</param>
     /// <returns>The minimized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Min<T>(Vector2D<T> value1, Vector2D<T> value2) where T : INumberBase<T>, IComparisonOperators<T, T, bool>
+    public static Vector2D<T> Min<T>(Vector2D<T> value1, Vector2D<T> value2) where T : INumberBase<T>
     {
-        return new Vector2D<T>( // using T.Min here would add an IsNaN check
-            (value1.X < value2.X) ? value1.X : value2.X, 
-            (value1.Y < value2.Y) ? value1.Y : value2.Y
+        return new Vector2D<T>(
+        T.MinMagnitudeNumber(value1.X, value2.X), 
+        T.MinMagnitudeNumber(value1.Y, value2.Y)
         );
     }
 
@@ -1792,4 +1802,60 @@ public static partial class Vector2D
 
     public static Vector2 AsNumerics(this Vector2D<float> vector)
         => Unsafe.BitCast<Vector2D<float>, Vector2>(vector);
+}
+
+// IVector<Vector2D<T>, T>
+public readonly partial struct Vector2D<T>
+{
+    T IVector<Vector2D<T>, T>.LengthSquared()
+        => this.LengthSquared();
+    static Vector2D<T> IVector<Vector2D<T>, T>.Multiply(Vector2D<T> left, Vector2D<T> right)
+        => Vector2D.Multiply(left, right);
+    static Vector2D<T> IVector<Vector2D<T>, T>.Multiply(Vector2D<T> left, T right)
+        => Vector2D.Multiply(left, right);
+    static Vector2D<T> IVector<Vector2D<T>, T>.Multiply(T left, Vector2D<T> right)
+        => Vector2D.Multiply(left, right);
+    static Vector2D<T> IVector<Vector2D<T>, T>.Negate(Vector2D<T> value)
+        => Vector2D.Negate(value);
+    static Vector2D<T> IVector<Vector2D<T>, T>.Subtract(Vector2D<T> left, Vector2D<T> right)
+        => Vector2D.Subtract(left, right);
+    static Vector2D<T> IVector<Vector2D<T>, T>.Add(Vector2D<T> left, Vector2D<T> right)
+        => Vector2D.Add(left, right);
+    static Vector2D<T> IVector<Vector2D<T>, T>.Divide(Vector2D<T> left, Vector2D<T> right)
+        => Vector2D.Divide(left, right);
+    static Vector2D<T> IVector<Vector2D<T>, T>.Divide(Vector2D<T> left, T divisor)
+        => Vector2D.Divide(left, divisor);
+    static Vector2D<T> IVector<Vector2D<T>, T>.Clamp(Vector2D<T> value1, Vector2D<T> min, Vector2D<T> max)
+        => Vector2D.Clamp(value1, min, max);
+    static TReturn IVector<Vector2D<T>, T>.Distance<TReturn>(Vector2D<T> value1, Vector2D<T> value2)
+        => Vector2D.Distance<T, TReturn>(value1, value2);
+    static T IVector<Vector2D<T>, T>.DistanceSquared(Vector2D<T> value1, Vector2D<T> value2)
+        => Vector2D.DistanceSquared(value1, value2);
+    static TReturn IVector<Vector2D<T>, T>.DistanceSquared<TReturn>(Vector2D<T> value1, Vector2D<T> value2)
+        => Vector2D.DistanceSquared<T, TReturn>(value1, value2);
+    static T IVector<Vector2D<T>, T>.Dot(Vector2D<T> vector1, Vector2D<T> vector2)
+        => Vector2D.Dot(vector1, vector2);
+    static TReturn IVector<Vector2D<T>, T>.Dot<TReturn>(Vector2D<T> vector1, Vector2D<T> vector2)
+        => Vector2D.Dot<T, TReturn>(vector1, vector2);
+    static Vector2D<T> IVector<Vector2D<T>, T>.Max(Vector2D<T> value1, Vector2D<T> value2)
+        => Vector2D.Max(value1, value2);
+    static Vector2D<T> IVector<Vector2D<T>, T>.Min(Vector2D<T> value1, Vector2D<T> value2)
+        => Vector2D.Min(value1, value2);
+
+    static Vector2D<T> IVector<Vector2D<T>, T>.Lerp(Vector2D<T> value1, Vector2D<T> value2, T amount) /* where T : IFloatingPoint<T> */
+    {
+        Helpers.CheckTypeAndThrow<Vector2D<T>, T>(typeof(IFloatingPoint<>));
+        return Vector2D.LerpUnchecked(value1, value2, amount);
+    }
+
+    static Vector2D<T> IVector<Vector2D<T>, T>.LerpClamped(Vector2D<T> value1, Vector2D<T> value2, T amount) /* where T : IFloatingPoint<T> */
+    {
+        Helpers.CheckTypeAndThrow<Vector2D<T>, T>(typeof(IFloatingPoint<>));
+        return Vector2D.LerpClampedUnchecked(value1, value2, amount);
+    }
+    static Vector2D<T> IVector<Vector2D<T>, T>.Reflect(Vector2D<T> vector, Vector2D<T> normal) /* where T : IFloatingPoint<T> */
+    {
+        Helpers.CheckTypeAndThrow<Vector2D<T>, T>(typeof(IFloatingPoint<>));
+        return Vector2D.Reflect<T, T>(vector, normal);
+    }
 }

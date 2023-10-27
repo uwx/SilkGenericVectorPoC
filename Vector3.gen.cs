@@ -12,6 +12,7 @@ namespace GenericVector;
 
 
 // Vector3D<T>
+/// <summary>A structure encapsulating three values, usually geometric vectors, and provides hardware accelerated methods.</summary>
 [StructLayout(LayoutKind.Sequential), DataContract, Serializable]
 public readonly partial struct Vector3D<T> : IVector<Vector3D<T>, T>, IVectorAlso<Vector3D<T>, T>, IEquatable<Vector3>, ISpanFormattable
     where T : INumberBase<T>
@@ -613,7 +614,7 @@ unsafe
     /// <remarks>This method returns a string in which each element of the vector is formatted using the "G" (general) format string and the formatting conventions of the current thread culture. The "&lt;" and "&gt;" characters are used to begin and end the string, and the current culture's <see cref="NumberFormatInfo.NumberGroupSeparator" /> property followed by a space is used to separate each element.</remarks>
     public override string ToString()
     {
-        return ToString("G", CultureInfo.CurrentCulture);
+        return ToString("G", null);
     }
 
     /// <summary>Returns the string representation of the current instance using the specified format string to format individual elements.</summary>
@@ -624,7 +625,7 @@ unsafe
     /// <related type="Article" href="/dotnet/standard/base-types/custom-numeric-format-strings">Custom Numeric Format Strings</related>
     public string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format)
     {
-        return ToString(format, CultureInfo.CurrentCulture);
+        return ToString(format, null);
     }
 
     /// <summary>Returns the string representation of the current instance using the specified format string to format individual elements and the specified format provider to define culture-specific formatting.</summary>
@@ -1299,7 +1300,7 @@ public static partial class Vector3D
     /// <param name="max">The maximum value.</param>
     /// <returns>The restricted vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector3D<T> Clamp<T>(Vector3D<T> value1, Vector3D<T> min, Vector3D<T> max) where T : INumberBase<T>, IComparisonOperators<T, T, bool>
+    public static Vector3D<T> Clamp<T>(Vector3D<T> value1, Vector3D<T> min, Vector3D<T> max) where T : INumberBase<T>
     {
         // NOTE: COMPLETELY UNTESTED. MIGHT BE SLOW.
         unsafe
@@ -1439,10 +1440,29 @@ public static partial class Vector3D
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector3D<T> LerpUnchecked<T>(Vector3D<T> value1, Vector3D<T> value2, T amount) where T : INumberBase<T>
+    {
+        return (value1.As<T>() * (T.One - amount)) + (value2.As<T>() * amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector3D<TFloat> LerpClamped<T, TFloat>(Vector3D<T> value1, Vector3D<T> value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         amount = TFloat.Clamp(amount, TFloat.Zero, TFloat.One);
         return Lerp(value1, value2, amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector3D<T> LerpClampedUnchecked<T>(Vector3D<T> value1, Vector3D<T> value2, T amount) where T : INumberBase<T>
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static T ClampT(T value, T min, T max)
+        {
+            return T.MaxMagnitude(T.MaxMagnitude(value, min), max);
+        }
+
+        amount = ClampT(amount, T.Zero, T.One);
+        return LerpUnchecked(value1, value2, amount);
     }
 
     /// <summary>Returns a vector whose elements are the maximum of each of the pairs of elements in two specified vectors.</summary>
@@ -1450,12 +1470,12 @@ public static partial class Vector3D
     /// <param name="value2">The second vector.</param>
     /// <returns>The maximized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector3D<T> Max<T>(Vector3D<T> value1, Vector3D<T> value2) where T : INumberBase<T>, IComparisonOperators<T, T, bool>
+    public static Vector3D<T> Max<T>(Vector3D<T> value1, Vector3D<T> value2) where T : INumberBase<T>
     {
-        return new Vector3D<T>( // using T.Max here would add an IsNaN check
-            (value1.X > value2.X) ? value1.X : value2.X, 
-            (value1.Y > value2.Y) ? value1.Y : value2.Y, 
-            (value1.Z > value2.Z) ? value1.Z : value2.Z
+        return new Vector3D<T>(
+            T.MaxMagnitudeNumber(value1.X, value2.X), 
+            T.MaxMagnitudeNumber(value1.Y, value2.Y), 
+            T.MaxMagnitudeNumber(value1.Z, value2.Z)
         );
     }
 
@@ -1464,12 +1484,12 @@ public static partial class Vector3D
     /// <param name="value2">The second vector.</param>
     /// <returns>The minimized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector3D<T> Min<T>(Vector3D<T> value1, Vector3D<T> value2) where T : INumberBase<T>, IComparisonOperators<T, T, bool>
+    public static Vector3D<T> Min<T>(Vector3D<T> value1, Vector3D<T> value2) where T : INumberBase<T>
     {
-        return new Vector3D<T>( // using T.Min here would add an IsNaN check
-            (value1.X < value2.X) ? value1.X : value2.X, 
-            (value1.Y < value2.Y) ? value1.Y : value2.Y, 
-            (value1.Z < value2.Z) ? value1.Z : value2.Z
+        return new Vector3D<T>(
+        T.MinMagnitudeNumber(value1.X, value2.X), 
+        T.MinMagnitudeNumber(value1.Y, value2.Y), 
+        T.MinMagnitudeNumber(value1.Z, value2.Z)
         );
     }
 
@@ -1869,4 +1889,60 @@ public static partial class Vector3D
 
     public static Vector3 AsNumerics(this Vector3D<float> vector)
         => Unsafe.BitCast<Vector3D<float>, Vector3>(vector);
+}
+
+// IVector<Vector3D<T>, T>
+public readonly partial struct Vector3D<T>
+{
+    T IVector<Vector3D<T>, T>.LengthSquared()
+        => this.LengthSquared();
+    static Vector3D<T> IVector<Vector3D<T>, T>.Multiply(Vector3D<T> left, Vector3D<T> right)
+        => Vector3D.Multiply(left, right);
+    static Vector3D<T> IVector<Vector3D<T>, T>.Multiply(Vector3D<T> left, T right)
+        => Vector3D.Multiply(left, right);
+    static Vector3D<T> IVector<Vector3D<T>, T>.Multiply(T left, Vector3D<T> right)
+        => Vector3D.Multiply(left, right);
+    static Vector3D<T> IVector<Vector3D<T>, T>.Negate(Vector3D<T> value)
+        => Vector3D.Negate(value);
+    static Vector3D<T> IVector<Vector3D<T>, T>.Subtract(Vector3D<T> left, Vector3D<T> right)
+        => Vector3D.Subtract(left, right);
+    static Vector3D<T> IVector<Vector3D<T>, T>.Add(Vector3D<T> left, Vector3D<T> right)
+        => Vector3D.Add(left, right);
+    static Vector3D<T> IVector<Vector3D<T>, T>.Divide(Vector3D<T> left, Vector3D<T> right)
+        => Vector3D.Divide(left, right);
+    static Vector3D<T> IVector<Vector3D<T>, T>.Divide(Vector3D<T> left, T divisor)
+        => Vector3D.Divide(left, divisor);
+    static Vector3D<T> IVector<Vector3D<T>, T>.Clamp(Vector3D<T> value1, Vector3D<T> min, Vector3D<T> max)
+        => Vector3D.Clamp(value1, min, max);
+    static TReturn IVector<Vector3D<T>, T>.Distance<TReturn>(Vector3D<T> value1, Vector3D<T> value2)
+        => Vector3D.Distance<T, TReturn>(value1, value2);
+    static T IVector<Vector3D<T>, T>.DistanceSquared(Vector3D<T> value1, Vector3D<T> value2)
+        => Vector3D.DistanceSquared(value1, value2);
+    static TReturn IVector<Vector3D<T>, T>.DistanceSquared<TReturn>(Vector3D<T> value1, Vector3D<T> value2)
+        => Vector3D.DistanceSquared<T, TReturn>(value1, value2);
+    static T IVector<Vector3D<T>, T>.Dot(Vector3D<T> vector1, Vector3D<T> vector2)
+        => Vector3D.Dot(vector1, vector2);
+    static TReturn IVector<Vector3D<T>, T>.Dot<TReturn>(Vector3D<T> vector1, Vector3D<T> vector2)
+        => Vector3D.Dot<T, TReturn>(vector1, vector2);
+    static Vector3D<T> IVector<Vector3D<T>, T>.Max(Vector3D<T> value1, Vector3D<T> value2)
+        => Vector3D.Max(value1, value2);
+    static Vector3D<T> IVector<Vector3D<T>, T>.Min(Vector3D<T> value1, Vector3D<T> value2)
+        => Vector3D.Min(value1, value2);
+
+    static Vector3D<T> IVector<Vector3D<T>, T>.Lerp(Vector3D<T> value1, Vector3D<T> value2, T amount) /* where T : IFloatingPoint<T> */
+    {
+        Helpers.CheckTypeAndThrow<Vector3D<T>, T>(typeof(IFloatingPoint<>));
+        return Vector3D.LerpUnchecked(value1, value2, amount);
+    }
+
+    static Vector3D<T> IVector<Vector3D<T>, T>.LerpClamped(Vector3D<T> value1, Vector3D<T> value2, T amount) /* where T : IFloatingPoint<T> */
+    {
+        Helpers.CheckTypeAndThrow<Vector3D<T>, T>(typeof(IFloatingPoint<>));
+        return Vector3D.LerpClampedUnchecked(value1, value2, amount);
+    }
+    static Vector3D<T> IVector<Vector3D<T>, T>.Reflect(Vector3D<T> vector, Vector3D<T> normal) /* where T : IFloatingPoint<T> */
+    {
+        Helpers.CheckTypeAndThrow<Vector3D<T>, T>(typeof(IFloatingPoint<>));
+        return Vector3D.Reflect<T, T>(vector, normal);
+    }
 }

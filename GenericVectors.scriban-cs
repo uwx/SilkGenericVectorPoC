@@ -577,7 +577,7 @@ public readonly partial struct {{TypeNameT}} : IVector<{{TypeNameT}}, T>, IVecto
     /// <remarks>This method returns a string in which each element of the vector is formatted using the "G" (general) format string and the formatting conventions of the current thread culture. The "&lt;" and "&gt;" characters are used to begin and end the string, and the current culture's <see cref="NumberFormatInfo.NumberGroupSeparator" /> property followed by a space is used to separate each element.</remarks>
     public override string ToString()
     {
-        return ToString("G", CultureInfo.CurrentCulture);
+        return ToString("G", null);
     }
 
     /// <summary>Returns the string representation of the current instance using the specified format string to format individual elements.</summary>
@@ -588,7 +588,7 @@ public readonly partial struct {{TypeNameT}} : IVector<{{TypeNameT}}, T>, IVecto
     /// <related type="Article" href="/dotnet/standard/base-types/custom-numeric-format-strings">Custom Numeric Format Strings</related>
     public string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format)
     {
-        return ToString(format, CultureInfo.CurrentCulture);
+        return ToString(format, null);
     }
 
     /// <summary>Returns the string representation of the current instance using the specified format string to format individual elements and the specified format provider to define culture-specific formatting.</summary>
@@ -855,14 +855,6 @@ public readonly partial struct {{TypeNameT}} :
         return true;
     }
 
-    static {{TypeNameT}} IAdditiveIdentity<{{TypeNameT}}, {{TypeNameT}}>.AdditiveIdentity => Zero;
-    static {{TypeNameT}} IMultiplicativeIdentity<{{TypeNameT}}, {{TypeNameT}}>.MultiplicativeIdentity => One;
-
-    static {{TypeNameT}} IDecrementOperators<{{TypeNameT}}>.operator --({{TypeNameT}} value) => value - One;
-    static {{TypeNameT}} IIncrementOperators<{{TypeNameT}}>.operator ++({{TypeNameT}} value) => value + One;
-
-    static {{TypeNameT}} IUnaryPlusOperators<{{TypeNameT}}, {{TypeNameT}}>.operator +({{TypeNameT}} value) => value;
-
     static bool INumberBase<{{TypeNameT}}>.IsCanonical({{TypeNameT}} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsCanonical(value.{c})"; end }};
 
     static bool INumberBase<{{TypeNameT}}>.IsComplexNumber({{TypeNameT}} value) => {{ wrap forEachDimension ' || ' newline:false; $"T.IsComplexNumber(value.{c})"; end }};
@@ -905,7 +897,7 @@ public readonly partial struct {{TypeNameT}} :
 
     static {{TypeNameT}} INumberBase<{{TypeNameT}}>.MinMagnitudeNumber({{TypeNameT}} x, {{TypeNameT}} y) => new({{ wrap forEachDimension ', ' newline:false; $"T.MinMagnitudeNumber(x.{c}, y.{c})"; end }});
 
-    public static bool TryConvertFromChecked<TOther>(TOther value, out {{TypeNameT}} result) where TOther : INumberBase<TOther>
+    static bool INumberBase<{{TypeNameT}}>.TryConvertFromChecked<TOther>(TOther value, out {{TypeNameT}} result) where TOther : INumberBase<TOther>
     {
         if (value is {{TypeNameT}} v)
         {
@@ -923,7 +915,7 @@ public readonly partial struct {{TypeNameT}} :
         return false;
     }
 
-    public static bool TryConvertFromSaturating<TOther>(TOther value, out {{TypeNameT}} result) where TOther : INumberBase<TOther>
+    static bool INumberBase<{{TypeNameT}}>.TryConvertFromSaturating<TOther>(TOther value, out {{TypeNameT}} result) where TOther : INumberBase<TOther>
     {
         if (value is {{TypeNameT}} v)
         {
@@ -941,7 +933,7 @@ public readonly partial struct {{TypeNameT}} :
         return false;
     }
 
-    public static bool TryConvertFromTruncating<TOther>(TOther value, out {{TypeNameT}} result) where TOther : INumberBase<TOther>
+    static bool INumberBase<{{TypeNameT}}>.TryConvertFromTruncating<TOther>(TOther value, out {{TypeNameT}} result) where TOther : INumberBase<TOther>
     {
         if (value is {{TypeNameT}} v)
         {
@@ -959,22 +951,14 @@ public readonly partial struct {{TypeNameT}} :
         return false;
     }
 
-    public static bool TryConvertToChecked<TOther>({{TypeNameT}} value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
-    {
-        return TOther.TryConvertFromChecked(value, out result);
-    }
+    static bool INumberBase<{{TypeNameT}}>.TryConvertToChecked<TOther>({{TypeNameT}} value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
+        => TOther.TryConvertFromChecked(value, out result);
 
-    public static bool TryConvertToSaturating<TOther>({{TypeNameT}} value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
-    {
-        return TOther.TryConvertFromSaturating(value, out result);
-    }
+    static bool INumberBase<{{TypeNameT}}>.TryConvertToSaturating<TOther>({{TypeNameT}} value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
+        => TOther.TryConvertFromSaturating(value, out result);
 
-    public static bool TryConvertToTruncating<TOther>({{TypeNameT}} value, [MaybeNullWhen(false)]out TOther result) where TOther : INumberBase<TOther>
-    {
-        return TOther.TryConvertFromTruncating(value, out result);
-    }
-
-    static int INumberBase<{{TypeNameT}}>.Radix => T.Radix;
+    static bool INumberBase<{{TypeNameT}}>.TryConvertToTruncating<TOther>({{TypeNameT}} value, [MaybeNullWhen(false)]out TOther result) where TOther : INumberBase<TOther>
+        => TOther.TryConvertFromTruncating(value, out result);
 
     {{TypeName}}<T1>? IVec{{vecN}}.GetChecked<T1>() => T1.TryConvertFromChecked(X, out var x) ? new(x, {{ wrap forEachDimension ', ' newline:false dimensionOffset:1; $"T1.CreateChecked({c})"; end }}) : null;
     {{TypeName}}<T1>? IVec{{vecN}}.GetSaturating<T1>() => T1.TryConvertFromSaturating(X, out var x) ? new(x, {{ wrap forEachDimension ', ' newline:false dimensionOffset:1; $"T1.CreateSaturating({c})"; end }}) : null;
@@ -1216,7 +1200,7 @@ public static partial class {{ TypeName }}
     /// <param name="max">The maximum value.</param>
     /// <returns>The restricted vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Clamp<T>({{ TypeNameT }} value1, {{ TypeNameT }} min, {{ TypeNameT }} max) where T : INumberBase<T>, IComparisonOperators<T, T, bool>
+    public static {{ TypeNameT }} Clamp<T>({{ TypeNameT }} value1, {{ TypeNameT }} min, {{ TypeNameT }} max) where T : INumberBase<T>
     {
         {{ wrap vectorize 'value1' 'min' 'max'; $"{vector}.Min({vector}.Max({a}, {b}), {c})"; end }}
 
@@ -1293,10 +1277,29 @@ public static partial class {{ TypeName }}
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static {{ TypeNameT }} LerpUnchecked<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2, T amount) where T : INumberBase<T>
+    {
+        return (value1.As<T>() * (T.One - amount)) + (value2.As<T>() * amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static {{ TypeName }}<TFloat> LerpClamped<T, TFloat>({{ TypeNameT }} value1, {{ TypeNameT }} value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         amount = TFloat.Clamp(amount, TFloat.Zero, TFloat.One);
         return Lerp(value1, value2, amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static {{ TypeNameT }} LerpClampedUnchecked<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2, T amount) where T : INumberBase<T>
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static T ClampT(T value, T min, T max)
+        {
+            return T.MaxMagnitude(T.MaxMagnitude(value, min), max);
+        }
+
+        amount = ClampT(amount, T.Zero, T.One);
+        return LerpUnchecked(value1, value2, amount);
     }
 
     /// <summary>Returns a vector whose elements are the maximum of each of the pairs of elements in two specified vectors.</summary>
@@ -1304,10 +1307,10 @@ public static partial class {{ TypeName }}
     /// <param name="value2">The second vector.</param>
     /// <returns>The maximized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Max<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2) where T : INumberBase<T>, IComparisonOperators<T, T, bool>
+    public static {{ TypeNameT }} Max<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2) where T : INumberBase<T>
     {
-        return new {{ TypeNameT }}( // using T.Max here would add an IsNaN check
-            {{ wrap forEachDimension ', '; $"(value1.{c} > value2.{c}) ? value1.{c} : value2.{c}"; end }}
+        return new {{ TypeNameT }}(
+            {{ wrap forEachDimension ', '; $"T.MaxMagnitudeNumber(value1.{c}, value2.{c})"; end }}
         );
     }
 
@@ -1316,10 +1319,10 @@ public static partial class {{ TypeName }}
     /// <param name="value2">The second vector.</param>
     /// <returns>The minimized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Min<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2) where T : INumberBase<T>, IComparisonOperators<T, T, bool>
+    public static {{ TypeNameT }} Min<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2) where T : INumberBase<T>
     {
-        return new {{ TypeNameT }}( // using T.Min here would add an IsNaN check
-            {{ wrap forEachDimension ', '; $"(value1.{c} < value2.{c}) ? value1.{c} : value2.{c}"; end }}
+        return new {{ TypeNameT }}(
+        {{ wrap forEachDimension ', '; $"T.MinMagnitudeNumber(value1.{c}, value2.{c})"; end }}
         );
     }
 
@@ -1717,4 +1720,60 @@ public static partial class {{ TypeName }}
 
     public static Vector{{vecN}} AsNumerics(this {{ TypeName }}<float> vector)
         => Unsafe.BitCast<{{ TypeName }}<float>, Vector{{vecN}}>(vector);
+}
+
+// IVector<{{TypeNameT}}, T>
+public readonly partial struct {{TypeNameT}}
+{
+    T IVector<{{TypeNameT}}, T>.LengthSquared()
+        => this.LengthSquared();
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Multiply({{TypeNameT}} left, {{TypeNameT}} right)
+        => {{TypeName}}.Multiply(left, right);
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Multiply({{TypeNameT}} left, T right)
+        => {{TypeName}}.Multiply(left, right);
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Multiply(T left, {{TypeNameT}} right)
+        => {{TypeName}}.Multiply(left, right);
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Negate({{TypeNameT}} value)
+        => {{TypeName}}.Negate(value);
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Subtract({{TypeNameT}} left, {{TypeNameT}} right)
+        => {{TypeName}}.Subtract(left, right);
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Add({{TypeNameT}} left, {{TypeNameT}} right)
+        => {{TypeName}}.Add(left, right);
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Divide({{TypeNameT}} left, {{TypeNameT}} right)
+        => {{TypeName}}.Divide(left, right);
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Divide({{TypeNameT}} left, T divisor)
+        => {{TypeName}}.Divide(left, divisor);
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Clamp({{TypeNameT}} value1, {{TypeNameT}} min, {{TypeNameT}} max)
+        => {{TypeName}}.Clamp(value1, min, max);
+    static TReturn IVector<{{TypeNameT}}, T>.Distance<TReturn>({{TypeNameT}} value1, {{TypeNameT}} value2)
+        => {{TypeName}}.Distance<T, TReturn>(value1, value2);
+    static T IVector<{{TypeNameT}}, T>.DistanceSquared({{TypeNameT}} value1, {{TypeNameT}} value2)
+        => {{TypeName}}.DistanceSquared(value1, value2);
+    static TReturn IVector<{{TypeNameT}}, T>.DistanceSquared<TReturn>({{TypeNameT}} value1, {{TypeNameT}} value2)
+        => {{TypeName}}.DistanceSquared<T, TReturn>(value1, value2);
+    static T IVector<{{TypeNameT}}, T>.Dot({{TypeNameT}} vector1, {{TypeNameT}} vector2)
+        => {{TypeName}}.Dot(vector1, vector2);
+    static TReturn IVector<{{TypeNameT}}, T>.Dot<TReturn>({{TypeNameT}} vector1, {{TypeNameT}} vector2)
+        => {{TypeName}}.Dot<T, TReturn>(vector1, vector2);
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Max({{TypeNameT}} value1, {{TypeNameT}} value2)
+        => {{TypeName}}.Max(value1, value2);
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Min({{TypeNameT}} value1, {{TypeNameT}} value2)
+        => {{TypeName}}.Min(value1, value2);
+
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Lerp({{TypeNameT}} value1, {{TypeNameT}} value2, T amount) /* where T : IFloatingPoint<T> */
+    {
+        Helpers.CheckTypeAndThrow<{{TypeNameT}}, T>(typeof(IFloatingPoint<>));
+        return {{TypeName}}.LerpUnchecked(value1, value2, amount);
+    }
+
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.LerpClamped({{TypeNameT}} value1, {{TypeNameT}} value2, T amount) /* where T : IFloatingPoint<T> */
+    {
+        Helpers.CheckTypeAndThrow<{{TypeNameT}}, T>(typeof(IFloatingPoint<>));
+        return {{TypeName}}.LerpClampedUnchecked(value1, value2, amount);
+    }
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Reflect({{TypeNameT}} vector, {{TypeNameT}} normal) /* where T : IFloatingPoint<T> */
+    {
+        Helpers.CheckTypeAndThrow<{{TypeNameT}}, T>(typeof(IFloatingPoint<>));
+        return {{TypeName}}.Reflect<T, T>(vector, normal);
+    }
 }

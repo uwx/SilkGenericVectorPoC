@@ -12,6 +12,7 @@ namespace GenericVector;
 
 
 // Vector4D<T>
+/// <summary>A structure encapsulating four values, usually geometric vectors, and provides hardware accelerated methods.</summary>
 [StructLayout(LayoutKind.Sequential), DataContract, Serializable]
 public readonly partial struct Vector4D<T> : IVector<Vector4D<T>, T>, IVectorAlso<Vector4D<T>, T>, IEquatable<Vector4>, ISpanFormattable
     where T : INumberBase<T>
@@ -634,7 +635,7 @@ unsafe
     /// <remarks>This method returns a string in which each element of the vector is formatted using the "G" (general) format string and the formatting conventions of the current thread culture. The "&lt;" and "&gt;" characters are used to begin and end the string, and the current culture's <see cref="NumberFormatInfo.NumberGroupSeparator" /> property followed by a space is used to separate each element.</remarks>
     public override string ToString()
     {
-        return ToString("G", CultureInfo.CurrentCulture);
+        return ToString("G", null);
     }
 
     /// <summary>Returns the string representation of the current instance using the specified format string to format individual elements.</summary>
@@ -645,7 +646,7 @@ unsafe
     /// <related type="Article" href="/dotnet/standard/base-types/custom-numeric-format-strings">Custom Numeric Format Strings</related>
     public string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format)
     {
-        return ToString(format, CultureInfo.CurrentCulture);
+        return ToString(format, null);
     }
 
     /// <summary>Returns the string representation of the current instance using the specified format string to format individual elements and the specified format provider to define culture-specific formatting.</summary>
@@ -1357,7 +1358,7 @@ public static partial class Vector4D
     /// <param name="max">The maximum value.</param>
     /// <returns>The restricted vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Clamp<T>(Vector4D<T> value1, Vector4D<T> min, Vector4D<T> max) where T : INumberBase<T>, IComparisonOperators<T, T, bool>
+    public static Vector4D<T> Clamp<T>(Vector4D<T> value1, Vector4D<T> min, Vector4D<T> max) where T : INumberBase<T>
     {
         // NOTE: COMPLETELY UNTESTED. MIGHT BE SLOW.
         unsafe
@@ -1499,10 +1500,29 @@ public static partial class Vector4D
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector4D<T> LerpUnchecked<T>(Vector4D<T> value1, Vector4D<T> value2, T amount) where T : INumberBase<T>
+    {
+        return (value1.As<T>() * (T.One - amount)) + (value2.As<T>() * amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector4D<TFloat> LerpClamped<T, TFloat>(Vector4D<T> value1, Vector4D<T> value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         amount = TFloat.Clamp(amount, TFloat.Zero, TFloat.One);
         return Lerp(value1, value2, amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector4D<T> LerpClampedUnchecked<T>(Vector4D<T> value1, Vector4D<T> value2, T amount) where T : INumberBase<T>
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static T ClampT(T value, T min, T max)
+        {
+            return T.MaxMagnitude(T.MaxMagnitude(value, min), max);
+        }
+
+        amount = ClampT(amount, T.Zero, T.One);
+        return LerpUnchecked(value1, value2, amount);
     }
 
     /// <summary>Returns a vector whose elements are the maximum of each of the pairs of elements in two specified vectors.</summary>
@@ -1510,13 +1530,13 @@ public static partial class Vector4D
     /// <param name="value2">The second vector.</param>
     /// <returns>The maximized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Max<T>(Vector4D<T> value1, Vector4D<T> value2) where T : INumberBase<T>, IComparisonOperators<T, T, bool>
+    public static Vector4D<T> Max<T>(Vector4D<T> value1, Vector4D<T> value2) where T : INumberBase<T>
     {
-        return new Vector4D<T>( // using T.Max here would add an IsNaN check
-            (value1.X > value2.X) ? value1.X : value2.X, 
-            (value1.Y > value2.Y) ? value1.Y : value2.Y, 
-            (value1.Z > value2.Z) ? value1.Z : value2.Z, 
-            (value1.W > value2.W) ? value1.W : value2.W
+        return new Vector4D<T>(
+            T.MaxMagnitudeNumber(value1.X, value2.X), 
+            T.MaxMagnitudeNumber(value1.Y, value2.Y), 
+            T.MaxMagnitudeNumber(value1.Z, value2.Z), 
+            T.MaxMagnitudeNumber(value1.W, value2.W)
         );
     }
 
@@ -1525,13 +1545,13 @@ public static partial class Vector4D
     /// <param name="value2">The second vector.</param>
     /// <returns>The minimized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Min<T>(Vector4D<T> value1, Vector4D<T> value2) where T : INumberBase<T>, IComparisonOperators<T, T, bool>
+    public static Vector4D<T> Min<T>(Vector4D<T> value1, Vector4D<T> value2) where T : INumberBase<T>
     {
-        return new Vector4D<T>( // using T.Min here would add an IsNaN check
-            (value1.X < value2.X) ? value1.X : value2.X, 
-            (value1.Y < value2.Y) ? value1.Y : value2.Y, 
-            (value1.Z < value2.Z) ? value1.Z : value2.Z, 
-            (value1.W < value2.W) ? value1.W : value2.W
+        return new Vector4D<T>(
+        T.MinMagnitudeNumber(value1.X, value2.X), 
+        T.MinMagnitudeNumber(value1.Y, value2.Y), 
+        T.MinMagnitudeNumber(value1.Z, value2.Z), 
+        T.MinMagnitudeNumber(value1.W, value2.W)
         );
     }
 
@@ -1945,4 +1965,60 @@ public static partial class Vector4D
 
     public static Vector4 AsNumerics(this Vector4D<float> vector)
         => Unsafe.BitCast<Vector4D<float>, Vector4>(vector);
+}
+
+// IVector<Vector4D<T>, T>
+public readonly partial struct Vector4D<T>
+{
+    T IVector<Vector4D<T>, T>.LengthSquared()
+        => this.LengthSquared();
+    static Vector4D<T> IVector<Vector4D<T>, T>.Multiply(Vector4D<T> left, Vector4D<T> right)
+        => Vector4D.Multiply(left, right);
+    static Vector4D<T> IVector<Vector4D<T>, T>.Multiply(Vector4D<T> left, T right)
+        => Vector4D.Multiply(left, right);
+    static Vector4D<T> IVector<Vector4D<T>, T>.Multiply(T left, Vector4D<T> right)
+        => Vector4D.Multiply(left, right);
+    static Vector4D<T> IVector<Vector4D<T>, T>.Negate(Vector4D<T> value)
+        => Vector4D.Negate(value);
+    static Vector4D<T> IVector<Vector4D<T>, T>.Subtract(Vector4D<T> left, Vector4D<T> right)
+        => Vector4D.Subtract(left, right);
+    static Vector4D<T> IVector<Vector4D<T>, T>.Add(Vector4D<T> left, Vector4D<T> right)
+        => Vector4D.Add(left, right);
+    static Vector4D<T> IVector<Vector4D<T>, T>.Divide(Vector4D<T> left, Vector4D<T> right)
+        => Vector4D.Divide(left, right);
+    static Vector4D<T> IVector<Vector4D<T>, T>.Divide(Vector4D<T> left, T divisor)
+        => Vector4D.Divide(left, divisor);
+    static Vector4D<T> IVector<Vector4D<T>, T>.Clamp(Vector4D<T> value1, Vector4D<T> min, Vector4D<T> max)
+        => Vector4D.Clamp(value1, min, max);
+    static TReturn IVector<Vector4D<T>, T>.Distance<TReturn>(Vector4D<T> value1, Vector4D<T> value2)
+        => Vector4D.Distance<T, TReturn>(value1, value2);
+    static T IVector<Vector4D<T>, T>.DistanceSquared(Vector4D<T> value1, Vector4D<T> value2)
+        => Vector4D.DistanceSquared(value1, value2);
+    static TReturn IVector<Vector4D<T>, T>.DistanceSquared<TReturn>(Vector4D<T> value1, Vector4D<T> value2)
+        => Vector4D.DistanceSquared<T, TReturn>(value1, value2);
+    static T IVector<Vector4D<T>, T>.Dot(Vector4D<T> vector1, Vector4D<T> vector2)
+        => Vector4D.Dot(vector1, vector2);
+    static TReturn IVector<Vector4D<T>, T>.Dot<TReturn>(Vector4D<T> vector1, Vector4D<T> vector2)
+        => Vector4D.Dot<T, TReturn>(vector1, vector2);
+    static Vector4D<T> IVector<Vector4D<T>, T>.Max(Vector4D<T> value1, Vector4D<T> value2)
+        => Vector4D.Max(value1, value2);
+    static Vector4D<T> IVector<Vector4D<T>, T>.Min(Vector4D<T> value1, Vector4D<T> value2)
+        => Vector4D.Min(value1, value2);
+
+    static Vector4D<T> IVector<Vector4D<T>, T>.Lerp(Vector4D<T> value1, Vector4D<T> value2, T amount) /* where T : IFloatingPoint<T> */
+    {
+        Helpers.CheckTypeAndThrow<Vector4D<T>, T>(typeof(IFloatingPoint<>));
+        return Vector4D.LerpUnchecked(value1, value2, amount);
+    }
+
+    static Vector4D<T> IVector<Vector4D<T>, T>.LerpClamped(Vector4D<T> value1, Vector4D<T> value2, T amount) /* where T : IFloatingPoint<T> */
+    {
+        Helpers.CheckTypeAndThrow<Vector4D<T>, T>(typeof(IFloatingPoint<>));
+        return Vector4D.LerpClampedUnchecked(value1, value2, amount);
+    }
+    static Vector4D<T> IVector<Vector4D<T>, T>.Reflect(Vector4D<T> vector, Vector4D<T> normal) /* where T : IFloatingPoint<T> */
+    {
+        Helpers.CheckTypeAndThrow<Vector4D<T>, T>(typeof(IFloatingPoint<>));
+        return Vector4D.Reflect<T, T>(vector, normal);
+    }
 }

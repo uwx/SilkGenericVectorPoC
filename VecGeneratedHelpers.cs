@@ -252,7 +252,7 @@ public static partial class Vector4D
         return result;
     }
 
-    /// <summary>Transforms a three-dimensional vector by the specified Quaternion<T> rotation value.</summary>
+    /// <summary>Transforms a three-dimensional vector by the specified Quaternion{T} rotation value.</summary>
     /// <param name="value">The vector to rotate.</param>
     /// <param name="rotation">The rotation to apply.</param>
     /// <returns>The transformed vector.</returns>
