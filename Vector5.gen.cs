@@ -1589,6 +1589,32 @@ public static partial class Vector5D
         return LerpUnchecked(value1, value2, amount);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector5D<TFloat> Lerp<T, TFloat>(Vector5D<T> value1, Vector5D<T> value2, Vector5D<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    {
+        return (value1.As<TFloat>() * (Vector5D<TFloat>.One - amount)) + (value2.As<TFloat>() * amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector5D<T> LerpUnchecked<T>(Vector5D<T> value1, Vector5D<T> value2, Vector5D<T> amount) where T : INumberBase<T>
+    {
+        return (value1.As<T>() * (Vector5D<T>.One - amount)) + (value2.As<T>() * amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector5D<TFloat> LerpClamped<T, TFloat>(Vector5D<T> value1, Vector5D<T> value2, Vector5D<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    {
+        amount = Clamp(amount, Vector5D<TFloat>.Zero, Vector5D<TFloat>.One);
+        return Lerp(value1, value2, amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector5D<T> LerpClampedUnchecked<T>(Vector5D<T> value1, Vector5D<T> value2, Vector5D<T> amount) where T : INumberBase<T>
+    {
+        amount = Clamp(amount, Vector5D<T>.Zero, Vector5D<T>.One);
+        return LerpUnchecked(value1, value2, amount);
+    }
+
     /// <summary>Returns a vector whose elements are the maximum of each of the pairs of elements in two specified vectors.</summary>
     /// <param name="value1">The first vector.</param>
     /// <param name="value2">The second vector.</param>
@@ -1804,6 +1830,18 @@ public static partial class Vector5D
         return LerpClamped<T, T>(value1, value2, amount);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector5D<T> Lerp<T>(Vector5D<T> value1, Vector5D<T> value2, Vector5D<T> amount) where T : INumberBase<T>, IFloatingPoint<T>
+    {
+        return Lerp<T, T>(value1, value2, amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector5D<T> LerpClamped<T>(Vector5D<T> value1, Vector5D<T> value2, Vector5D<T> amount) where T : INumberBase<T>, IFloatingPoint<T>
+    {
+        return LerpClamped<T, T>(value1, value2, amount);
+    }
+
     /// <summary>Returns the reflection of a vector off a surface that has the specified normal.</summary>
     /// <param name="vector">The source vector.</param>
     /// <param name="normal">The normal of the surface being reflected off.</param>
@@ -1949,7 +1987,6 @@ public static partial class Vector5D
     public static Vector5D<T> BitIncrement<T>(Vector5D<T> x) where T : IFloatingPointIeee754<T> => new(T.BitIncrement(x.X), T.BitIncrement(x.Y), T.BitIncrement(x.Z), T.BitIncrement(x.W), T.BitIncrement(x.V));
 
     public static Vector5D<T> FusedMultiplyAdd<T>(Vector5D<T> left, Vector5D<T> right, Vector5D<T> addend) where T : IFloatingPointIeee754<T> => new(T.FusedMultiplyAdd(left.X, right.X, addend.X), T.FusedMultiplyAdd(left.Y, right.Y, addend.Y), T.FusedMultiplyAdd(left.Z, right.Z, addend.Z), T.FusedMultiplyAdd(left.W, right.W, addend.W), T.FusedMultiplyAdd(left.V, right.V, addend.V));
-    // public static Vector5D<T> Lerp<T>(Vector5D<T> value1, Vector5D<T> value2, Vector5D<T> amount) where T : IFloatingPointIeee754<T> => new(T.Lerp(value1.X, value2.X, amount.X), T.Lerp(value1.Y, value2.Y, amount.Y), T.Lerp(value1.Z, value2.Z, amount.Z), T.Lerp(value1.W, value2.W, amount.W), T.Lerp(value1.V, value2.V, amount.V));
     public static Vector5D<T> ReciprocalEstimate<T>(Vector5D<T> x) where T : IFloatingPointIeee754<T> => new(T.ReciprocalEstimate(x.X), T.ReciprocalEstimate(x.Y), T.ReciprocalEstimate(x.Z), T.ReciprocalEstimate(x.W), T.ReciprocalEstimate(x.V));
     public static Vector5D<T> ReciprocalSqrtEstimate<T>(Vector5D<T> x) where T : IFloatingPointIeee754<T> => new(T.ReciprocalSqrtEstimate(x.X), T.ReciprocalSqrtEstimate(x.Y), T.ReciprocalSqrtEstimate(x.Z), T.ReciprocalSqrtEstimate(x.W), T.ReciprocalSqrtEstimate(x.V));
 
@@ -2091,6 +2128,19 @@ public readonly partial struct Vector5D<T>
         Helpers.CheckTypeAndThrow<Vector5D<T>, T>(typeof(IFloatingPoint<>));
         return Vector5D.LerpClampedUnchecked(value1, value2, amount);
     }
+
+    static Vector5D<T> IVector<Vector5D<T>, T>.Lerp(Vector5D<T> value1, Vector5D<T> value2, Vector5D<T> amount) /* where T : IFloatingPoint<T> */
+    {
+        Helpers.CheckTypeAndThrow<Vector5D<T>, T>(typeof(IFloatingPoint<>));
+        return Vector5D.LerpUnchecked(value1, value2, amount);
+    }
+
+    static Vector5D<T> IVector<Vector5D<T>, T>.LerpClamped(Vector5D<T> value1, Vector5D<T> value2, Vector5D<T> amount) /* where T : IFloatingPoint<T> */
+    {
+        Helpers.CheckTypeAndThrow<Vector5D<T>, T>(typeof(IFloatingPoint<>));
+        return Vector5D.LerpClampedUnchecked(value1, value2, amount);
+    }
+
     static Vector5D<T> IVector<Vector5D<T>, T>.Reflect(Vector5D<T> vector, Vector5D<T> normal) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<Vector5D<T>, T>(typeof(IFloatingPoint<>));

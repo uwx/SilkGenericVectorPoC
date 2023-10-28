@@ -121,6 +121,8 @@ public interface IVector<TVector, T> :
     //TVector Remainder(T right) /* where T : IModulusOperators<T, T, T> */;
     static abstract TVector Lerp(TVector value1, TVector value2, T amount) /* where T : IFloatingPoint<T> */;
     static abstract TVector LerpClamped(TVector value1, TVector value2, T amount) /* where T : IFloatingPoint<T> */;
+    static abstract TVector Lerp(TVector value1, TVector value2, TVector amount) /* where T : IFloatingPoint<T> */;
+    static abstract TVector LerpClamped(TVector value1, TVector value2, TVector amount) /* where T : IFloatingPoint<T> */;
     static abstract TVector Reflect(TVector vector, TVector normal) /* where T : IFloatingPoint<T> */;
     //static abstract TVector Sqrt(TVector value) /* where T : IFloatingPoint<T>, IRootFunctions<T> */;
 

@@ -1415,6 +1415,32 @@ public static partial class Vector2D
         return LerpUnchecked(value1, value2, amount);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2D<TFloat> Lerp<T, TFloat>(Vector2D<T> value1, Vector2D<T> value2, Vector2D<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    {
+        return (value1.As<TFloat>() * (Vector2D<TFloat>.One - amount)) + (value2.As<TFloat>() * amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector2D<T> LerpUnchecked<T>(Vector2D<T> value1, Vector2D<T> value2, Vector2D<T> amount) where T : INumberBase<T>
+    {
+        return (value1.As<T>() * (Vector2D<T>.One - amount)) + (value2.As<T>() * amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2D<TFloat> LerpClamped<T, TFloat>(Vector2D<T> value1, Vector2D<T> value2, Vector2D<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    {
+        amount = Clamp(amount, Vector2D<TFloat>.Zero, Vector2D<TFloat>.One);
+        return Lerp(value1, value2, amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector2D<T> LerpClampedUnchecked<T>(Vector2D<T> value1, Vector2D<T> value2, Vector2D<T> amount) where T : INumberBase<T>
+    {
+        amount = Clamp(amount, Vector2D<T>.Zero, Vector2D<T>.One);
+        return LerpUnchecked(value1, value2, amount);
+    }
+
     /// <summary>Returns a vector whose elements are the maximum of each of the pairs of elements in two specified vectors.</summary>
     /// <param name="value1">The first vector.</param>
     /// <param name="value2">The second vector.</param>
@@ -1606,6 +1632,18 @@ public static partial class Vector2D
         return LerpClamped<T, T>(value1, value2, amount);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2D<T> Lerp<T>(Vector2D<T> value1, Vector2D<T> value2, Vector2D<T> amount) where T : INumberBase<T>, IFloatingPoint<T>
+    {
+        return Lerp<T, T>(value1, value2, amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2D<T> LerpClamped<T>(Vector2D<T> value1, Vector2D<T> value2, Vector2D<T> amount) where T : INumberBase<T>, IFloatingPoint<T>
+    {
+        return LerpClamped<T, T>(value1, value2, amount);
+    }
+
     /// <summary>Returns the reflection of a vector off a surface that has the specified normal.</summary>
     /// <param name="vector">The source vector.</param>
     /// <param name="normal">The normal of the surface being reflected off.</param>
@@ -1745,7 +1783,6 @@ public static partial class Vector2D
     public static Vector2D<T> BitIncrement<T>(Vector2D<T> x) where T : IFloatingPointIeee754<T> => new(T.BitIncrement(x.X), T.BitIncrement(x.Y));
 
     public static Vector2D<T> FusedMultiplyAdd<T>(Vector2D<T> left, Vector2D<T> right, Vector2D<T> addend) where T : IFloatingPointIeee754<T> => new(T.FusedMultiplyAdd(left.X, right.X, addend.X), T.FusedMultiplyAdd(left.Y, right.Y, addend.Y));
-    // public static Vector2D<T> Lerp<T>(Vector2D<T> value1, Vector2D<T> value2, Vector2D<T> amount) where T : IFloatingPointIeee754<T> => new(T.Lerp(value1.X, value2.X, amount.X), T.Lerp(value1.Y, value2.Y, amount.Y));
     public static Vector2D<T> ReciprocalEstimate<T>(Vector2D<T> x) where T : IFloatingPointIeee754<T> => new(T.ReciprocalEstimate(x.X), T.ReciprocalEstimate(x.Y));
     public static Vector2D<T> ReciprocalSqrtEstimate<T>(Vector2D<T> x) where T : IFloatingPointIeee754<T> => new(T.ReciprocalSqrtEstimate(x.X), T.ReciprocalSqrtEstimate(x.Y));
 
@@ -1874,6 +1911,19 @@ public readonly partial struct Vector2D<T>
         Helpers.CheckTypeAndThrow<Vector2D<T>, T>(typeof(IFloatingPoint<>));
         return Vector2D.LerpClampedUnchecked(value1, value2, amount);
     }
+
+    static Vector2D<T> IVector<Vector2D<T>, T>.Lerp(Vector2D<T> value1, Vector2D<T> value2, Vector2D<T> amount) /* where T : IFloatingPoint<T> */
+    {
+        Helpers.CheckTypeAndThrow<Vector2D<T>, T>(typeof(IFloatingPoint<>));
+        return Vector2D.LerpUnchecked(value1, value2, amount);
+    }
+
+    static Vector2D<T> IVector<Vector2D<T>, T>.LerpClamped(Vector2D<T> value1, Vector2D<T> value2, Vector2D<T> amount) /* where T : IFloatingPoint<T> */
+    {
+        Helpers.CheckTypeAndThrow<Vector2D<T>, T>(typeof(IFloatingPoint<>));
+        return Vector2D.LerpClampedUnchecked(value1, value2, amount);
+    }
+
     static Vector2D<T> IVector<Vector2D<T>, T>.Reflect(Vector2D<T> vector, Vector2D<T> normal) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<Vector2D<T>, T>(typeof(IFloatingPoint<>));

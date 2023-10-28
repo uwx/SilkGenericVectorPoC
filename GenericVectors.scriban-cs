@@ -1336,6 +1336,32 @@ public static partial class {{ TypeName }}
         return LerpUnchecked(value1, value2, amount);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static {{ TypeName }}<TFloat> Lerp<T, TFloat>({{ TypeNameT }} value1, {{ TypeNameT }} value2, {{TypeName}}<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    {
+        return (value1.As<TFloat>() * ({{TypeName}}<TFloat>.One - amount)) + (value2.As<TFloat>() * amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static {{ TypeNameT }} LerpUnchecked<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2, {{ TypeNameT }} amount) where T : INumberBase<T>
+    {
+        return (value1.As<T>() * ({{TypeNameT}}.One - amount)) + (value2.As<T>() * amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static {{ TypeName }}<TFloat> LerpClamped<T, TFloat>({{ TypeNameT }} value1, {{ TypeNameT }} value2, {{TypeName}}<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    {
+        amount = Clamp(amount, {{TypeName}}<TFloat>.Zero, {{TypeName}}<TFloat>.One);
+        return Lerp(value1, value2, amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static {{ TypeNameT }} LerpClampedUnchecked<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2, {{ TypeNameT }} amount) where T : INumberBase<T>
+    {
+        amount = Clamp(amount, {{ TypeNameT }}.Zero, {{ TypeNameT }}.One);
+        return LerpUnchecked(value1, value2, amount);
+    }
+
     /// <summary>Returns a vector whose elements are the maximum of each of the pairs of elements in two specified vectors.</summary>
     /// <param name="value1">The first vector.</param>
     /// <param name="value2">The second vector.</param>
@@ -1545,6 +1571,18 @@ public static partial class {{ TypeName }}
         return LerpClamped<T, T>(value1, value2, amount);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static {{ TypeNameT }} Lerp<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2, {{ TypeNameT }} amount) where T : INumberBase<T>, IFloatingPoint<T>
+    {
+        return Lerp<T, T>(value1, value2, amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static {{ TypeNameT }} LerpClamped<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2, {{ TypeNameT }} amount) where T : INumberBase<T>, IFloatingPoint<T>
+    {
+        return LerpClamped<T, T>(value1, value2, amount);
+    }
+
     /// <summary>Returns the reflection of a vector off a surface that has the specified normal.</summary>
     /// <param name="vector">The source vector.</param>
     /// <param name="normal">The normal of the surface being reflected off.</param>
@@ -1682,7 +1720,6 @@ public static partial class {{ TypeName }}
     public static {{ TypeNameT }} BitIncrement<T>({{ TypeNameT }} x) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.BitIncrement(x.{c})"; end }});
 
     public static {{ TypeNameT }} FusedMultiplyAdd<T>({{ TypeNameT }} left, {{ TypeNameT }} right, {{ TypeNameT }} addend) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.FusedMultiplyAdd(left.{c}, right.{c}, addend.{c})"; end }});
-    // public static {{ TypeNameT }} Lerp<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2, {{ TypeNameT }} amount) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Lerp(value1.{c}, value2.{c}, amount.{c})"; end }});
     public static {{ TypeNameT }} ReciprocalEstimate<T>({{ TypeNameT }} x) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.ReciprocalEstimate(x.{c})"; end }});
     public static {{ TypeNameT }} ReciprocalSqrtEstimate<T>({{ TypeNameT }} x) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.ReciprocalSqrtEstimate(x.{c})"; end }});
 
@@ -1807,6 +1844,19 @@ public readonly partial struct {{TypeNameT}}
         Helpers.CheckTypeAndThrow<{{TypeNameT}}, T>(typeof(IFloatingPoint<>));
         return {{TypeName}}.LerpClampedUnchecked(value1, value2, amount);
     }
+
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Lerp({{TypeNameT}} value1, {{TypeNameT}} value2, {{TypeNameT}} amount) /* where T : IFloatingPoint<T> */
+    {
+        Helpers.CheckTypeAndThrow<{{TypeNameT}}, T>(typeof(IFloatingPoint<>));
+        return {{TypeName}}.LerpUnchecked(value1, value2, amount);
+    }
+
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.LerpClamped({{TypeNameT}} value1, {{TypeNameT}} value2, {{TypeNameT}} amount) /* where T : IFloatingPoint<T> */
+    {
+        Helpers.CheckTypeAndThrow<{{TypeNameT}}, T>(typeof(IFloatingPoint<>));
+        return {{TypeName}}.LerpClampedUnchecked(value1, value2, amount);
+    }
+
     static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Reflect({{TypeNameT}} vector, {{TypeNameT}} normal) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<{{TypeNameT}}, T>(typeof(IFloatingPoint<>));
