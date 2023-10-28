@@ -100,31 +100,31 @@ public interface IVector<TVector, T> :
     
     //T Length() /* where T : IRootFunctions<T> */;
     T LengthSquared();
-    static abstract TVector Multiply(in TVector left, in TVector right);
-    static abstract TVector Multiply(in TVector left, T right);
-    static abstract TVector Multiply(T left, in TVector right);
-    static abstract TVector Negate(in TVector value);
-    static abstract TVector Subtract(in TVector left, in TVector right);
-    static abstract TVector Add(in TVector left, in TVector right);
-    static abstract TVector Divide(in TVector left, in TVector right);
-    static abstract TVector Divide(in TVector left, T divisor);
-    static abstract TVector Clamp(in TVector value1, in TVector min, in TVector max);
-    static abstract TReturn Distance<TReturn>(in TVector value1, in TVector value2) where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>;
-    static abstract T DistanceSquared(in TVector value1, in TVector value2);
-    static abstract TReturn DistanceSquared<TReturn>(in TVector value1, in TVector value2) where TReturn : INumberBase<TReturn>;
-    static abstract T Dot(in TVector vector1, in TVector vector2);
-    static abstract TReturn Dot<TReturn>(in TVector vector1, in TVector vector2) where TReturn : INumberBase<TReturn>;
-    static abstract TVector Max(in TVector value1, in TVector value2);
-    static abstract TVector Min(in TVector value1, in TVector value2);
-    //static abstract TVector Normalize(in TVector value) /* where T : IRootFunctions<T> */;
-    //TVector Remainder(in TVector right) /* where T : IModulusOperators<T, T, T> */;
+    static abstract TVector Multiply(TVector left, TVector right);
+    static abstract TVector Multiply(TVector left, T right);
+    static abstract TVector Multiply(T left, TVector right);
+    static abstract TVector Negate(TVector value);
+    static abstract TVector Subtract(TVector left, TVector right);
+    static abstract TVector Add(TVector left, TVector right);
+    static abstract TVector Divide(TVector left, TVector right);
+    static abstract TVector Divide(TVector left, T divisor);
+    static abstract TVector Clamp(TVector value1, TVector min, TVector max);
+    static abstract TReturn Distance<TReturn>(TVector value1, TVector value2) where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>;
+    static abstract T DistanceSquared(TVector value1, TVector value2);
+    static abstract TReturn DistanceSquared<TReturn>(TVector value1, TVector value2) where TReturn : INumberBase<TReturn>;
+    static abstract T Dot(TVector vector1, TVector vector2);
+    static abstract TReturn Dot<TReturn>(TVector vector1, TVector vector2) where TReturn : INumberBase<TReturn>;
+    static abstract TVector Max(TVector value1, TVector value2);
+    static abstract TVector Min(TVector value1, TVector value2);
+    //static abstract TVector Normalize(TVector value) /* where T : IRootFunctions<T> */;
+    //TVector Remainder(TVector right) /* where T : IModulusOperators<T, T, T> */;
     //TVector Remainder(T right) /* where T : IModulusOperators<T, T, T> */;
-    static abstract TVector Lerp(in TVector value1, in TVector value2, T amount) /* where T : IFloatingPoint<T> */;
-    static abstract TVector LerpClamped(in TVector value1, in TVector value2, T amount) /* where T : IFloatingPoint<T> */;
-    static abstract TVector Lerp(in TVector value1, in TVector value2, in TVector amount) /* where T : IFloatingPoint<T> */;
-    static abstract TVector LerpClamped(in TVector value1, in TVector value2, in TVector amount) /* where T : IFloatingPoint<T> */;
-    static abstract TVector Reflect(in TVector vector, in TVector normal) /* where T : IFloatingPoint<T> */;
-    //static abstract TVector Sqrt(in TVector value) /* where T : IFloatingPoint<T>, IRootFunctions<T> */;
+    static abstract TVector Lerp(TVector value1, TVector value2, T amount) /* where T : IFloatingPoint<T> */;
+    static abstract TVector LerpClamped(TVector value1, TVector value2, T amount) /* where T : IFloatingPoint<T> */;
+    static abstract TVector Lerp(TVector value1, TVector value2, TVector amount) /* where T : IFloatingPoint<T> */;
+    static abstract TVector LerpClamped(TVector value1, TVector value2, TVector amount) /* where T : IFloatingPoint<T> */;
+    static abstract TVector Reflect(TVector vector, TVector normal) /* where T : IFloatingPoint<T> */;
+    //static abstract TVector Sqrt(TVector value) /* where T : IFloatingPoint<T>, IRootFunctions<T> */;
 
     /// <summary>Copies the elements of the vector to a specified array.</summary>
     /// <param name="vector">The vector to be copied.</param>

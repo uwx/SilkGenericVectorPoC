@@ -807,47 +807,47 @@ public readonly partial struct {{TypeNameT}} :
         return true;
     }
 
-    static bool INumberBase<{{TypeNameT}}>.IsCanonical({{ TypeNameT }} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsCanonical(value.{c})"; end }};
+    static bool INumberBase<{{TypeNameT}}>.IsCanonical({{TypeNameT}} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsCanonical(value.{c})"; end }};
 
-    static bool INumberBase<{{TypeNameT}}>.IsComplexNumber({{ TypeNameT }} value) => {{ wrap forEachDimension ' || ' newline:false; $"T.IsComplexNumber(value.{c})"; end }};
+    static bool INumberBase<{{TypeNameT}}>.IsComplexNumber({{TypeNameT}} value) => {{ wrap forEachDimension ' || ' newline:false; $"T.IsComplexNumber(value.{c})"; end }};
 
-    static bool INumberBase<{{TypeNameT}}>.IsEvenInteger({{ TypeNameT }} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsEvenInteger(value.{c})"; end }};
+    static bool INumberBase<{{TypeNameT}}>.IsEvenInteger({{TypeNameT}} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsEvenInteger(value.{c})"; end }};
 
-    static bool INumberBase<{{TypeNameT}}>.IsFinite({{ TypeNameT }} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsFinite(value.{c})"; end }};
+    static bool INumberBase<{{TypeNameT}}>.IsFinite({{TypeNameT}} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsFinite(value.{c})"; end }};
 
-    static bool INumberBase<{{TypeNameT}}>.IsImaginaryNumber({{ TypeNameT }} value) => {{ wrap forEachDimension ' || ' newline:false; $"T.IsImaginaryNumber(value.{c})"; end }};
+    static bool INumberBase<{{TypeNameT}}>.IsImaginaryNumber({{TypeNameT}} value) => {{ wrap forEachDimension ' || ' newline:false; $"T.IsImaginaryNumber(value.{c})"; end }};
 
-    static bool INumberBase<{{TypeNameT}}>.IsInfinity({{ TypeNameT }} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsInfinity(value.{c})"; end }};
+    static bool INumberBase<{{TypeNameT}}>.IsInfinity({{TypeNameT}} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsInfinity(value.{c})"; end }};
 
-    static bool INumberBase<{{TypeNameT}}>.IsInteger({{ TypeNameT }} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsInteger(value.{c})"; end }};
+    static bool INumberBase<{{TypeNameT}}>.IsInteger({{TypeNameT}} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsInteger(value.{c})"; end }};
 
-    static bool INumberBase<{{TypeNameT}}>.IsNaN({{ TypeNameT }} value) => {{ wrap forEachDimension ' || ' newline:false; $"T.IsNaN(value.{c})"; end }};
+    static bool INumberBase<{{TypeNameT}}>.IsNaN({{TypeNameT}} value) => {{ wrap forEachDimension ' || ' newline:false; $"T.IsNaN(value.{c})"; end }};
 
-    static bool INumberBase<{{TypeNameT}}>.IsNegative({{ TypeNameT }} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsNegative(value.{c})"; end }};
+    static bool INumberBase<{{TypeNameT}}>.IsNegative({{TypeNameT}} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsNegative(value.{c})"; end }};
 
-    static bool INumberBase<{{TypeNameT}}>.IsNegativeInfinity({{ TypeNameT }} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsNegativeInfinity(value.{c})"; end }};
+    static bool INumberBase<{{TypeNameT}}>.IsNegativeInfinity({{TypeNameT}} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsNegativeInfinity(value.{c})"; end }};
 
-    static bool INumberBase<{{TypeNameT}}>.IsNormal({{ TypeNameT }} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsNormal(value.{c})"; end }};
+    static bool INumberBase<{{TypeNameT}}>.IsNormal({{TypeNameT}} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsNormal(value.{c})"; end }};
 
-    static bool INumberBase<{{TypeNameT}}>.IsOddInteger({{ TypeNameT }} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsOddInteger(value.{c})"; end }};
+    static bool INumberBase<{{TypeNameT}}>.IsOddInteger({{TypeNameT}} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsOddInteger(value.{c})"; end }};
 
-    static bool INumberBase<{{TypeNameT}}>.IsPositive({{ TypeNameT }} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsPositive(value.{c})"; end }};
+    static bool INumberBase<{{TypeNameT}}>.IsPositive({{TypeNameT}} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsPositive(value.{c})"; end }};
 
-    static bool INumberBase<{{TypeNameT}}>.IsPositiveInfinity({{ TypeNameT }} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsPositiveInfinity(value.{c})"; end }};
+    static bool INumberBase<{{TypeNameT}}>.IsPositiveInfinity({{TypeNameT}} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsPositiveInfinity(value.{c})"; end }};
 
-    static bool INumberBase<{{TypeNameT}}>.IsRealNumber({{ TypeNameT }} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsRealNumber(value.{c})"; end }};
+    static bool INumberBase<{{TypeNameT}}>.IsRealNumber({{TypeNameT}} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsRealNumber(value.{c})"; end }};
 
-    static bool INumberBase<{{TypeNameT}}>.IsSubnormal({{ TypeNameT }} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsSubnormal(value.{c})"; end }};
+    static bool INumberBase<{{TypeNameT}}>.IsSubnormal({{TypeNameT}} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsSubnormal(value.{c})"; end }};
 
-    static bool INumberBase<{{TypeNameT}}>.IsZero({{ TypeNameT }} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsZero(value.{c})"; end }};
+    static bool INumberBase<{{TypeNameT}}>.IsZero({{TypeNameT}} value) => {{ wrap forEachDimension ' && ' newline:false; $"T.IsZero(value.{c})"; end }};
 
-    static {{TypeNameT}} INumberBase<{{TypeNameT}}>.MaxMagnitude({{ TypeNameT }} x, {{ TypeNameT }} y) => new({{ wrap forEachDimension ', ' newline:false; $"T.MaxMagnitude(x.{c}, y.{c})"; end }});
+    static {{TypeNameT}} INumberBase<{{TypeNameT}}>.MaxMagnitude({{TypeNameT}} x, {{TypeNameT}} y) => new({{ wrap forEachDimension ', ' newline:false; $"T.MaxMagnitude(x.{c}, y.{c})"; end }});
 
-    static {{TypeNameT}} INumberBase<{{TypeNameT}}>.MaxMagnitudeNumber({{ TypeNameT }} x, {{ TypeNameT }} y) => new({{ wrap forEachDimension ', ' newline:false; $"T.MaxMagnitudeNumber(x.{c}, y.{c})"; end }});
+    static {{TypeNameT}} INumberBase<{{TypeNameT}}>.MaxMagnitudeNumber({{TypeNameT}} x, {{TypeNameT}} y) => new({{ wrap forEachDimension ', ' newline:false; $"T.MaxMagnitudeNumber(x.{c}, y.{c})"; end }});
 
-    static {{TypeNameT}} INumberBase<{{TypeNameT}}>.MinMagnitude({{ TypeNameT }} x, {{ TypeNameT }} y) => new({{ wrap forEachDimension ', ' newline:false; $"T.MinMagnitude(x.{c}, y.{c})"; end }});
+    static {{TypeNameT}} INumberBase<{{TypeNameT}}>.MinMagnitude({{TypeNameT}} x, {{TypeNameT}} y) => new({{ wrap forEachDimension ', ' newline:false; $"T.MinMagnitude(x.{c}, y.{c})"; end }});
 
-    static {{TypeNameT}} INumberBase<{{TypeNameT}}>.MinMagnitudeNumber({{ TypeNameT }} x, {{ TypeNameT }} y) => new({{ wrap forEachDimension ', ' newline:false; $"T.MinMagnitudeNumber(x.{c}, y.{c})"; end }});
+    static {{TypeNameT}} INumberBase<{{TypeNameT}}>.MinMagnitudeNumber({{TypeNameT}} x, {{TypeNameT}} y) => new({{ wrap forEachDimension ', ' newline:false; $"T.MinMagnitudeNumber(x.{c}, y.{c})"; end }});
 
     static bool INumberBase<{{TypeNameT}}>.TryConvertFromChecked<TOther>(TOther value, out {{TypeNameT}} result)
     {
@@ -903,13 +903,13 @@ public readonly partial struct {{TypeNameT}} :
         return false;
     }
 
-    static bool INumberBase<{{TypeNameT}}>.TryConvertToChecked<TOther>({{ TypeNameT }} value, [MaybeNullWhen(false)] out TOther result)
+    static bool INumberBase<{{TypeNameT}}>.TryConvertToChecked<TOther>({{TypeNameT}} value, [MaybeNullWhen(false)] out TOther result)
         => TOther.TryConvertFromChecked(value, out result);
 
-    static bool INumberBase<{{TypeNameT}}>.TryConvertToSaturating<TOther>({{ TypeNameT }} value, [MaybeNullWhen(false)] out TOther result)
+    static bool INumberBase<{{TypeNameT}}>.TryConvertToSaturating<TOther>({{TypeNameT}} value, [MaybeNullWhen(false)] out TOther result)
         => TOther.TryConvertFromSaturating(value, out result);
 
-    static bool INumberBase<{{TypeNameT}}>.TryConvertToTruncating<TOther>({{ TypeNameT }} value, [MaybeNullWhen(false)]out TOther result)
+    static bool INumberBase<{{TypeNameT}}>.TryConvertToTruncating<TOther>({{TypeNameT}} value, [MaybeNullWhen(false)]out TOther result)
         => TOther.TryConvertFromTruncating(value, out result);
 
     {{TypeName}}<T1>? IVec{{vecN}}.GetChecked<T1>() => T1.TryConvertFromChecked(X, out var x) ? new(x, {{ wrap forEachDimension ', ' newline:false dimensionOffset:1; $"T1.CreateChecked({c})"; end }}) : null;
@@ -1046,7 +1046,7 @@ public static partial class {{ TypeName }}
     {
         // We explicitly don't check for `null` because historically this has thrown `NullReferenceException` for perf reasons
 
-        ArgumentOutOfRangeException.ThrowIfLessThan(array.Length, {{ TypeNameT }}.Count, nameof(array));
+        ArgumentOutOfRangeException.ThrowIfLessThan(array.Length, {{TypeNameT}}.Count, nameof(array));
 
         Unsafe.WriteUnaligned(ref Unsafe.As<T, byte>(ref array[0]), self);
     }
@@ -1068,7 +1068,7 @@ public static partial class {{ TypeName }}
         // We explicitly don't check for `null` because historically this has thrown `NullReferenceException` for perf reasons
 
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual((uint)index, (uint)array.Length);
-        ArgumentOutOfRangeException.ThrowIfLessThan((array.Length - index), {{ TypeNameT }}.Count);
+        ArgumentOutOfRangeException.ThrowIfLessThan((array.Length - index), {{TypeNameT}}.Count);
 
         Unsafe.WriteUnaligned(ref Unsafe.As<T, byte>(ref array[index]), self);
     }
@@ -1080,7 +1080,7 @@ public static partial class {{ TypeName }}
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void CopyTo<T>(in this {{TypeNameT}} self, Span<T> destination) where T : INumberBase<T>
     {
-        ArgumentOutOfRangeException.ThrowIfLessThan(destination.Length, {{ TypeNameT }}.Count, nameof(destination));
+        ArgumentOutOfRangeException.ThrowIfLessThan(destination.Length, {{TypeNameT}}.Count, nameof(destination));
 
         Unsafe.WriteUnaligned(ref Unsafe.As<T, byte>(ref MemoryMarshal.GetReference(destination)), self);
     }
@@ -1139,7 +1139,7 @@ public static partial class {{ TypeName }}
     /// <param name="right">The second vector.</param>
     /// <returns>The element-wise product vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Multiply<T>(in {{ TypeNameT }} left, in {{ TypeNameT }} right) where T : INumberBase<T>
+    public static {{ TypeNameT }} Multiply<T>({{ TypeNameT }} left, {{ TypeNameT }} right) where T : INumberBase<T>
     {
         return left * right;
     }
@@ -1149,7 +1149,7 @@ public static partial class {{ TypeName }}
     /// <param name="right">The scalar value.</param>
     /// <returns>The scaled vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Multiply<T>(in {{ TypeNameT }} left, T right) where T : INumberBase<T>
+    public static {{ TypeNameT }} Multiply<T>({{ TypeNameT }} left, T right) where T : INumberBase<T>
     {
         return left * right;
     }
@@ -1159,7 +1159,7 @@ public static partial class {{ TypeName }}
     /// <param name="right">The vector.</param>
     /// <returns>The scaled vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Multiply<T>(T left, in {{ TypeNameT }} right) where T : INumberBase<T>
+    public static {{ TypeNameT }} Multiply<T>(T left, {{ TypeNameT }} right) where T : INumberBase<T>
     {
         return left * right;
     }
@@ -1168,7 +1168,7 @@ public static partial class {{ TypeName }}
     /// <param name="value">The vector to negate.</param>
     /// <returns>The negated vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Negate<T>(in {{ TypeNameT }} value) where T : INumberBase<T>
+    public static {{ TypeNameT }} Negate<T>({{ TypeNameT }} value) where T : INumberBase<T>
     {
         return -value;
     }
@@ -1178,7 +1178,7 @@ public static partial class {{ TypeName }}
     /// <param name="right">The second vector.</param>
     /// <returns>The difference vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Subtract<T>(in {{ TypeNameT }} left, in {{ TypeNameT }} right) where T : INumberBase<T>
+    public static {{ TypeNameT }} Subtract<T>({{ TypeNameT }} left, {{ TypeNameT }} right) where T : INumberBase<T>
     {
         return left - right;
     }
@@ -1188,7 +1188,7 @@ public static partial class {{ TypeName }}
     /// <param name="right">The second vector to add.</param>
     /// <returns>The summed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Add<T>(in {{ TypeNameT }} left, in {{ TypeNameT }} right) where T : INumberBase<T>
+    public static {{ TypeNameT }} Add<T>({{ TypeNameT }} left, {{ TypeNameT }} right) where T : INumberBase<T>
     {
         return left + right;
     }
@@ -1198,7 +1198,7 @@ public static partial class {{ TypeName }}
     /// <param name="right">The second vector.</param>
     /// <returns>The vector resulting from the division.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Divide<T>(in {{ TypeNameT }} left, in {{ TypeNameT }} right) where T : INumberBase<T>
+    public static {{ TypeNameT }} Divide<T>({{ TypeNameT }} left, {{ TypeNameT }} right) where T : INumberBase<T>
     {
         return left / right;
     }
@@ -1208,7 +1208,7 @@ public static partial class {{ TypeName }}
     /// <param name="divisor">The scalar value.</param>
     /// <returns>The vector that results from the division.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Divide<T>(in {{ TypeNameT }} left, T divisor) where T : INumberBase<T>
+    public static {{ TypeNameT }} Divide<T>({{ TypeNameT }} left, T divisor) where T : INumberBase<T>
     {
         return left / divisor;
     }
@@ -1221,7 +1221,7 @@ public static partial class {{ TypeName }}
     /// <param name="value">A vector.</param>
     /// <returns>The absolute value vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Abs<T>(in {{ TypeNameT }} value) where T : INumberBase<T>
+    public static {{ TypeNameT }} Abs<T>({{ TypeNameT }} value) where T : INumberBase<T>
     {
         {{ wrap vectorize 'value'; $"{vector}.Abs({a})"; end }}
 
@@ -1234,7 +1234,7 @@ public static partial class {{ TypeName }}
     /// <param name="max">The maximum value.</param>
     /// <returns>The restricted vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Clamp<T>(in {{ TypeNameT }} value1, in {{ TypeNameT }} min, {{ TypeNameT }} max) where T : INumberBase<T>
+    public static {{ TypeNameT }} Clamp<T>({{ TypeNameT }} value1, {{ TypeNameT }} min, {{ TypeNameT }} max) where T : INumberBase<T>
     {
         {{ wrap vectorize 'value1' 'min' 'max'; $"{vector}.Min({vector}.Max({a}, {b}), {c})"; end }}
 
@@ -1247,7 +1247,7 @@ public static partial class {{ TypeName }}
     /// <param name="value2">The second point.</param>
     /// <returns>The distance.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TReturn Distance<T, TReturn>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
+    public static TReturn Distance<T, TReturn>({{ TypeNameT }} value1, {{ TypeNameT }} value2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
     {
         var distanceSquared = DistanceSquared<T, TReturn>(value1, value2);
         return TReturn.Sqrt(distanceSquared);
@@ -1258,7 +1258,7 @@ public static partial class {{ TypeName }}
     /// <param name="value2">The second point.</param>
     /// <returns>The distance squared.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static T DistanceSquared<T>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2) where T : INumberBase<T>
+    public static T DistanceSquared<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2) where T : INumberBase<T>
     {
         var difference = value1 - value2;
         return Dot(difference, difference);
@@ -1269,7 +1269,7 @@ public static partial class {{ TypeName }}
     /// <param name="value2">The second point.</param>
     /// <returns>The distance squared.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TReturn DistanceSquared<T, TReturn>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
+    public static TReturn DistanceSquared<T, TReturn>({{ TypeNameT }} value1, {{ TypeNameT }} value2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
     {
         var difference = value1 - value2;
         return Dot<T, TReturn>(difference, difference);
@@ -1280,7 +1280,7 @@ public static partial class {{ TypeName }}
     /// <param name="vector2">The second vector.</param>
     /// <returns>The dot product.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static T Dot<T>(in {{ TypeNameT }} vector1, in {{ TypeNameT }} vector2) where T : INumberBase<T>
+    public static T Dot<T>({{ TypeNameT }} vector1, {{ TypeNameT }} vector2) where T : INumberBase<T>
     {
         // TODO: vectorize return scalar
         return
@@ -1292,7 +1292,7 @@ public static partial class {{ TypeName }}
     /// <param name="vector2">The second vector.</param>
     /// <returns>The dot product.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TReturn Dot<T, TReturn>(in {{ TypeNameT }} vector1, in {{ TypeNameT }} vector2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
+    public static TReturn Dot<T, TReturn>({{ TypeNameT }} vector1, {{ TypeNameT }} vector2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
     {
         // TODO vectorize return converted (maybe not possible)
         return
@@ -1305,26 +1305,26 @@ public static partial class {{ TypeName }}
     /// <param name="amount">A value between 0 and 1 that indicates the weight of <paramref name="value2" />.</param>
     /// <returns>The interpolated vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeName }}<TFloat> Lerp<T, TFloat>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    public static {{ TypeName }}<TFloat> Lerp<T, TFloat>({{ TypeNameT }} value1, {{ TypeNameT }} value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         return (value1.As<TFloat>() * (TFloat.One - amount)) + (value2.As<TFloat>() * amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static {{ TypeNameT }} LerpUnchecked<T>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2, T amount) where T : INumberBase<T>
+    internal static {{ TypeNameT }} LerpUnchecked<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2, T amount) where T : INumberBase<T>
     {
         return (value1.As<T>() * (T.One - amount)) + (value2.As<T>() * amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeName }}<TFloat> LerpClamped<T, TFloat>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    public static {{ TypeName }}<TFloat> LerpClamped<T, TFloat>({{ TypeNameT }} value1, {{ TypeNameT }} value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         amount = TFloat.Clamp(amount, TFloat.Zero, TFloat.One);
         return Lerp(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static {{ TypeNameT }} LerpClampedUnchecked<T>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2, T amount) where T : INumberBase<T>
+    internal static {{ TypeNameT }} LerpClampedUnchecked<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2, T amount) where T : INumberBase<T>
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static T ClampT(T value, T min, T max)
@@ -1337,26 +1337,26 @@ public static partial class {{ TypeName }}
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeName }}<TFloat> Lerp<T, TFloat>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2, {{TypeName}}<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    public static {{ TypeName }}<TFloat> Lerp<T, TFloat>({{ TypeNameT }} value1, {{ TypeNameT }} value2, {{TypeName}}<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         return (value1.As<TFloat>() * ({{TypeName}}<TFloat>.One - amount)) + (value2.As<TFloat>() * amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static {{ TypeNameT }} LerpUnchecked<T>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2, {{ TypeNameT }} amount) where T : INumberBase<T>
+    internal static {{ TypeNameT }} LerpUnchecked<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2, {{ TypeNameT }} amount) where T : INumberBase<T>
     {
-        return (value1.As<T>() * ({{ TypeNameT }}.One - amount)) + (value2.As<T>() * amount);
+        return (value1.As<T>() * ({{TypeNameT}}.One - amount)) + (value2.As<T>() * amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeName }}<TFloat> LerpClamped<T, TFloat>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2, {{TypeName}}<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    public static {{ TypeName }}<TFloat> LerpClamped<T, TFloat>({{ TypeNameT }} value1, {{ TypeNameT }} value2, {{TypeName}}<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         amount = Clamp(amount, {{TypeName}}<TFloat>.Zero, {{TypeName}}<TFloat>.One);
         return Lerp(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static {{ TypeNameT }} LerpClampedUnchecked<T>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2, {{ TypeNameT }} amount) where T : INumberBase<T>
+    internal static {{ TypeNameT }} LerpClampedUnchecked<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2, {{ TypeNameT }} amount) where T : INumberBase<T>
     {
         amount = Clamp(amount, {{ TypeNameT }}.Zero, {{ TypeNameT }}.One);
         return LerpUnchecked(value1, value2, amount);
@@ -1367,7 +1367,7 @@ public static partial class {{ TypeName }}
     /// <param name="value2">The second vector.</param>
     /// <returns>The maximized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Max<T>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2) where T : INumberBase<T>
+    public static {{ TypeNameT }} Max<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2) where T : INumberBase<T>
     {
         return new {{ TypeNameT }}(
             {{ wrap forEachDimension ', '; $"T.MaxMagnitudeNumber(value1.{c}, value2.{c})"; end }}
@@ -1379,7 +1379,7 @@ public static partial class {{ TypeName }}
     /// <param name="value2">The second vector.</param>
     /// <returns>The minimized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Min<T>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2) where T : INumberBase<T>
+    public static {{ TypeNameT }} Min<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2) where T : INumberBase<T>
     {
         return new {{ TypeNameT }}(
         {{ wrap forEachDimension ', '; $"T.MinMagnitudeNumber(value1.{c}, value2.{c})"; end }}
@@ -1390,7 +1390,7 @@ public static partial class {{ TypeName }}
     /// <param name="value">The vector to normalize.</param>
     /// <returns>The normalized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeName }}<TReturn> Normalize<T, TReturn>(in {{ TypeNameT }} value) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
+    public static {{ TypeName }}<TReturn> Normalize<T, TReturn>({{ TypeNameT }} value) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
     {
         return value.As<TReturn>() / value.Length<T, TReturn>();
     }
@@ -1399,7 +1399,7 @@ public static partial class {{ TypeName }}
     /// <param name="value">The vector to normalize.</param>
     /// <returns>The normalized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Normalize<T>(in {{ TypeNameT }} value) where T : INumberBase<T>, IRootFunctions<T>
+    public static {{ TypeNameT }} Normalize<T>({{ TypeNameT }} value) where T : INumberBase<T>, IRootFunctions<T>
     {
         return value / value.Length();
     }
@@ -1409,7 +1409,7 @@ public static partial class {{ TypeName }}
     /// <param name="normal">The normal of the surface being reflected off.</param>
     /// <returns>The reflected vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeName }}<TReturn> Reflect<T, TReturn>(in {{ TypeNameT }} vector, in {{ TypeNameT }} normal) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
+    public static {{ TypeName }}<TReturn> Reflect<T, TReturn>({{ TypeNameT }} vector, {{ TypeNameT }} normal) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
     {
         var dot = Dot<T, TReturn>(vector, normal);
         return vector.As<TReturn>() - (NumericConstants<TReturn>.Two * (dot * normal.As<TReturn>()));
@@ -1419,7 +1419,7 @@ public static partial class {{ TypeName }}
     /// <param name="value">A vector.</param>
     /// <returns>The square root vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeName }}<TReturn> Sqrt<T, TReturn>(in {{ TypeNameT }} value) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
+    public static {{ TypeName }}<TReturn> Sqrt<T, TReturn>({{ TypeNameT }} value) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
     {
         return new {{ TypeName }}<TReturn>(
             {{ wrap forEachDimension ', '; $"TReturn.Sqrt(TReturn.CreateTruncating(value.{c}))"; end }}
@@ -1433,9 +1433,9 @@ public static partial class {{ TypeName }}
     /// <param name="matrix">The transformation matrix.</param>
     /// <returns>The transformed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Transform<T>(in {{ TypeNameT }} position, Matrix4X4<T> matrix) where T : INumberBase<T>
+    public static {{ TypeNameT }} Transform<T>({{ TypeNameT }} position, Matrix4X4<T> matrix) where T : INumberBase<T>
     {
-        return (in {{ TypeNameT }})Vector4D.Transform(position, matrix);
+        return ({{ TypeNameT }})Vector4D.Transform(position, matrix);
     }
 
     /// <summary>Transforms a vector by the specified Quaternion rotation value.</summary>
@@ -1443,7 +1443,7 @@ public static partial class {{ TypeName }}
     /// <param name="rotation">The rotation to apply.</param>
     /// <returns>The transformed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeName }}<TReturn> Transform<T, TQuat, TReturn>(in {{ TypeNameT }} value, Quaternion<TQuat> rotation) where T : INumberBase<T> where TReturn : INumberBase<TReturn> where TQuat : ITrigonometricFunctions<TQuat>, IRootFunctions<TQuat>
+    public static {{ TypeName }}<TReturn> Transform<T, TQuat, TReturn>({{ TypeNameT }} value, Quaternion<TQuat> rotation) where T : INumberBase<T> where TReturn : INumberBase<TReturn> where TQuat : ITrigonometricFunctions<TQuat>, IRootFunctions<TQuat>
     {
         {{ wrap forEachDimension; $"var {cl2} = rotation.{c} + rotation.{c};"; end -}}
         var x2 = rotation.X + rotation.X;
@@ -1502,7 +1502,7 @@ public static partial class {{ TypeName }}
     // /// <param name="matrix">The matrix.</param>
     // /// <returns>The transformed vector.</returns>
     // [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    // internal static {{ TypeNameT }} TransformNormal<T>(in {{ TypeNameT }} normal, in Matrix4x4 matrix) where T : INumberBase<T>
+    // internal static {{ TypeNameT }} TransformNormal<T>({{ TypeNameT }} normal, in Matrix4x4 matrix) where T : INumberBase<T>
     // {
     //     var matrixX = new Vector4(matrix.M11, matrix.M12, matrix.M13, matrix.M14);
     //     var matrixY = new Vector4(matrix.M21, matrix.M22, matrix.M23, matrix.M24);
@@ -1517,7 +1517,7 @@ public static partial class {{ TypeName }}
     */
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Remainder<T>(this {{ TypeNameT }} left, in {{ TypeNameT }} right) where T : INumberBase<T>, IModulusOperators<T, T, T>
+    public static {{ TypeNameT }} Remainder<T>(this {{ TypeNameT }} left, {{ TypeNameT }} right) where T : INumberBase<T>, IModulusOperators<T, T, T>
     {
         return new {{ TypeNameT }}(
             {{ wrap forEachDimension ','; $"left.{c} % right.{c}"; end }}
@@ -1560,25 +1560,25 @@ public static partial class {{ TypeName }}
     /// <param name="amount">A value between 0 and 1 that indicates the weight of <paramref name="value2" />.</param>
     /// <returns>The interpolated vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Lerp<T>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2, T amount) where T : INumberBase<T>, IFloatingPoint<T>
+    public static {{ TypeNameT }} Lerp<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2, T amount) where T : INumberBase<T>, IFloatingPoint<T>
     {
         return Lerp<T, T>(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} LerpClamped<T>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2, T amount) where T : INumberBase<T>, IFloatingPoint<T>
+    public static {{ TypeNameT }} LerpClamped<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2, T amount) where T : INumberBase<T>, IFloatingPoint<T>
     {
         return LerpClamped<T, T>(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Lerp<T>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2, {{ TypeNameT }} amount) where T : INumberBase<T>, IFloatingPoint<T>
+    public static {{ TypeNameT }} Lerp<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2, {{ TypeNameT }} amount) where T : INumberBase<T>, IFloatingPoint<T>
     {
         return Lerp<T, T>(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} LerpClamped<T>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2, {{ TypeNameT }} amount) where T : INumberBase<T>, IFloatingPoint<T>
+    public static {{ TypeNameT }} LerpClamped<T>({{ TypeNameT }} value1, {{ TypeNameT }} value2, {{ TypeNameT }} amount) where T : INumberBase<T>, IFloatingPoint<T>
     {
         return LerpClamped<T, T>(value1, value2, amount);
     }
@@ -1588,7 +1588,7 @@ public static partial class {{ TypeName }}
     /// <param name="normal">The normal of the surface being reflected off.</param>
     /// <returns>The reflected vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Reflect<T>(in {{ TypeNameT }} vector, in {{ TypeNameT }} normal) where T : IFloatingPoint<T>
+    public static {{ TypeNameT }} Reflect<T>({{ TypeNameT }} vector, {{ TypeNameT }} normal) where T : IFloatingPoint<T>
     {
         return Reflect<T, T>(vector, normal);
     }
@@ -1597,7 +1597,7 @@ public static partial class {{ TypeName }}
     /// <param name="value">A vector.</param>
     /// <returns>The square root vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Sqrt<T>(in {{ TypeNameT }} value) where T : IFloatingPoint<T>, IRootFunctions<T>
+    public static {{ TypeNameT }} Sqrt<T>({{ TypeNameT }} value) where T : IFloatingPoint<T>, IRootFunctions<T>
     {
         return Sqrt<T, T>(value);
     }
@@ -1609,7 +1609,7 @@ public static partial class {{ TypeName }}
     /// <param name="rotation">The rotation to apply.</param>
     /// <returns>The transformed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Transform<T>(in {{ TypeNameT }} value, Quaternion<T> rotation)
+    public static {{ TypeNameT }} Transform<T>({{ TypeNameT }} value, Quaternion<T> rotation)
         where T : IFloatingPoint<T>, ITrigonometricFunctions<T>, IRootFunctions<T>
     {
         return Transform<T, T, T>(value, rotation);
@@ -1621,7 +1621,7 @@ public static partial class {{ TypeName }}
     /// <param name="rotation">The rotation to apply.</param>
     /// <returns>The transformed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static {{ TypeNameT }} Transform<T, TQuat>(in {{ TypeNameT }} value, Quaternion<TQuat> rotation)
+    public static {{ TypeNameT }} Transform<T, TQuat>({{ TypeNameT }} value, Quaternion<TQuat> rotation)
         where T : IFloatingPoint<T>
         where TQuat : ITrigonometricFunctions<TQuat>, IRootFunctions<TQuat>
     {
@@ -1631,31 +1631,31 @@ public static partial class {{ TypeName }}
     #endregion
 
     // Equivalent implementing IHyperbolicFunctions<System.Runtime.Intrinsics.Vector3>
-    public static {{ TypeNameT }} Acosh<T>(in {{ TypeNameT }} x) where T : IHyperbolicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Acosh(x.{c})"; end }});
-    public static {{ TypeNameT }} Asinh<T>(in {{ TypeNameT }} x) where T : IHyperbolicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Asinh(x.{c})"; end }});
-    public static {{ TypeNameT }} Atanh<T>(in {{ TypeNameT }} x) where T : IHyperbolicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Atanh(x.{c})"; end }});
-    public static {{ TypeNameT }} Cosh<T>(in {{ TypeNameT }} x) where T : IHyperbolicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Cosh(x.{c})"; end }});
-    public static {{ TypeNameT }} Sinh<T>(in {{ TypeNameT }} x) where T : IHyperbolicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Sinh(x.{c})"; end }});
-    public static {{ TypeNameT }} Tanh<T>(in {{ TypeNameT }} x) where T : IHyperbolicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Tanh(x.{c})"; end }});
+    public static {{ TypeNameT }} Acosh<T>({{ TypeNameT }} x) where T : IHyperbolicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Acosh(x.{c})"; end }});
+    public static {{ TypeNameT }} Asinh<T>({{ TypeNameT }} x) where T : IHyperbolicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Asinh(x.{c})"; end }});
+    public static {{ TypeNameT }} Atanh<T>({{ TypeNameT }} x) where T : IHyperbolicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Atanh(x.{c})"; end }});
+    public static {{ TypeNameT }} Cosh<T>({{ TypeNameT }} x) where T : IHyperbolicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Cosh(x.{c})"; end }});
+    public static {{ TypeNameT }} Sinh<T>({{ TypeNameT }} x) where T : IHyperbolicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Sinh(x.{c})"; end }});
+    public static {{ TypeNameT }} Tanh<T>({{ TypeNameT }} x) where T : IHyperbolicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Tanh(x.{c})"; end }});
 
     // Equivalent implementing ITrigonometricFunctions<System.Runtime.Intrinsics.Vector3>
-    public static {{ TypeNameT }} Acos<T>(in {{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Acos(x.{c})"; end }});
-    public static {{ TypeNameT }} AcosPi<T>(in {{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.AcosPi(x.{c})"; end }});
-    public static {{ TypeNameT }} Asin<T>(in {{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Asin(x.{c})"; end }});
-    public static {{ TypeNameT }} AsinPi<T>(in {{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.AsinPi(x.{c})"; end }});
-    public static {{ TypeNameT }} Atan<T>(in {{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Atan(x.{c})"; end }});
-    public static {{ TypeNameT }} AtanPi<T>(in {{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.AtanPi(x.{c})"; end }});
-    public static {{ TypeNameT }} Cos<T>(in {{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Cos(x.{c})"; end }});
-    public static {{ TypeNameT }} CosPi<T>(in {{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.CosPi(x.{c})"; end }});
-    public static {{ TypeNameT }} DegreesToRadians<T>(in {{ TypeNameT }} degrees) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.DegreesToRadians(degrees.{c})"; end }});
-    public static {{ TypeNameT }} RadiansToDegrees<T>(in {{ TypeNameT }} radians) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.RadiansToDegrees(radians.{c})"; end }});
-    public static {{ TypeNameT }} Sin<T>(in {{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Sin(x.{c})"; end }});
-    public static {{ TypeNameT }} SinPi<T>(in {{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.SinPi(x.{c})"; end }});
-    public static {{ TypeNameT }} Tan<T>(in {{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Tan(x.{c})"; end }});
-    public static {{ TypeNameT }} TanPi<T>(in {{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.TanPi(x.{c})"; end }});
+    public static {{ TypeNameT }} Acos<T>({{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Acos(x.{c})"; end }});
+    public static {{ TypeNameT }} AcosPi<T>({{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.AcosPi(x.{c})"; end }});
+    public static {{ TypeNameT }} Asin<T>({{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Asin(x.{c})"; end }});
+    public static {{ TypeNameT }} AsinPi<T>({{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.AsinPi(x.{c})"; end }});
+    public static {{ TypeNameT }} Atan<T>({{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Atan(x.{c})"; end }});
+    public static {{ TypeNameT }} AtanPi<T>({{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.AtanPi(x.{c})"; end }});
+    public static {{ TypeNameT }} Cos<T>({{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Cos(x.{c})"; end }});
+    public static {{ TypeNameT }} CosPi<T>({{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.CosPi(x.{c})"; end }});
+    public static {{ TypeNameT }} DegreesToRadians<T>({{ TypeNameT }} degrees) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.DegreesToRadians(degrees.{c})"; end }});
+    public static {{ TypeNameT }} RadiansToDegrees<T>({{ TypeNameT }} radians) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.RadiansToDegrees(radians.{c})"; end }});
+    public static {{ TypeNameT }} Sin<T>({{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Sin(x.{c})"; end }});
+    public static {{ TypeNameT }} SinPi<T>({{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.SinPi(x.{c})"; end }});
+    public static {{ TypeNameT }} Tan<T>({{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Tan(x.{c})"; end }});
+    public static {{ TypeNameT }} TanPi<T>({{ TypeNameT }} x) where T : ITrigonometricFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.TanPi(x.{c})"; end }});
 
 
-    public static ({{ TypeNameT }} Sin, {{ TypeNameT }} Cos) SinCos<T>(in {{ TypeNameT }} x) where T : ITrigonometricFunctions<T>
+    public static ({{ TypeNameT }} Sin, {{ TypeNameT }} Cos) SinCos<T>({{ TypeNameT }} x) where T : ITrigonometricFunctions<T>
     {
         {{ wrap forEachDimension; $"var (sin{c}, cos{c}) = T.SinCos(x.{c});"; end }}
 
@@ -1665,7 +1665,7 @@ public static partial class {{ TypeName }}
         );
     }
 
-    public static ({{ TypeNameT }} SinPi, {{ TypeNameT }} CosPi) SinCosPi<T>(in {{ TypeNameT }} x) where T : ITrigonometricFunctions<T>
+    public static ({{ TypeNameT }} SinPi, {{ TypeNameT }} CosPi) SinCosPi<T>({{ TypeNameT }} x) where T : ITrigonometricFunctions<T>
     {
         {{ wrap forEachDimension; $"var (sin{c}, cos{c}) = T.SinCosPi(x.{c});"; end }}
 
@@ -1676,110 +1676,110 @@ public static partial class {{ TypeName }}
     }
 
     // Equivalent implementing ILogarithmicFunctions<System.Runtime.Intrinsics.Vector3>
-    public static {{ TypeNameT }} Log<T>(in {{ TypeNameT }} x) where T : ILogarithmicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Log(x.{c})"; end }});
+    public static {{ TypeNameT }} Log<T>({{ TypeNameT }} x) where T : ILogarithmicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Log(x.{c})"; end }});
 
-    public static {{ TypeNameT }} Log<T>(in {{ TypeNameT }} x, in {{ TypeNameT }} newBase) where T : ILogarithmicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Log(x.{c}, newBase.{c})"; end }});
-    public static {{ TypeNameT }} Log<T>(in {{ TypeNameT }} x, T newBase) where T : ILogarithmicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Log(x.{c}, newBase)"; end }});
-    public static {{ TypeNameT }} LogP1<T>(in {{ TypeNameT }} x) where T : ILogarithmicFunctions<T> => Log(x + {{ TypeNameT }}.One);
-    public static {{ TypeNameT }} Log2<T>(in {{ TypeNameT }} x) where T : ILogarithmicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Log2(x.{c})"; end }});
-    public static {{ TypeNameT }} Log2P1<T>(in {{ TypeNameT }} x) where T : ILogarithmicFunctions<T> => Log2(x + {{ TypeNameT }}.One);
-    public static {{ TypeNameT }} Log10<T>(in {{ TypeNameT }} x) where T : ILogarithmicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Log10(x.{c})"; end }});
-    public static {{ TypeNameT }} Log10P1<T>(in {{ TypeNameT }} x) where T : ILogarithmicFunctions<T> => Log10(x + {{ TypeNameT }}.One);
+    public static {{ TypeNameT }} Log<T>({{ TypeNameT }} x, {{ TypeNameT }} newBase) where T : ILogarithmicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Log(x.{c}, newBase.{c})"; end }});
+    public static {{ TypeNameT }} Log<T>({{ TypeNameT }} x, T newBase) where T : ILogarithmicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Log(x.{c}, newBase)"; end }});
+    public static {{ TypeNameT }} LogP1<T>({{ TypeNameT }} x) where T : ILogarithmicFunctions<T> => Log(x + {{ TypeNameT }}.One);
+    public static {{ TypeNameT }} Log2<T>({{ TypeNameT }} x) where T : ILogarithmicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Log2(x.{c})"; end }});
+    public static {{ TypeNameT }} Log2P1<T>({{ TypeNameT }} x) where T : ILogarithmicFunctions<T> => Log2(x + {{ TypeNameT }}.One);
+    public static {{ TypeNameT }} Log10<T>({{ TypeNameT }} x) where T : ILogarithmicFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Log10(x.{c})"; end }});
+    public static {{ TypeNameT }} Log10P1<T>({{ TypeNameT }} x) where T : ILogarithmicFunctions<T> => Log10(x + {{ TypeNameT }}.One);
 
     // Equivalent implementing IExponentialFunctions<System.Runtime.Intrinsics.Vector3>
-    public static {{ TypeNameT }} Exp<T>(in {{ TypeNameT }} x) where T : IExponentialFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Exp(x.{c})"; end }});
-    public static {{ TypeNameT }} ExpM1<T>(in {{ TypeNameT }} x) where T : IExponentialFunctions<T> => Exp(x) - {{ TypeNameT }}.One;
-    public static {{ TypeNameT }} Exp2<T>(in {{ TypeNameT }} x) where T : IExponentialFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Exp2(x.{c})"; end }});
-    public static {{ TypeNameT }} Exp2M1<T>(in {{ TypeNameT }} x) where T : IExponentialFunctions<T> => Exp2(x) - {{ TypeNameT }}.One;
-    public static {{ TypeNameT }} Exp10<T>(in {{ TypeNameT }} x) where T : IExponentialFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Exp10(x.{c})"; end }});
-    public static {{ TypeNameT }} Exp10M1<T>(in {{ TypeNameT }} x) where T : IExponentialFunctions<T> => Exp10(x) - {{ TypeNameT }}.One;
+    public static {{ TypeNameT }} Exp<T>({{ TypeNameT }} x) where T : IExponentialFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Exp(x.{c})"; end }});
+    public static {{ TypeNameT }} ExpM1<T>({{ TypeNameT }} x) where T : IExponentialFunctions<T> => Exp(x) - {{ TypeNameT }}.One;
+    public static {{ TypeNameT }} Exp2<T>({{ TypeNameT }} x) where T : IExponentialFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Exp2(x.{c})"; end }});
+    public static {{ TypeNameT }} Exp2M1<T>({{ TypeNameT }} x) where T : IExponentialFunctions<T> => Exp2(x) - {{ TypeNameT }}.One;
+    public static {{ TypeNameT }} Exp10<T>({{ TypeNameT }} x) where T : IExponentialFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Exp10(x.{c})"; end }});
+    public static {{ TypeNameT }} Exp10M1<T>({{ TypeNameT }} x) where T : IExponentialFunctions<T> => Exp10(x) - {{ TypeNameT }}.One;
 
     // Equivalent implementing IPowerFunctions<System.Runtime.Intrinsics.Vector3>
-    public static {{ TypeNameT }} Pow<T>(in {{ TypeNameT }} x, in {{ TypeNameT }} y) where T : IPowerFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Pow(x.{c}, y.{c})"; end }});
-    public static {{ TypeNameT }} Pow<T>(in {{ TypeNameT }} x, T y) where T : IPowerFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Pow(x.{c}, y)"; end }});
+    public static {{ TypeNameT }} Pow<T>({{ TypeNameT }} x, {{ TypeNameT }} y) where T : IPowerFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Pow(x.{c}, y.{c})"; end }});
+    public static {{ TypeNameT }} Pow<T>({{ TypeNameT }} x, T y) where T : IPowerFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Pow(x.{c}, y)"; end }});
 
     // Equivalent implementing IRootFunctions<System.Runtime.Intrinsics.Vector3>
-    public static {{ TypeNameT }} Cbrt<T>(in {{ TypeNameT }} x) where T : IRootFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Cbrt(x.{c})"; end }});
-    public static {{ TypeNameT }} Hypot<T>(in {{ TypeNameT }} x, in {{ TypeNameT }} y) where T : IRootFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Hypot(x.{c}, y.{c})"; end }});
-    public static {{ TypeNameT }} Hypot<T>(in {{ TypeNameT }} x, T y) where T : IRootFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Hypot(x.{c}, y)"; end }});
-    public static {{ TypeNameT }} RootN<T>(in {{ TypeNameT }} x, int n) where T : IRootFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.RootN(x.{c}, n)"; end }});
+    public static {{ TypeNameT }} Cbrt<T>({{ TypeNameT }} x) where T : IRootFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Cbrt(x.{c})"; end }});
+    public static {{ TypeNameT }} Hypot<T>({{ TypeNameT }} x, {{ TypeNameT }} y) where T : IRootFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Hypot(x.{c}, y.{c})"; end }});
+    public static {{ TypeNameT }} Hypot<T>({{ TypeNameT }} x, T y) where T : IRootFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Hypot(x.{c}, y)"; end }});
+    public static {{ TypeNameT }} RootN<T>({{ TypeNameT }} x, int n) where T : IRootFunctions<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.RootN(x.{c}, n)"; end }});
 
     // IFloatingPoint<TSelf>
-    public static {{ TypeNameT }} Round<T>(in {{ TypeNameT }} x) where T : IFloatingPoint<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Round(x.{c})"; end }});
-    public static {{ TypeNameT }} Round<T>(in {{ TypeNameT }} x, int digits) where T : IFloatingPoint<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Round(x.{c}, digits)"; end }});
-    public static {{ TypeNameT }} Round<T>(in {{ TypeNameT }} x, MidpointRounding mode) where T : IFloatingPoint<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Round(x.{c}, mode)"; end }});
-    public static {{ TypeNameT }} Round<T>(in {{ TypeNameT }} x, int digits, MidpointRounding mode) where T : IFloatingPoint<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Round(x.{c}, digits, mode)"; end }});
-    public static {{ TypeNameT }} Truncate<T>(in {{ TypeNameT }} x) where T : IFloatingPoint<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Truncate(x.{c})"; end }});
+    public static {{ TypeNameT }} Round<T>({{ TypeNameT }} x) where T : IFloatingPoint<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Round(x.{c})"; end }});
+    public static {{ TypeNameT }} Round<T>({{ TypeNameT }} x, int digits) where T : IFloatingPoint<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Round(x.{c}, digits)"; end }});
+    public static {{ TypeNameT }} Round<T>({{ TypeNameT }} x, MidpointRounding mode) where T : IFloatingPoint<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Round(x.{c}, mode)"; end }});
+    public static {{ TypeNameT }} Round<T>({{ TypeNameT }} x, int digits, MidpointRounding mode) where T : IFloatingPoint<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Round(x.{c}, digits, mode)"; end }});
+    public static {{ TypeNameT }} Truncate<T>({{ TypeNameT }} x) where T : IFloatingPoint<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Truncate(x.{c})"; end }});
 
     // IFloatingPointIeee754<TSelf>
-    public static {{ TypeNameT }} Atan2<T>(in {{ TypeNameT }} x, in {{ TypeNameT }} y) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Atan2(x.{c}, y.{c})"; end }});
-    public static {{ TypeNameT }} Atan2Pi<T>(in {{ TypeNameT }} x, in {{ TypeNameT }} y) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Atan2Pi(x.{c}, y.{c})"; end }});
-    public static {{ TypeNameT }} Atan2<T>(in {{ TypeNameT }} x, T y) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Atan2(x.{c}, y)"; end }});
-    public static {{ TypeNameT }} Atan2Pi<T>(in {{ TypeNameT }} x, T y) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Atan2Pi(x.{c}, y)"; end }});
-    public static {{ TypeNameT }} BitDecrement<T>(in {{ TypeNameT }} x) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.BitDecrement(x.{c})"; end }});
-    public static {{ TypeNameT }} BitIncrement<T>(in {{ TypeNameT }} x) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.BitIncrement(x.{c})"; end }});
+    public static {{ TypeNameT }} Atan2<T>({{ TypeNameT }} x, {{ TypeNameT }} y) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Atan2(x.{c}, y.{c})"; end }});
+    public static {{ TypeNameT }} Atan2Pi<T>({{ TypeNameT }} x, {{ TypeNameT }} y) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Atan2Pi(x.{c}, y.{c})"; end }});
+    public static {{ TypeNameT }} Atan2<T>({{ TypeNameT }} x, T y) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Atan2(x.{c}, y)"; end }});
+    public static {{ TypeNameT }} Atan2Pi<T>({{ TypeNameT }} x, T y) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Atan2Pi(x.{c}, y)"; end }});
+    public static {{ TypeNameT }} BitDecrement<T>({{ TypeNameT }} x) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.BitDecrement(x.{c})"; end }});
+    public static {{ TypeNameT }} BitIncrement<T>({{ TypeNameT }} x) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.BitIncrement(x.{c})"; end }});
 
-    public static {{ TypeNameT }} FusedMultiplyAdd<T>(in {{ TypeNameT }} left, in {{ TypeNameT }} right, {{ TypeNameT }} addend) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.FusedMultiplyAdd(left.{c}, right.{c}, addend.{c})"; end }});
-    public static {{ TypeNameT }} ReciprocalEstimate<T>(in {{ TypeNameT }} x) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.ReciprocalEstimate(x.{c})"; end }});
-    public static {{ TypeNameT }} ReciprocalSqrtEstimate<T>(in {{ TypeNameT }} x) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.ReciprocalSqrtEstimate(x.{c})"; end }});
+    public static {{ TypeNameT }} FusedMultiplyAdd<T>({{ TypeNameT }} left, {{ TypeNameT }} right, {{ TypeNameT }} addend) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.FusedMultiplyAdd(left.{c}, right.{c}, addend.{c})"; end }});
+    public static {{ TypeNameT }} ReciprocalEstimate<T>({{ TypeNameT }} x) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.ReciprocalEstimate(x.{c})"; end }});
+    public static {{ TypeNameT }} ReciprocalSqrtEstimate<T>({{ TypeNameT }} x) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.ReciprocalSqrtEstimate(x.{c})"; end }});
 
     // INumber<T>
-    // public static {{ TypeNameT }} Clamp<T>(in {{ TypeNameT }} value, in {{ TypeNameT }} min, {{ TypeNameT }} max) where T : INumber<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Clamp(x.{c})"; end }});
-    public static {{ TypeNameT }} CopySign<T>(in {{ TypeNameT }} value, in {{ TypeNameT }} sign) where T : INumber<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.CopySign(value.{c}, sign.{c})"; end }});
-    public static {{ TypeNameT }} CopySign<T>(in {{ TypeNameT }} value, T sign) where T : INumber<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.CopySign(value.{c}, sign)"; end }});
-    public static {{ TypeNameT }} MaxNumber<T>(in {{ TypeNameT }} x, in {{ TypeNameT }} y) where T : INumber<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.MaxNumber(x.{c}, y.{c})"; end }});
-    public static {{ TypeNameT }} MinNumber<T>(in {{ TypeNameT }} x, in {{ TypeNameT }} y) where T : INumber<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.MinNumber(x.{c}, y.{c})"; end }});
+    // public static {{ TypeNameT }} Clamp<T>({{ TypeNameT }} value, {{ TypeNameT }} min, {{ TypeNameT }} max) where T : INumber<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.Clamp(x.{c})"; end }});
+    public static {{ TypeNameT }} CopySign<T>({{ TypeNameT }} value, {{ TypeNameT }} sign) where T : INumber<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.CopySign(value.{c}, sign.{c})"; end }});
+    public static {{ TypeNameT }} CopySign<T>({{ TypeNameT }} value, T sign) where T : INumber<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.CopySign(value.{c}, sign)"; end }});
+    public static {{ TypeNameT }} MaxNumber<T>({{ TypeNameT }} x, {{ TypeNameT }} y) where T : INumber<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.MaxNumber(x.{c}, y.{c})"; end }});
+    public static {{ TypeNameT }} MinNumber<T>({{ TypeNameT }} x, {{ TypeNameT }} y) where T : INumber<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.MinNumber(x.{c}, y.{c})"; end }});
 
     // INumberBase<T>
-    // public static {{ TypeNameT }} MaxMagnitude<T>(in {{ TypeNameT }} x, in {{ TypeNameT }} y) where T : INumberBase<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.MaxMagnitude(x.{c}, y.{c})"; end }});
-    // public static {{ TypeNameT }} MaxMagnitudeNumber<T>(in {{ TypeNameT }} x, in {{ TypeNameT }} y) where T : INumberBase<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.MaxMagnitudeNumber(x.{c}, y.{c})"; end }});
-    // public static {{ TypeNameT }} MinMagnitude<T>(in {{ TypeNameT }} x, in {{ TypeNameT }} y) where T : INumberBase<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.MinMagnitude(x.{c}, y.{c})"; end }});
-    // public static {{ TypeNameT }} MinMagnitudeNumber<T>(in {{ TypeNameT }} x, in {{ TypeNameT }} y) where T : INumberBase<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.MinMagnitudeNumber(x.{c}, y.{c})"; end }});
+    // public static {{ TypeNameT }} MaxMagnitude<T>({{ TypeNameT }} x, {{ TypeNameT }} y) where T : INumberBase<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.MaxMagnitude(x.{c}, y.{c})"; end }});
+    // public static {{ TypeNameT }} MaxMagnitudeNumber<T>({{ TypeNameT }} x, {{ TypeNameT }} y) where T : INumberBase<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.MaxMagnitudeNumber(x.{c}, y.{c})"; end }});
+    // public static {{ TypeNameT }} MinMagnitude<T>({{ TypeNameT }} x, {{ TypeNameT }} y) where T : INumberBase<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.MinMagnitude(x.{c}, y.{c})"; end }});
+    // public static {{ TypeNameT }} MinMagnitudeNumber<T>({{ TypeNameT }} x, {{ TypeNameT }} y) where T : INumberBase<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.MinMagnitudeNumber(x.{c}, y.{c})"; end }});
     // (there's no reason you would want these.)
 
 
 
     // IFloatingPointIeee754<TSelf>
-    public static {{ TypeName }}<int> ILogB<T>(in {{ TypeNameT }} x) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.ILogB(x.{c})"; end }});
-    public static {{ TypeNameT }} ScaleB<T>(in {{ TypeNameT }} x, {{ TypeName }}<int> n) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.ScaleB(x.{c}, n.{c})"; end }});
-    public static {{ TypeNameT }} ScaleB<T>(in {{ TypeNameT }} x, int n) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.ScaleB(x.{c}, n)"; end }});
+    public static {{ TypeName }}<int> ILogB<T>({{ TypeNameT }} x) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.ILogB(x.{c})"; end }});
+    public static {{ TypeNameT }} ScaleB<T>({{ TypeNameT }} x, {{ TypeName }}<int> n) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.ScaleB(x.{c}, n.{c})"; end }});
+    public static {{ TypeNameT }} ScaleB<T>({{ TypeNameT }} x, int n) where T : IFloatingPointIeee754<T> => new({{ wrap forEachDimension ', ' newline:false; $"T.ScaleB(x.{c}, n)"; end }});
 
-    public static {{ TypeName }}<int> RoundToInt<T>(in {{ TypeNameT }} vector) where T : IFloatingPoint<T>
+    public static {{ TypeName }}<int> RoundToInt<T>({{ TypeNameT }} vector) where T : IFloatingPoint<T>
     {
         return new {{ TypeName }}<int>(
             {{ wrap forEachDimension ','; $"int.CreateSaturating(T.Round(vector.{c}))"; end }}
         );
     }
 
-    public static {{ TypeName }}<int> FloorToInt<T>(in {{ TypeNameT }} vector) where T : IFloatingPoint<T>
+    public static {{ TypeName }}<int> FloorToInt<T>({{ TypeNameT }} vector) where T : IFloatingPoint<T>
     {
         return new {{ TypeName }}<int>(
             {{ wrap forEachDimension ','; $"int.CreateSaturating(T.Floor(vector.{c}))"; end }}
         );
     }
 
-    public static {{ TypeName }}<int> CeilingToInt<T>(in {{ TypeNameT }} vector) where T : IFloatingPoint<T>
+    public static {{ TypeName }}<int> CeilingToInt<T>({{ TypeNameT }} vector) where T : IFloatingPoint<T>
     {
         return new {{ TypeName }}<int>(
             {{ wrap forEachDimension ','; $"int.CreateSaturating(T.Ceiling(vector.{c}))"; end }}
         );
     }
 
-    public static {{ TypeName }}<TInt> RoundToInt<T, TInt>(in {{ TypeNameT }} vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
+    public static {{ TypeName }}<TInt> RoundToInt<T, TInt>({{ TypeNameT }} vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
     {
         return new {{ TypeName }}<TInt>(
             {{ wrap forEachDimension ','; $"TInt.CreateSaturating(T.Round(vector.{c}))"; end }}
         );
     }
 
-    public static {{ TypeName }}<TInt> FloorToInt<T, TInt>(in {{ TypeNameT }} vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
+    public static {{ TypeName }}<TInt> FloorToInt<T, TInt>({{ TypeNameT }} vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
     {
         return new {{ TypeName }}<TInt>(
             {{ wrap forEachDimension ','; $"TInt.CreateSaturating(T.Floor(vector.{c}))"; end }}
         );
     }
 
-    public static {{ TypeName }}<TInt> CeilingToInt<T, TInt>(in {{ TypeNameT }} vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
+    public static {{ TypeName }}<TInt> CeilingToInt<T, TInt>({{ TypeNameT }} vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
     {
         return new {{ TypeName }}<TInt>(
             {{ wrap forEachDimension ','; $"TInt.CreateSaturating(T.Ceiling(vector.{c}))"; end }}
@@ -1800,64 +1800,64 @@ public readonly partial struct {{TypeNameT}}
 {
     T IVector<{{TypeNameT}}, T>.LengthSquared()
         => this.LengthSquared();
-    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Multiply(in {{ TypeNameT }} left, in {{ TypeNameT }} right)
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Multiply({{TypeNameT}} left, {{TypeNameT}} right)
         => {{TypeName}}.Multiply(left, right);
-    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Multiply(in {{ TypeNameT }} left, T right)
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Multiply({{TypeNameT}} left, T right)
         => {{TypeName}}.Multiply(left, right);
-    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Multiply(T left, in {{ TypeNameT }} right)
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Multiply(T left, {{TypeNameT}} right)
         => {{TypeName}}.Multiply(left, right);
-    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Negate(in {{ TypeNameT }} value)
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Negate({{TypeNameT}} value)
         => {{TypeName}}.Negate(value);
-    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Subtract(in {{ TypeNameT }} left, in {{ TypeNameT }} right)
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Subtract({{TypeNameT}} left, {{TypeNameT}} right)
         => {{TypeName}}.Subtract(left, right);
-    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Add(in {{ TypeNameT }} left, in {{ TypeNameT }} right)
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Add({{TypeNameT}} left, {{TypeNameT}} right)
         => {{TypeName}}.Add(left, right);
-    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Divide(in {{ TypeNameT }} left, in {{ TypeNameT }} right)
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Divide({{TypeNameT}} left, {{TypeNameT}} right)
         => {{TypeName}}.Divide(left, right);
-    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Divide(in {{ TypeNameT }} left, T divisor)
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Divide({{TypeNameT}} left, T divisor)
         => {{TypeName}}.Divide(left, divisor);
-    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Clamp(in {{ TypeNameT }} value1, in {{ TypeNameT }} min, in {{ TypeNameT }} max)
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Clamp({{TypeNameT}} value1, {{TypeNameT}} min, {{TypeNameT}} max)
         => {{TypeName}}.Clamp(value1, min, max);
-    static TReturn IVector<{{TypeNameT}}, T>.Distance<TReturn>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2)
+    static TReturn IVector<{{TypeNameT}}, T>.Distance<TReturn>({{TypeNameT}} value1, {{TypeNameT}} value2)
         => {{TypeName}}.Distance<T, TReturn>(value1, value2);
-    static T IVector<{{TypeNameT}}, T>.DistanceSquared(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2)
+    static T IVector<{{TypeNameT}}, T>.DistanceSquared({{TypeNameT}} value1, {{TypeNameT}} value2)
         => {{TypeName}}.DistanceSquared(value1, value2);
-    static TReturn IVector<{{TypeNameT}}, T>.DistanceSquared<TReturn>(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2)
+    static TReturn IVector<{{TypeNameT}}, T>.DistanceSquared<TReturn>({{TypeNameT}} value1, {{TypeNameT}} value2)
         => {{TypeName}}.DistanceSquared<T, TReturn>(value1, value2);
-    static T IVector<{{TypeNameT}}, T>.Dot(in {{ TypeNameT }} vector1, in {{ TypeNameT }} vector2)
+    static T IVector<{{TypeNameT}}, T>.Dot({{TypeNameT}} vector1, {{TypeNameT}} vector2)
         => {{TypeName}}.Dot(vector1, vector2);
-    static TReturn IVector<{{TypeNameT}}, T>.Dot<TReturn>(in {{ TypeNameT }} vector1, in {{ TypeNameT }} vector2)
+    static TReturn IVector<{{TypeNameT}}, T>.Dot<TReturn>({{TypeNameT}} vector1, {{TypeNameT}} vector2)
         => {{TypeName}}.Dot<T, TReturn>(vector1, vector2);
-    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Max(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2)
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Max({{TypeNameT}} value1, {{TypeNameT}} value2)
         => {{TypeName}}.Max(value1, value2);
-    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Min(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2)
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Min({{TypeNameT}} value1, {{TypeNameT}} value2)
         => {{TypeName}}.Min(value1, value2);
 
-    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Lerp(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2, T amount) /* where T : IFloatingPoint<T> */
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Lerp({{TypeNameT}} value1, {{TypeNameT}} value2, T amount) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<{{TypeNameT}}, T>(typeof(IFloatingPoint<>));
         return {{TypeName}}.LerpUnchecked(value1, value2, amount);
     }
 
-    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.LerpClamped(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2, T amount) /* where T : IFloatingPoint<T> */
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.LerpClamped({{TypeNameT}} value1, {{TypeNameT}} value2, T amount) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<{{TypeNameT}}, T>(typeof(IFloatingPoint<>));
         return {{TypeName}}.LerpClampedUnchecked(value1, value2, amount);
     }
 
-    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Lerp(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2, in {{ TypeNameT }} amount) /* where T : IFloatingPoint<T> */
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Lerp({{TypeNameT}} value1, {{TypeNameT}} value2, {{TypeNameT}} amount) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<{{TypeNameT}}, T>(typeof(IFloatingPoint<>));
         return {{TypeName}}.LerpUnchecked(value1, value2, amount);
     }
 
-    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.LerpClamped(in {{ TypeNameT }} value1, in {{ TypeNameT }} value2, in {{ TypeNameT }} amount) /* where T : IFloatingPoint<T> */
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.LerpClamped({{TypeNameT}} value1, {{TypeNameT}} value2, {{TypeNameT}} amount) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<{{TypeNameT}}, T>(typeof(IFloatingPoint<>));
         return {{TypeName}}.LerpClampedUnchecked(value1, value2, amount);
     }
 
-    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Reflect(in {{ TypeNameT }} vector, in {{ TypeNameT }} normal) /* where T : IFloatingPoint<T> */
+    static {{TypeNameT}} IVector<{{TypeNameT}}, T>.Reflect({{TypeNameT}} vector, {{TypeNameT}} normal) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<{{TypeNameT}}, T>(typeof(IFloatingPoint<>));
         return {{TypeName}}.Reflect<T, T>(vector, normal);

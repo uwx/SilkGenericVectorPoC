@@ -1235,7 +1235,7 @@ public static partial class Vector4D
     /// <param name="right">The second vector.</param>
     /// <returns>The element-wise product vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Multiply<T>(in Vector4D<T> left, in Vector4D<T> right) where T : INumberBase<T>
+    public static Vector4D<T> Multiply<T>(Vector4D<T> left, Vector4D<T> right) where T : INumberBase<T>
     {
         return left * right;
     }
@@ -1245,7 +1245,7 @@ public static partial class Vector4D
     /// <param name="right">The scalar value.</param>
     /// <returns>The scaled vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Multiply<T>(in Vector4D<T> left, T right) where T : INumberBase<T>
+    public static Vector4D<T> Multiply<T>(Vector4D<T> left, T right) where T : INumberBase<T>
     {
         return left * right;
     }
@@ -1255,7 +1255,7 @@ public static partial class Vector4D
     /// <param name="right">The vector.</param>
     /// <returns>The scaled vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Multiply<T>(T left, in Vector4D<T> right) where T : INumberBase<T>
+    public static Vector4D<T> Multiply<T>(T left, Vector4D<T> right) where T : INumberBase<T>
     {
         return left * right;
     }
@@ -1264,7 +1264,7 @@ public static partial class Vector4D
     /// <param name="value">The vector to negate.</param>
     /// <returns>The negated vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Negate<T>(in Vector4D<T> value) where T : INumberBase<T>
+    public static Vector4D<T> Negate<T>(Vector4D<T> value) where T : INumberBase<T>
     {
         return -value;
     }
@@ -1274,7 +1274,7 @@ public static partial class Vector4D
     /// <param name="right">The second vector.</param>
     /// <returns>The difference vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Subtract<T>(in Vector4D<T> left, in Vector4D<T> right) where T : INumberBase<T>
+    public static Vector4D<T> Subtract<T>(Vector4D<T> left, Vector4D<T> right) where T : INumberBase<T>
     {
         return left - right;
     }
@@ -1284,7 +1284,7 @@ public static partial class Vector4D
     /// <param name="right">The second vector to add.</param>
     /// <returns>The summed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Add<T>(in Vector4D<T> left, in Vector4D<T> right) where T : INumberBase<T>
+    public static Vector4D<T> Add<T>(Vector4D<T> left, Vector4D<T> right) where T : INumberBase<T>
     {
         return left + right;
     }
@@ -1294,7 +1294,7 @@ public static partial class Vector4D
     /// <param name="right">The second vector.</param>
     /// <returns>The vector resulting from the division.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Divide<T>(in Vector4D<T> left, in Vector4D<T> right) where T : INumberBase<T>
+    public static Vector4D<T> Divide<T>(Vector4D<T> left, Vector4D<T> right) where T : INumberBase<T>
     {
         return left / right;
     }
@@ -1304,7 +1304,7 @@ public static partial class Vector4D
     /// <param name="divisor">The scalar value.</param>
     /// <returns>The vector that results from the division.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Divide<T>(in Vector4D<T> left, T divisor) where T : INumberBase<T>
+    public static Vector4D<T> Divide<T>(Vector4D<T> left, T divisor) where T : INumberBase<T>
     {
         return left / divisor;
     }
@@ -1317,7 +1317,7 @@ public static partial class Vector4D
     /// <param name="value">A vector.</param>
     /// <returns>The absolute value vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Abs<T>(in Vector4D<T> value) where T : INumberBase<T>
+    public static Vector4D<T> Abs<T>(Vector4D<T> value) where T : INumberBase<T>
     {
         // NOTE: COMPLETELY UNTESTED. MIGHT BE SLOW.
         unsafe
@@ -1373,7 +1373,7 @@ public static partial class Vector4D
     /// <param name="max">The maximum value.</param>
     /// <returns>The restricted vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Clamp<T>(in Vector4D<T> value1, in Vector4D<T> min, Vector4D<T> max) where T : INumberBase<T>
+    public static Vector4D<T> Clamp<T>(Vector4D<T> value1, Vector4D<T> min, Vector4D<T> max) where T : INumberBase<T>
     {
         // NOTE: COMPLETELY UNTESTED. MIGHT BE SLOW.
         unsafe
@@ -1445,7 +1445,7 @@ public static partial class Vector4D
     /// <param name="value2">The second point.</param>
     /// <returns>The distance.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TReturn Distance<T, TReturn>(in Vector4D<T> value1, in Vector4D<T> value2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
+    public static TReturn Distance<T, TReturn>(Vector4D<T> value1, Vector4D<T> value2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
     {
         var distanceSquared = DistanceSquared<T, TReturn>(value1, value2);
         return TReturn.Sqrt(distanceSquared);
@@ -1456,7 +1456,7 @@ public static partial class Vector4D
     /// <param name="value2">The second point.</param>
     /// <returns>The distance squared.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static T DistanceSquared<T>(in Vector4D<T> value1, in Vector4D<T> value2) where T : INumberBase<T>
+    public static T DistanceSquared<T>(Vector4D<T> value1, Vector4D<T> value2) where T : INumberBase<T>
     {
         var difference = value1 - value2;
         return Dot(difference, difference);
@@ -1467,7 +1467,7 @@ public static partial class Vector4D
     /// <param name="value2">The second point.</param>
     /// <returns>The distance squared.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TReturn DistanceSquared<T, TReturn>(in Vector4D<T> value1, in Vector4D<T> value2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
+    public static TReturn DistanceSquared<T, TReturn>(Vector4D<T> value1, Vector4D<T> value2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
     {
         var difference = value1 - value2;
         return Dot<T, TReturn>(difference, difference);
@@ -1478,7 +1478,7 @@ public static partial class Vector4D
     /// <param name="vector2">The second vector.</param>
     /// <returns>The dot product.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static T Dot<T>(in Vector4D<T> vector1, in Vector4D<T> vector2) where T : INumberBase<T>
+    public static T Dot<T>(Vector4D<T> vector1, Vector4D<T> vector2) where T : INumberBase<T>
     {
         // TODO: vectorize return scalar
         return
@@ -1493,7 +1493,7 @@ public static partial class Vector4D
     /// <param name="vector2">The second vector.</param>
     /// <returns>The dot product.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TReturn Dot<T, TReturn>(in Vector4D<T> vector1, in Vector4D<T> vector2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
+    public static TReturn Dot<T, TReturn>(Vector4D<T> vector1, Vector4D<T> vector2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
     {
         // TODO vectorize return converted (maybe not possible)
         return
@@ -1509,26 +1509,26 @@ public static partial class Vector4D
     /// <param name="amount">A value between 0 and 1 that indicates the weight of <paramref name="value2" />.</param>
     /// <returns>The interpolated vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<TFloat> Lerp<T, TFloat>(in Vector4D<T> value1, in Vector4D<T> value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    public static Vector4D<TFloat> Lerp<T, TFloat>(Vector4D<T> value1, Vector4D<T> value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         return (value1.As<TFloat>() * (TFloat.One - amount)) + (value2.As<TFloat>() * amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static Vector4D<T> LerpUnchecked<T>(in Vector4D<T> value1, in Vector4D<T> value2, T amount) where T : INumberBase<T>
+    internal static Vector4D<T> LerpUnchecked<T>(Vector4D<T> value1, Vector4D<T> value2, T amount) where T : INumberBase<T>
     {
         return (value1.As<T>() * (T.One - amount)) + (value2.As<T>() * amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<TFloat> LerpClamped<T, TFloat>(in Vector4D<T> value1, in Vector4D<T> value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    public static Vector4D<TFloat> LerpClamped<T, TFloat>(Vector4D<T> value1, Vector4D<T> value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         amount = TFloat.Clamp(amount, TFloat.Zero, TFloat.One);
         return Lerp(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static Vector4D<T> LerpClampedUnchecked<T>(in Vector4D<T> value1, in Vector4D<T> value2, T amount) where T : INumberBase<T>
+    internal static Vector4D<T> LerpClampedUnchecked<T>(Vector4D<T> value1, Vector4D<T> value2, T amount) where T : INumberBase<T>
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static T ClampT(T value, T min, T max)
@@ -1541,26 +1541,26 @@ public static partial class Vector4D
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<TFloat> Lerp<T, TFloat>(in Vector4D<T> value1, in Vector4D<T> value2, Vector4D<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    public static Vector4D<TFloat> Lerp<T, TFloat>(Vector4D<T> value1, Vector4D<T> value2, Vector4D<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         return (value1.As<TFloat>() * (Vector4D<TFloat>.One - amount)) + (value2.As<TFloat>() * amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static Vector4D<T> LerpUnchecked<T>(in Vector4D<T> value1, in Vector4D<T> value2, Vector4D<T> amount) where T : INumberBase<T>
+    internal static Vector4D<T> LerpUnchecked<T>(Vector4D<T> value1, Vector4D<T> value2, Vector4D<T> amount) where T : INumberBase<T>
     {
         return (value1.As<T>() * (Vector4D<T>.One - amount)) + (value2.As<T>() * amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<TFloat> LerpClamped<T, TFloat>(in Vector4D<T> value1, in Vector4D<T> value2, Vector4D<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    public static Vector4D<TFloat> LerpClamped<T, TFloat>(Vector4D<T> value1, Vector4D<T> value2, Vector4D<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         amount = Clamp(amount, Vector4D<TFloat>.Zero, Vector4D<TFloat>.One);
         return Lerp(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static Vector4D<T> LerpClampedUnchecked<T>(in Vector4D<T> value1, in Vector4D<T> value2, Vector4D<T> amount) where T : INumberBase<T>
+    internal static Vector4D<T> LerpClampedUnchecked<T>(Vector4D<T> value1, Vector4D<T> value2, Vector4D<T> amount) where T : INumberBase<T>
     {
         amount = Clamp(amount, Vector4D<T>.Zero, Vector4D<T>.One);
         return LerpUnchecked(value1, value2, amount);
@@ -1571,7 +1571,7 @@ public static partial class Vector4D
     /// <param name="value2">The second vector.</param>
     /// <returns>The maximized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Max<T>(in Vector4D<T> value1, in Vector4D<T> value2) where T : INumberBase<T>
+    public static Vector4D<T> Max<T>(Vector4D<T> value1, Vector4D<T> value2) where T : INumberBase<T>
     {
         return new Vector4D<T>(
             T.MaxMagnitudeNumber(value1.X, value2.X), 
@@ -1586,7 +1586,7 @@ public static partial class Vector4D
     /// <param name="value2">The second vector.</param>
     /// <returns>The minimized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Min<T>(in Vector4D<T> value1, in Vector4D<T> value2) where T : INumberBase<T>
+    public static Vector4D<T> Min<T>(Vector4D<T> value1, Vector4D<T> value2) where T : INumberBase<T>
     {
         return new Vector4D<T>(
         T.MinMagnitudeNumber(value1.X, value2.X), 
@@ -1600,7 +1600,7 @@ public static partial class Vector4D
     /// <param name="value">The vector to normalize.</param>
     /// <returns>The normalized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<TReturn> Normalize<T, TReturn>(in Vector4D<T> value) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
+    public static Vector4D<TReturn> Normalize<T, TReturn>(Vector4D<T> value) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
     {
         return value.As<TReturn>() / value.Length<T, TReturn>();
     }
@@ -1609,7 +1609,7 @@ public static partial class Vector4D
     /// <param name="value">The vector to normalize.</param>
     /// <returns>The normalized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Normalize<T>(in Vector4D<T> value) where T : INumberBase<T>, IRootFunctions<T>
+    public static Vector4D<T> Normalize<T>(Vector4D<T> value) where T : INumberBase<T>, IRootFunctions<T>
     {
         return value / value.Length();
     }
@@ -1619,7 +1619,7 @@ public static partial class Vector4D
     /// <param name="normal">The normal of the surface being reflected off.</param>
     /// <returns>The reflected vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<TReturn> Reflect<T, TReturn>(in Vector4D<T> vector, in Vector4D<T> normal) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
+    public static Vector4D<TReturn> Reflect<T, TReturn>(Vector4D<T> vector, Vector4D<T> normal) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
     {
         var dot = Dot<T, TReturn>(vector, normal);
         return vector.As<TReturn>() - (NumericConstants<TReturn>.Two * (dot * normal.As<TReturn>()));
@@ -1629,7 +1629,7 @@ public static partial class Vector4D
     /// <param name="value">A vector.</param>
     /// <returns>The square root vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<TReturn> Sqrt<T, TReturn>(in Vector4D<T> value) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
+    public static Vector4D<TReturn> Sqrt<T, TReturn>(Vector4D<T> value) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
     {
         return new Vector4D<TReturn>(
             TReturn.Sqrt(TReturn.CreateTruncating(value.X)), 
@@ -1646,9 +1646,9 @@ public static partial class Vector4D
     /// <param name="matrix">The transformation matrix.</param>
     /// <returns>The transformed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Transform<T>(in Vector4D<T> position, Matrix4X4<T> matrix) where T : INumberBase<T>
+    public static Vector4D<T> Transform<T>(Vector4D<T> position, Matrix4X4<T> matrix) where T : INumberBase<T>
     {
-        return (in Vector4D<T>)Vector4D.Transform(position, matrix);
+        return (Vector4D<T>)Vector4D.Transform(position, matrix);
     }
 
     /// <summary>Transforms a vector by the specified Quaternion rotation value.</summary>
@@ -1656,7 +1656,7 @@ public static partial class Vector4D
     /// <param name="rotation">The rotation to apply.</param>
     /// <returns>The transformed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<TReturn> Transform<T, TQuat, TReturn>(in Vector4D<T> value, Quaternion<TQuat> rotation) where T : INumberBase<T> where TReturn : INumberBase<TReturn> where TQuat : ITrigonometricFunctions<TQuat>, IRootFunctions<TQuat>
+    public static Vector4D<TReturn> Transform<T, TQuat, TReturn>(Vector4D<T> value, Quaternion<TQuat> rotation) where T : INumberBase<T> where TReturn : INumberBase<TReturn> where TQuat : ITrigonometricFunctions<TQuat>, IRootFunctions<TQuat>
     {
         var  = rotation.X + rotation.X;
         var  = rotation.Y + rotation.Y;
@@ -1698,7 +1698,7 @@ public static partial class Vector4D
     // /// <param name="matrix">The matrix.</param>
     // /// <returns>The transformed vector.</returns>
     // [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    // internal static Vector4D<T> TransformNormal<T>(in Vector4D<T> normal, in Matrix4x4 matrix) where T : INumberBase<T>
+    // internal static Vector4D<T> TransformNormal<T>(Vector4D<T> normal, in Matrix4x4 matrix) where T : INumberBase<T>
     // {
     //     var matrixX = new Vector4(matrix.M11, matrix.M12, matrix.M13, matrix.M14);
     //     var matrixY = new Vector4(matrix.M21, matrix.M22, matrix.M23, matrix.M24);
@@ -1713,7 +1713,7 @@ public static partial class Vector4D
     */
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Remainder<T>(this Vector4D<T> left, in Vector4D<T> right) where T : INumberBase<T>, IModulusOperators<T, T, T>
+    public static Vector4D<T> Remainder<T>(this Vector4D<T> left, Vector4D<T> right) where T : INumberBase<T>, IModulusOperators<T, T, T>
     {
         return new Vector4D<T>(
             left.X % right.X,
@@ -1762,25 +1762,25 @@ public static partial class Vector4D
     /// <param name="amount">A value between 0 and 1 that indicates the weight of <paramref name="value2" />.</param>
     /// <returns>The interpolated vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Lerp<T>(in Vector4D<T> value1, in Vector4D<T> value2, T amount) where T : INumberBase<T>, IFloatingPoint<T>
+    public static Vector4D<T> Lerp<T>(Vector4D<T> value1, Vector4D<T> value2, T amount) where T : INumberBase<T>, IFloatingPoint<T>
     {
         return Lerp<T, T>(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> LerpClamped<T>(in Vector4D<T> value1, in Vector4D<T> value2, T amount) where T : INumberBase<T>, IFloatingPoint<T>
+    public static Vector4D<T> LerpClamped<T>(Vector4D<T> value1, Vector4D<T> value2, T amount) where T : INumberBase<T>, IFloatingPoint<T>
     {
         return LerpClamped<T, T>(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Lerp<T>(in Vector4D<T> value1, in Vector4D<T> value2, Vector4D<T> amount) where T : INumberBase<T>, IFloatingPoint<T>
+    public static Vector4D<T> Lerp<T>(Vector4D<T> value1, Vector4D<T> value2, Vector4D<T> amount) where T : INumberBase<T>, IFloatingPoint<T>
     {
         return Lerp<T, T>(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> LerpClamped<T>(in Vector4D<T> value1, in Vector4D<T> value2, Vector4D<T> amount) where T : INumberBase<T>, IFloatingPoint<T>
+    public static Vector4D<T> LerpClamped<T>(Vector4D<T> value1, Vector4D<T> value2, Vector4D<T> amount) where T : INumberBase<T>, IFloatingPoint<T>
     {
         return LerpClamped<T, T>(value1, value2, amount);
     }
@@ -1790,7 +1790,7 @@ public static partial class Vector4D
     /// <param name="normal">The normal of the surface being reflected off.</param>
     /// <returns>The reflected vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Reflect<T>(in Vector4D<T> vector, in Vector4D<T> normal) where T : IFloatingPoint<T>
+    public static Vector4D<T> Reflect<T>(Vector4D<T> vector, Vector4D<T> normal) where T : IFloatingPoint<T>
     {
         return Reflect<T, T>(vector, normal);
     }
@@ -1799,7 +1799,7 @@ public static partial class Vector4D
     /// <param name="value">A vector.</param>
     /// <returns>The square root vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Sqrt<T>(in Vector4D<T> value) where T : IFloatingPoint<T>, IRootFunctions<T>
+    public static Vector4D<T> Sqrt<T>(Vector4D<T> value) where T : IFloatingPoint<T>, IRootFunctions<T>
     {
         return Sqrt<T, T>(value);
     }
@@ -1811,7 +1811,7 @@ public static partial class Vector4D
     /// <param name="rotation">The rotation to apply.</param>
     /// <returns>The transformed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Transform<T>(in Vector4D<T> value, Quaternion<T> rotation)
+    public static Vector4D<T> Transform<T>(Vector4D<T> value, Quaternion<T> rotation)
         where T : IFloatingPoint<T>, ITrigonometricFunctions<T>, IRootFunctions<T>
     {
         return Transform<T, T, T>(value, rotation);
@@ -1823,7 +1823,7 @@ public static partial class Vector4D
     /// <param name="rotation">The rotation to apply.</param>
     /// <returns>The transformed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector4D<T> Transform<T, TQuat>(in Vector4D<T> value, Quaternion<TQuat> rotation)
+    public static Vector4D<T> Transform<T, TQuat>(Vector4D<T> value, Quaternion<TQuat> rotation)
         where T : IFloatingPoint<T>
         where TQuat : ITrigonometricFunctions<TQuat>, IRootFunctions<TQuat>
     {
@@ -1833,31 +1833,31 @@ public static partial class Vector4D
     #endregion
 
     // Equivalent implementing IHyperbolicFunctions<System.Runtime.Intrinsics.Vector3>
-    public static Vector4D<T> Acosh<T>(in Vector4D<T> x) where T : IHyperbolicFunctions<T> => new(T.Acosh(x.X), T.Acosh(x.Y), T.Acosh(x.Z), T.Acosh(x.W));
-    public static Vector4D<T> Asinh<T>(in Vector4D<T> x) where T : IHyperbolicFunctions<T> => new(T.Asinh(x.X), T.Asinh(x.Y), T.Asinh(x.Z), T.Asinh(x.W));
-    public static Vector4D<T> Atanh<T>(in Vector4D<T> x) where T : IHyperbolicFunctions<T> => new(T.Atanh(x.X), T.Atanh(x.Y), T.Atanh(x.Z), T.Atanh(x.W));
-    public static Vector4D<T> Cosh<T>(in Vector4D<T> x) where T : IHyperbolicFunctions<T> => new(T.Cosh(x.X), T.Cosh(x.Y), T.Cosh(x.Z), T.Cosh(x.W));
-    public static Vector4D<T> Sinh<T>(in Vector4D<T> x) where T : IHyperbolicFunctions<T> => new(T.Sinh(x.X), T.Sinh(x.Y), T.Sinh(x.Z), T.Sinh(x.W));
-    public static Vector4D<T> Tanh<T>(in Vector4D<T> x) where T : IHyperbolicFunctions<T> => new(T.Tanh(x.X), T.Tanh(x.Y), T.Tanh(x.Z), T.Tanh(x.W));
+    public static Vector4D<T> Acosh<T>(Vector4D<T> x) where T : IHyperbolicFunctions<T> => new(T.Acosh(x.X), T.Acosh(x.Y), T.Acosh(x.Z), T.Acosh(x.W));
+    public static Vector4D<T> Asinh<T>(Vector4D<T> x) where T : IHyperbolicFunctions<T> => new(T.Asinh(x.X), T.Asinh(x.Y), T.Asinh(x.Z), T.Asinh(x.W));
+    public static Vector4D<T> Atanh<T>(Vector4D<T> x) where T : IHyperbolicFunctions<T> => new(T.Atanh(x.X), T.Atanh(x.Y), T.Atanh(x.Z), T.Atanh(x.W));
+    public static Vector4D<T> Cosh<T>(Vector4D<T> x) where T : IHyperbolicFunctions<T> => new(T.Cosh(x.X), T.Cosh(x.Y), T.Cosh(x.Z), T.Cosh(x.W));
+    public static Vector4D<T> Sinh<T>(Vector4D<T> x) where T : IHyperbolicFunctions<T> => new(T.Sinh(x.X), T.Sinh(x.Y), T.Sinh(x.Z), T.Sinh(x.W));
+    public static Vector4D<T> Tanh<T>(Vector4D<T> x) where T : IHyperbolicFunctions<T> => new(T.Tanh(x.X), T.Tanh(x.Y), T.Tanh(x.Z), T.Tanh(x.W));
 
     // Equivalent implementing ITrigonometricFunctions<System.Runtime.Intrinsics.Vector3>
-    public static Vector4D<T> Acos<T>(in Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.Acos(x.X), T.Acos(x.Y), T.Acos(x.Z), T.Acos(x.W));
-    public static Vector4D<T> AcosPi<T>(in Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.AcosPi(x.X), T.AcosPi(x.Y), T.AcosPi(x.Z), T.AcosPi(x.W));
-    public static Vector4D<T> Asin<T>(in Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.Asin(x.X), T.Asin(x.Y), T.Asin(x.Z), T.Asin(x.W));
-    public static Vector4D<T> AsinPi<T>(in Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.AsinPi(x.X), T.AsinPi(x.Y), T.AsinPi(x.Z), T.AsinPi(x.W));
-    public static Vector4D<T> Atan<T>(in Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.Atan(x.X), T.Atan(x.Y), T.Atan(x.Z), T.Atan(x.W));
-    public static Vector4D<T> AtanPi<T>(in Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.AtanPi(x.X), T.AtanPi(x.Y), T.AtanPi(x.Z), T.AtanPi(x.W));
-    public static Vector4D<T> Cos<T>(in Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.Cos(x.X), T.Cos(x.Y), T.Cos(x.Z), T.Cos(x.W));
-    public static Vector4D<T> CosPi<T>(in Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.CosPi(x.X), T.CosPi(x.Y), T.CosPi(x.Z), T.CosPi(x.W));
-    public static Vector4D<T> DegreesToRadians<T>(in Vector4D<T> degrees) where T : ITrigonometricFunctions<T> => new(T.DegreesToRadians(degrees.X), T.DegreesToRadians(degrees.Y), T.DegreesToRadians(degrees.Z), T.DegreesToRadians(degrees.W));
-    public static Vector4D<T> RadiansToDegrees<T>(in Vector4D<T> radians) where T : ITrigonometricFunctions<T> => new(T.RadiansToDegrees(radians.X), T.RadiansToDegrees(radians.Y), T.RadiansToDegrees(radians.Z), T.RadiansToDegrees(radians.W));
-    public static Vector4D<T> Sin<T>(in Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.Sin(x.X), T.Sin(x.Y), T.Sin(x.Z), T.Sin(x.W));
-    public static Vector4D<T> SinPi<T>(in Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.SinPi(x.X), T.SinPi(x.Y), T.SinPi(x.Z), T.SinPi(x.W));
-    public static Vector4D<T> Tan<T>(in Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.Tan(x.X), T.Tan(x.Y), T.Tan(x.Z), T.Tan(x.W));
-    public static Vector4D<T> TanPi<T>(in Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.TanPi(x.X), T.TanPi(x.Y), T.TanPi(x.Z), T.TanPi(x.W));
+    public static Vector4D<T> Acos<T>(Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.Acos(x.X), T.Acos(x.Y), T.Acos(x.Z), T.Acos(x.W));
+    public static Vector4D<T> AcosPi<T>(Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.AcosPi(x.X), T.AcosPi(x.Y), T.AcosPi(x.Z), T.AcosPi(x.W));
+    public static Vector4D<T> Asin<T>(Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.Asin(x.X), T.Asin(x.Y), T.Asin(x.Z), T.Asin(x.W));
+    public static Vector4D<T> AsinPi<T>(Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.AsinPi(x.X), T.AsinPi(x.Y), T.AsinPi(x.Z), T.AsinPi(x.W));
+    public static Vector4D<T> Atan<T>(Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.Atan(x.X), T.Atan(x.Y), T.Atan(x.Z), T.Atan(x.W));
+    public static Vector4D<T> AtanPi<T>(Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.AtanPi(x.X), T.AtanPi(x.Y), T.AtanPi(x.Z), T.AtanPi(x.W));
+    public static Vector4D<T> Cos<T>(Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.Cos(x.X), T.Cos(x.Y), T.Cos(x.Z), T.Cos(x.W));
+    public static Vector4D<T> CosPi<T>(Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.CosPi(x.X), T.CosPi(x.Y), T.CosPi(x.Z), T.CosPi(x.W));
+    public static Vector4D<T> DegreesToRadians<T>(Vector4D<T> degrees) where T : ITrigonometricFunctions<T> => new(T.DegreesToRadians(degrees.X), T.DegreesToRadians(degrees.Y), T.DegreesToRadians(degrees.Z), T.DegreesToRadians(degrees.W));
+    public static Vector4D<T> RadiansToDegrees<T>(Vector4D<T> radians) where T : ITrigonometricFunctions<T> => new(T.RadiansToDegrees(radians.X), T.RadiansToDegrees(radians.Y), T.RadiansToDegrees(radians.Z), T.RadiansToDegrees(radians.W));
+    public static Vector4D<T> Sin<T>(Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.Sin(x.X), T.Sin(x.Y), T.Sin(x.Z), T.Sin(x.W));
+    public static Vector4D<T> SinPi<T>(Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.SinPi(x.X), T.SinPi(x.Y), T.SinPi(x.Z), T.SinPi(x.W));
+    public static Vector4D<T> Tan<T>(Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.Tan(x.X), T.Tan(x.Y), T.Tan(x.Z), T.Tan(x.W));
+    public static Vector4D<T> TanPi<T>(Vector4D<T> x) where T : ITrigonometricFunctions<T> => new(T.TanPi(x.X), T.TanPi(x.Y), T.TanPi(x.Z), T.TanPi(x.W));
 
 
-    public static (Vector4D<T> Sin, Vector4D<T> Cos) SinCos<T>(in Vector4D<T> x) where T : ITrigonometricFunctions<T>
+    public static (Vector4D<T> Sin, Vector4D<T> Cos) SinCos<T>(Vector4D<T> x) where T : ITrigonometricFunctions<T>
     {
         var (sinX, cosX) = T.SinCos(x.X);
         var (sinY, cosY) = T.SinCos(x.Y);
@@ -1870,7 +1870,7 @@ public static partial class Vector4D
         );
     }
 
-    public static (Vector4D<T> SinPi, Vector4D<T> CosPi) SinCosPi<T>(in Vector4D<T> x) where T : ITrigonometricFunctions<T>
+    public static (Vector4D<T> SinPi, Vector4D<T> CosPi) SinCosPi<T>(Vector4D<T> x) where T : ITrigonometricFunctions<T>
     {
         var (sinX, cosX) = T.SinCosPi(x.X);
         var (sinY, cosY) = T.SinCosPi(x.Y);
@@ -1884,75 +1884,75 @@ public static partial class Vector4D
     }
 
     // Equivalent implementing ILogarithmicFunctions<System.Runtime.Intrinsics.Vector3>
-    public static Vector4D<T> Log<T>(in Vector4D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log(x.X), T.Log(x.Y), T.Log(x.Z), T.Log(x.W));
+    public static Vector4D<T> Log<T>(Vector4D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log(x.X), T.Log(x.Y), T.Log(x.Z), T.Log(x.W));
 
-    public static Vector4D<T> Log<T>(in Vector4D<T> x, in Vector4D<T> newBase) where T : ILogarithmicFunctions<T> => new(T.Log(x.X, newBase.X), T.Log(x.Y, newBase.Y), T.Log(x.Z, newBase.Z), T.Log(x.W, newBase.W));
-    public static Vector4D<T> Log<T>(in Vector4D<T> x, T newBase) where T : ILogarithmicFunctions<T> => new(T.Log(x.X, newBase), T.Log(x.Y, newBase), T.Log(x.Z, newBase), T.Log(x.W, newBase));
-    public static Vector4D<T> LogP1<T>(in Vector4D<T> x) where T : ILogarithmicFunctions<T> => Log(x + Vector4D<T>.One);
-    public static Vector4D<T> Log2<T>(in Vector4D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log2(x.X), T.Log2(x.Y), T.Log2(x.Z), T.Log2(x.W));
-    public static Vector4D<T> Log2P1<T>(in Vector4D<T> x) where T : ILogarithmicFunctions<T> => Log2(x + Vector4D<T>.One);
-    public static Vector4D<T> Log10<T>(in Vector4D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log10(x.X), T.Log10(x.Y), T.Log10(x.Z), T.Log10(x.W));
-    public static Vector4D<T> Log10P1<T>(in Vector4D<T> x) where T : ILogarithmicFunctions<T> => Log10(x + Vector4D<T>.One);
+    public static Vector4D<T> Log<T>(Vector4D<T> x, Vector4D<T> newBase) where T : ILogarithmicFunctions<T> => new(T.Log(x.X, newBase.X), T.Log(x.Y, newBase.Y), T.Log(x.Z, newBase.Z), T.Log(x.W, newBase.W));
+    public static Vector4D<T> Log<T>(Vector4D<T> x, T newBase) where T : ILogarithmicFunctions<T> => new(T.Log(x.X, newBase), T.Log(x.Y, newBase), T.Log(x.Z, newBase), T.Log(x.W, newBase));
+    public static Vector4D<T> LogP1<T>(Vector4D<T> x) where T : ILogarithmicFunctions<T> => Log(x + Vector4D<T>.One);
+    public static Vector4D<T> Log2<T>(Vector4D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log2(x.X), T.Log2(x.Y), T.Log2(x.Z), T.Log2(x.W));
+    public static Vector4D<T> Log2P1<T>(Vector4D<T> x) where T : ILogarithmicFunctions<T> => Log2(x + Vector4D<T>.One);
+    public static Vector4D<T> Log10<T>(Vector4D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log10(x.X), T.Log10(x.Y), T.Log10(x.Z), T.Log10(x.W));
+    public static Vector4D<T> Log10P1<T>(Vector4D<T> x) where T : ILogarithmicFunctions<T> => Log10(x + Vector4D<T>.One);
 
     // Equivalent implementing IExponentialFunctions<System.Runtime.Intrinsics.Vector3>
-    public static Vector4D<T> Exp<T>(in Vector4D<T> x) where T : IExponentialFunctions<T> => new(T.Exp(x.X), T.Exp(x.Y), T.Exp(x.Z), T.Exp(x.W));
-    public static Vector4D<T> ExpM1<T>(in Vector4D<T> x) where T : IExponentialFunctions<T> => Exp(x) - Vector4D<T>.One;
-    public static Vector4D<T> Exp2<T>(in Vector4D<T> x) where T : IExponentialFunctions<T> => new(T.Exp2(x.X), T.Exp2(x.Y), T.Exp2(x.Z), T.Exp2(x.W));
-    public static Vector4D<T> Exp2M1<T>(in Vector4D<T> x) where T : IExponentialFunctions<T> => Exp2(x) - Vector4D<T>.One;
-    public static Vector4D<T> Exp10<T>(in Vector4D<T> x) where T : IExponentialFunctions<T> => new(T.Exp10(x.X), T.Exp10(x.Y), T.Exp10(x.Z), T.Exp10(x.W));
-    public static Vector4D<T> Exp10M1<T>(in Vector4D<T> x) where T : IExponentialFunctions<T> => Exp10(x) - Vector4D<T>.One;
+    public static Vector4D<T> Exp<T>(Vector4D<T> x) where T : IExponentialFunctions<T> => new(T.Exp(x.X), T.Exp(x.Y), T.Exp(x.Z), T.Exp(x.W));
+    public static Vector4D<T> ExpM1<T>(Vector4D<T> x) where T : IExponentialFunctions<T> => Exp(x) - Vector4D<T>.One;
+    public static Vector4D<T> Exp2<T>(Vector4D<T> x) where T : IExponentialFunctions<T> => new(T.Exp2(x.X), T.Exp2(x.Y), T.Exp2(x.Z), T.Exp2(x.W));
+    public static Vector4D<T> Exp2M1<T>(Vector4D<T> x) where T : IExponentialFunctions<T> => Exp2(x) - Vector4D<T>.One;
+    public static Vector4D<T> Exp10<T>(Vector4D<T> x) where T : IExponentialFunctions<T> => new(T.Exp10(x.X), T.Exp10(x.Y), T.Exp10(x.Z), T.Exp10(x.W));
+    public static Vector4D<T> Exp10M1<T>(Vector4D<T> x) where T : IExponentialFunctions<T> => Exp10(x) - Vector4D<T>.One;
 
     // Equivalent implementing IPowerFunctions<System.Runtime.Intrinsics.Vector3>
-    public static Vector4D<T> Pow<T>(in Vector4D<T> x, in Vector4D<T> y) where T : IPowerFunctions<T> => new(T.Pow(x.X, y.X), T.Pow(x.Y, y.Y), T.Pow(x.Z, y.Z), T.Pow(x.W, y.W));
-    public static Vector4D<T> Pow<T>(in Vector4D<T> x, T y) where T : IPowerFunctions<T> => new(T.Pow(x.X, y), T.Pow(x.Y, y), T.Pow(x.Z, y), T.Pow(x.W, y));
+    public static Vector4D<T> Pow<T>(Vector4D<T> x, Vector4D<T> y) where T : IPowerFunctions<T> => new(T.Pow(x.X, y.X), T.Pow(x.Y, y.Y), T.Pow(x.Z, y.Z), T.Pow(x.W, y.W));
+    public static Vector4D<T> Pow<T>(Vector4D<T> x, T y) where T : IPowerFunctions<T> => new(T.Pow(x.X, y), T.Pow(x.Y, y), T.Pow(x.Z, y), T.Pow(x.W, y));
 
     // Equivalent implementing IRootFunctions<System.Runtime.Intrinsics.Vector3>
-    public static Vector4D<T> Cbrt<T>(in Vector4D<T> x) where T : IRootFunctions<T> => new(T.Cbrt(x.X), T.Cbrt(x.Y), T.Cbrt(x.Z), T.Cbrt(x.W));
-    public static Vector4D<T> Hypot<T>(in Vector4D<T> x, in Vector4D<T> y) where T : IRootFunctions<T> => new(T.Hypot(x.X, y.X), T.Hypot(x.Y, y.Y), T.Hypot(x.Z, y.Z), T.Hypot(x.W, y.W));
-    public static Vector4D<T> Hypot<T>(in Vector4D<T> x, T y) where T : IRootFunctions<T> => new(T.Hypot(x.X, y), T.Hypot(x.Y, y), T.Hypot(x.Z, y), T.Hypot(x.W, y));
-    public static Vector4D<T> RootN<T>(in Vector4D<T> x, int n) where T : IRootFunctions<T> => new(T.RootN(x.X, n), T.RootN(x.Y, n), T.RootN(x.Z, n), T.RootN(x.W, n));
+    public static Vector4D<T> Cbrt<T>(Vector4D<T> x) where T : IRootFunctions<T> => new(T.Cbrt(x.X), T.Cbrt(x.Y), T.Cbrt(x.Z), T.Cbrt(x.W));
+    public static Vector4D<T> Hypot<T>(Vector4D<T> x, Vector4D<T> y) where T : IRootFunctions<T> => new(T.Hypot(x.X, y.X), T.Hypot(x.Y, y.Y), T.Hypot(x.Z, y.Z), T.Hypot(x.W, y.W));
+    public static Vector4D<T> Hypot<T>(Vector4D<T> x, T y) where T : IRootFunctions<T> => new(T.Hypot(x.X, y), T.Hypot(x.Y, y), T.Hypot(x.Z, y), T.Hypot(x.W, y));
+    public static Vector4D<T> RootN<T>(Vector4D<T> x, int n) where T : IRootFunctions<T> => new(T.RootN(x.X, n), T.RootN(x.Y, n), T.RootN(x.Z, n), T.RootN(x.W, n));
 
     // IFloatingPoint<TSelf>
-    public static Vector4D<T> Round<T>(in Vector4D<T> x) where T : IFloatingPoint<T> => new(T.Round(x.X), T.Round(x.Y), T.Round(x.Z), T.Round(x.W));
-    public static Vector4D<T> Round<T>(in Vector4D<T> x, int digits) where T : IFloatingPoint<T> => new(T.Round(x.X, digits), T.Round(x.Y, digits), T.Round(x.Z, digits), T.Round(x.W, digits));
-    public static Vector4D<T> Round<T>(in Vector4D<T> x, MidpointRounding mode) where T : IFloatingPoint<T> => new(T.Round(x.X, mode), T.Round(x.Y, mode), T.Round(x.Z, mode), T.Round(x.W, mode));
-    public static Vector4D<T> Round<T>(in Vector4D<T> x, int digits, MidpointRounding mode) where T : IFloatingPoint<T> => new(T.Round(x.X, digits, mode), T.Round(x.Y, digits, mode), T.Round(x.Z, digits, mode), T.Round(x.W, digits, mode));
-    public static Vector4D<T> Truncate<T>(in Vector4D<T> x) where T : IFloatingPoint<T> => new(T.Truncate(x.X), T.Truncate(x.Y), T.Truncate(x.Z), T.Truncate(x.W));
+    public static Vector4D<T> Round<T>(Vector4D<T> x) where T : IFloatingPoint<T> => new(T.Round(x.X), T.Round(x.Y), T.Round(x.Z), T.Round(x.W));
+    public static Vector4D<T> Round<T>(Vector4D<T> x, int digits) where T : IFloatingPoint<T> => new(T.Round(x.X, digits), T.Round(x.Y, digits), T.Round(x.Z, digits), T.Round(x.W, digits));
+    public static Vector4D<T> Round<T>(Vector4D<T> x, MidpointRounding mode) where T : IFloatingPoint<T> => new(T.Round(x.X, mode), T.Round(x.Y, mode), T.Round(x.Z, mode), T.Round(x.W, mode));
+    public static Vector4D<T> Round<T>(Vector4D<T> x, int digits, MidpointRounding mode) where T : IFloatingPoint<T> => new(T.Round(x.X, digits, mode), T.Round(x.Y, digits, mode), T.Round(x.Z, digits, mode), T.Round(x.W, digits, mode));
+    public static Vector4D<T> Truncate<T>(Vector4D<T> x) where T : IFloatingPoint<T> => new(T.Truncate(x.X), T.Truncate(x.Y), T.Truncate(x.Z), T.Truncate(x.W));
 
     // IFloatingPointIeee754<TSelf>
-    public static Vector4D<T> Atan2<T>(in Vector4D<T> x, in Vector4D<T> y) where T : IFloatingPointIeee754<T> => new(T.Atan2(x.X, y.X), T.Atan2(x.Y, y.Y), T.Atan2(x.Z, y.Z), T.Atan2(x.W, y.W));
-    public static Vector4D<T> Atan2Pi<T>(in Vector4D<T> x, in Vector4D<T> y) where T : IFloatingPointIeee754<T> => new(T.Atan2Pi(x.X, y.X), T.Atan2Pi(x.Y, y.Y), T.Atan2Pi(x.Z, y.Z), T.Atan2Pi(x.W, y.W));
-    public static Vector4D<T> Atan2<T>(in Vector4D<T> x, T y) where T : IFloatingPointIeee754<T> => new(T.Atan2(x.X, y), T.Atan2(x.Y, y), T.Atan2(x.Z, y), T.Atan2(x.W, y));
-    public static Vector4D<T> Atan2Pi<T>(in Vector4D<T> x, T y) where T : IFloatingPointIeee754<T> => new(T.Atan2Pi(x.X, y), T.Atan2Pi(x.Y, y), T.Atan2Pi(x.Z, y), T.Atan2Pi(x.W, y));
-    public static Vector4D<T> BitDecrement<T>(in Vector4D<T> x) where T : IFloatingPointIeee754<T> => new(T.BitDecrement(x.X), T.BitDecrement(x.Y), T.BitDecrement(x.Z), T.BitDecrement(x.W));
-    public static Vector4D<T> BitIncrement<T>(in Vector4D<T> x) where T : IFloatingPointIeee754<T> => new(T.BitIncrement(x.X), T.BitIncrement(x.Y), T.BitIncrement(x.Z), T.BitIncrement(x.W));
+    public static Vector4D<T> Atan2<T>(Vector4D<T> x, Vector4D<T> y) where T : IFloatingPointIeee754<T> => new(T.Atan2(x.X, y.X), T.Atan2(x.Y, y.Y), T.Atan2(x.Z, y.Z), T.Atan2(x.W, y.W));
+    public static Vector4D<T> Atan2Pi<T>(Vector4D<T> x, Vector4D<T> y) where T : IFloatingPointIeee754<T> => new(T.Atan2Pi(x.X, y.X), T.Atan2Pi(x.Y, y.Y), T.Atan2Pi(x.Z, y.Z), T.Atan2Pi(x.W, y.W));
+    public static Vector4D<T> Atan2<T>(Vector4D<T> x, T y) where T : IFloatingPointIeee754<T> => new(T.Atan2(x.X, y), T.Atan2(x.Y, y), T.Atan2(x.Z, y), T.Atan2(x.W, y));
+    public static Vector4D<T> Atan2Pi<T>(Vector4D<T> x, T y) where T : IFloatingPointIeee754<T> => new(T.Atan2Pi(x.X, y), T.Atan2Pi(x.Y, y), T.Atan2Pi(x.Z, y), T.Atan2Pi(x.W, y));
+    public static Vector4D<T> BitDecrement<T>(Vector4D<T> x) where T : IFloatingPointIeee754<T> => new(T.BitDecrement(x.X), T.BitDecrement(x.Y), T.BitDecrement(x.Z), T.BitDecrement(x.W));
+    public static Vector4D<T> BitIncrement<T>(Vector4D<T> x) where T : IFloatingPointIeee754<T> => new(T.BitIncrement(x.X), T.BitIncrement(x.Y), T.BitIncrement(x.Z), T.BitIncrement(x.W));
 
-    public static Vector4D<T> FusedMultiplyAdd<T>(in Vector4D<T> left, in Vector4D<T> right, Vector4D<T> addend) where T : IFloatingPointIeee754<T> => new(T.FusedMultiplyAdd(left.X, right.X, addend.X), T.FusedMultiplyAdd(left.Y, right.Y, addend.Y), T.FusedMultiplyAdd(left.Z, right.Z, addend.Z), T.FusedMultiplyAdd(left.W, right.W, addend.W));
-    public static Vector4D<T> ReciprocalEstimate<T>(in Vector4D<T> x) where T : IFloatingPointIeee754<T> => new(T.ReciprocalEstimate(x.X), T.ReciprocalEstimate(x.Y), T.ReciprocalEstimate(x.Z), T.ReciprocalEstimate(x.W));
-    public static Vector4D<T> ReciprocalSqrtEstimate<T>(in Vector4D<T> x) where T : IFloatingPointIeee754<T> => new(T.ReciprocalSqrtEstimate(x.X), T.ReciprocalSqrtEstimate(x.Y), T.ReciprocalSqrtEstimate(x.Z), T.ReciprocalSqrtEstimate(x.W));
+    public static Vector4D<T> FusedMultiplyAdd<T>(Vector4D<T> left, Vector4D<T> right, Vector4D<T> addend) where T : IFloatingPointIeee754<T> => new(T.FusedMultiplyAdd(left.X, right.X, addend.X), T.FusedMultiplyAdd(left.Y, right.Y, addend.Y), T.FusedMultiplyAdd(left.Z, right.Z, addend.Z), T.FusedMultiplyAdd(left.W, right.W, addend.W));
+    public static Vector4D<T> ReciprocalEstimate<T>(Vector4D<T> x) where T : IFloatingPointIeee754<T> => new(T.ReciprocalEstimate(x.X), T.ReciprocalEstimate(x.Y), T.ReciprocalEstimate(x.Z), T.ReciprocalEstimate(x.W));
+    public static Vector4D<T> ReciprocalSqrtEstimate<T>(Vector4D<T> x) where T : IFloatingPointIeee754<T> => new(T.ReciprocalSqrtEstimate(x.X), T.ReciprocalSqrtEstimate(x.Y), T.ReciprocalSqrtEstimate(x.Z), T.ReciprocalSqrtEstimate(x.W));
 
     // INumber<T>
-    // public static Vector4D<T> Clamp<T>(in Vector4D<T> value, in Vector4D<T> min, Vector4D<T> max) where T : INumber<T> => new(T.Clamp(x.X), T.Clamp(x.Y), T.Clamp(x.Z), T.Clamp(x.W));
-    public static Vector4D<T> CopySign<T>(in Vector4D<T> value, in Vector4D<T> sign) where T : INumber<T> => new(T.CopySign(value.X, sign.X), T.CopySign(value.Y, sign.Y), T.CopySign(value.Z, sign.Z), T.CopySign(value.W, sign.W));
-    public static Vector4D<T> CopySign<T>(in Vector4D<T> value, T sign) where T : INumber<T> => new(T.CopySign(value.X, sign), T.CopySign(value.Y, sign), T.CopySign(value.Z, sign), T.CopySign(value.W, sign));
-    public static Vector4D<T> MaxNumber<T>(in Vector4D<T> x, in Vector4D<T> y) where T : INumber<T> => new(T.MaxNumber(x.X, y.X), T.MaxNumber(x.Y, y.Y), T.MaxNumber(x.Z, y.Z), T.MaxNumber(x.W, y.W));
-    public static Vector4D<T> MinNumber<T>(in Vector4D<T> x, in Vector4D<T> y) where T : INumber<T> => new(T.MinNumber(x.X, y.X), T.MinNumber(x.Y, y.Y), T.MinNumber(x.Z, y.Z), T.MinNumber(x.W, y.W));
+    // public static Vector4D<T> Clamp<T>(Vector4D<T> value, Vector4D<T> min, Vector4D<T> max) where T : INumber<T> => new(T.Clamp(x.X), T.Clamp(x.Y), T.Clamp(x.Z), T.Clamp(x.W));
+    public static Vector4D<T> CopySign<T>(Vector4D<T> value, Vector4D<T> sign) where T : INumber<T> => new(T.CopySign(value.X, sign.X), T.CopySign(value.Y, sign.Y), T.CopySign(value.Z, sign.Z), T.CopySign(value.W, sign.W));
+    public static Vector4D<T> CopySign<T>(Vector4D<T> value, T sign) where T : INumber<T> => new(T.CopySign(value.X, sign), T.CopySign(value.Y, sign), T.CopySign(value.Z, sign), T.CopySign(value.W, sign));
+    public static Vector4D<T> MaxNumber<T>(Vector4D<T> x, Vector4D<T> y) where T : INumber<T> => new(T.MaxNumber(x.X, y.X), T.MaxNumber(x.Y, y.Y), T.MaxNumber(x.Z, y.Z), T.MaxNumber(x.W, y.W));
+    public static Vector4D<T> MinNumber<T>(Vector4D<T> x, Vector4D<T> y) where T : INumber<T> => new(T.MinNumber(x.X, y.X), T.MinNumber(x.Y, y.Y), T.MinNumber(x.Z, y.Z), T.MinNumber(x.W, y.W));
 
     // INumberBase<T>
-    // public static Vector4D<T> MaxMagnitude<T>(in Vector4D<T> x, in Vector4D<T> y) where T : INumberBase<T> => new(T.MaxMagnitude(x.X, y.X), T.MaxMagnitude(x.Y, y.Y), T.MaxMagnitude(x.Z, y.Z), T.MaxMagnitude(x.W, y.W));
-    // public static Vector4D<T> MaxMagnitudeNumber<T>(in Vector4D<T> x, in Vector4D<T> y) where T : INumberBase<T> => new(T.MaxMagnitudeNumber(x.X, y.X), T.MaxMagnitudeNumber(x.Y, y.Y), T.MaxMagnitudeNumber(x.Z, y.Z), T.MaxMagnitudeNumber(x.W, y.W));
-    // public static Vector4D<T> MinMagnitude<T>(in Vector4D<T> x, in Vector4D<T> y) where T : INumberBase<T> => new(T.MinMagnitude(x.X, y.X), T.MinMagnitude(x.Y, y.Y), T.MinMagnitude(x.Z, y.Z), T.MinMagnitude(x.W, y.W));
-    // public static Vector4D<T> MinMagnitudeNumber<T>(in Vector4D<T> x, in Vector4D<T> y) where T : INumberBase<T> => new(T.MinMagnitudeNumber(x.X, y.X), T.MinMagnitudeNumber(x.Y, y.Y), T.MinMagnitudeNumber(x.Z, y.Z), T.MinMagnitudeNumber(x.W, y.W));
+    // public static Vector4D<T> MaxMagnitude<T>(Vector4D<T> x, Vector4D<T> y) where T : INumberBase<T> => new(T.MaxMagnitude(x.X, y.X), T.MaxMagnitude(x.Y, y.Y), T.MaxMagnitude(x.Z, y.Z), T.MaxMagnitude(x.W, y.W));
+    // public static Vector4D<T> MaxMagnitudeNumber<T>(Vector4D<T> x, Vector4D<T> y) where T : INumberBase<T> => new(T.MaxMagnitudeNumber(x.X, y.X), T.MaxMagnitudeNumber(x.Y, y.Y), T.MaxMagnitudeNumber(x.Z, y.Z), T.MaxMagnitudeNumber(x.W, y.W));
+    // public static Vector4D<T> MinMagnitude<T>(Vector4D<T> x, Vector4D<T> y) where T : INumberBase<T> => new(T.MinMagnitude(x.X, y.X), T.MinMagnitude(x.Y, y.Y), T.MinMagnitude(x.Z, y.Z), T.MinMagnitude(x.W, y.W));
+    // public static Vector4D<T> MinMagnitudeNumber<T>(Vector4D<T> x, Vector4D<T> y) where T : INumberBase<T> => new(T.MinMagnitudeNumber(x.X, y.X), T.MinMagnitudeNumber(x.Y, y.Y), T.MinMagnitudeNumber(x.Z, y.Z), T.MinMagnitudeNumber(x.W, y.W));
     // (there's no reason you would want these.)
 
 
 
     // IFloatingPointIeee754<TSelf>
-    public static Vector4D<int> ILogB<T>(in Vector4D<T> x) where T : IFloatingPointIeee754<T> => new(T.ILogB(x.X), T.ILogB(x.Y), T.ILogB(x.Z), T.ILogB(x.W));
-    public static Vector4D<T> ScaleB<T>(in Vector4D<T> x, Vector4D<int> n) where T : IFloatingPointIeee754<T> => new(T.ScaleB(x.X, n.X), T.ScaleB(x.Y, n.Y), T.ScaleB(x.Z, n.Z), T.ScaleB(x.W, n.W));
-    public static Vector4D<T> ScaleB<T>(in Vector4D<T> x, int n) where T : IFloatingPointIeee754<T> => new(T.ScaleB(x.X, n), T.ScaleB(x.Y, n), T.ScaleB(x.Z, n), T.ScaleB(x.W, n));
+    public static Vector4D<int> ILogB<T>(Vector4D<T> x) where T : IFloatingPointIeee754<T> => new(T.ILogB(x.X), T.ILogB(x.Y), T.ILogB(x.Z), T.ILogB(x.W));
+    public static Vector4D<T> ScaleB<T>(Vector4D<T> x, Vector4D<int> n) where T : IFloatingPointIeee754<T> => new(T.ScaleB(x.X, n.X), T.ScaleB(x.Y, n.Y), T.ScaleB(x.Z, n.Z), T.ScaleB(x.W, n.W));
+    public static Vector4D<T> ScaleB<T>(Vector4D<T> x, int n) where T : IFloatingPointIeee754<T> => new(T.ScaleB(x.X, n), T.ScaleB(x.Y, n), T.ScaleB(x.Z, n), T.ScaleB(x.W, n));
 
-    public static Vector4D<int> RoundToInt<T>(in Vector4D<T> vector) where T : IFloatingPoint<T>
+    public static Vector4D<int> RoundToInt<T>(Vector4D<T> vector) where T : IFloatingPoint<T>
     {
         return new Vector4D<int>(
             int.CreateSaturating(T.Round(vector.X)),
@@ -1962,7 +1962,7 @@ public static partial class Vector4D
         );
     }
 
-    public static Vector4D<int> FloorToInt<T>(in Vector4D<T> vector) where T : IFloatingPoint<T>
+    public static Vector4D<int> FloorToInt<T>(Vector4D<T> vector) where T : IFloatingPoint<T>
     {
         return new Vector4D<int>(
             int.CreateSaturating(T.Floor(vector.X)),
@@ -1972,7 +1972,7 @@ public static partial class Vector4D
         );
     }
 
-    public static Vector4D<int> CeilingToInt<T>(in Vector4D<T> vector) where T : IFloatingPoint<T>
+    public static Vector4D<int> CeilingToInt<T>(Vector4D<T> vector) where T : IFloatingPoint<T>
     {
         return new Vector4D<int>(
             int.CreateSaturating(T.Ceiling(vector.X)),
@@ -1982,7 +1982,7 @@ public static partial class Vector4D
         );
     }
 
-    public static Vector4D<TInt> RoundToInt<T, TInt>(in Vector4D<T> vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
+    public static Vector4D<TInt> RoundToInt<T, TInt>(Vector4D<T> vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
     {
         return new Vector4D<TInt>(
             TInt.CreateSaturating(T.Round(vector.X)),
@@ -1992,7 +1992,7 @@ public static partial class Vector4D
         );
     }
 
-    public static Vector4D<TInt> FloorToInt<T, TInt>(in Vector4D<T> vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
+    public static Vector4D<TInt> FloorToInt<T, TInt>(Vector4D<T> vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
     {
         return new Vector4D<TInt>(
             TInt.CreateSaturating(T.Floor(vector.X)),
@@ -2002,7 +2002,7 @@ public static partial class Vector4D
         );
     }
 
-    public static Vector4D<TInt> CeilingToInt<T, TInt>(in Vector4D<T> vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
+    public static Vector4D<TInt> CeilingToInt<T, TInt>(Vector4D<T> vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
     {
         return new Vector4D<TInt>(
             TInt.CreateSaturating(T.Ceiling(vector.X)),
@@ -2024,64 +2024,64 @@ public readonly partial struct Vector4D<T>
 {
     T IVector<Vector4D<T>, T>.LengthSquared()
         => this.LengthSquared();
-    static Vector4D<T> IVector<Vector4D<T>, T>.Multiply(in Vector4D<T> left, in Vector4D<T> right)
+    static Vector4D<T> IVector<Vector4D<T>, T>.Multiply(Vector4D<T> left, Vector4D<T> right)
         => Vector4D.Multiply(left, right);
-    static Vector4D<T> IVector<Vector4D<T>, T>.Multiply(in Vector4D<T> left, T right)
+    static Vector4D<T> IVector<Vector4D<T>, T>.Multiply(Vector4D<T> left, T right)
         => Vector4D.Multiply(left, right);
-    static Vector4D<T> IVector<Vector4D<T>, T>.Multiply(T left, in Vector4D<T> right)
+    static Vector4D<T> IVector<Vector4D<T>, T>.Multiply(T left, Vector4D<T> right)
         => Vector4D.Multiply(left, right);
-    static Vector4D<T> IVector<Vector4D<T>, T>.Negate(in Vector4D<T> value)
+    static Vector4D<T> IVector<Vector4D<T>, T>.Negate(Vector4D<T> value)
         => Vector4D.Negate(value);
-    static Vector4D<T> IVector<Vector4D<T>, T>.Subtract(in Vector4D<T> left, in Vector4D<T> right)
+    static Vector4D<T> IVector<Vector4D<T>, T>.Subtract(Vector4D<T> left, Vector4D<T> right)
         => Vector4D.Subtract(left, right);
-    static Vector4D<T> IVector<Vector4D<T>, T>.Add(in Vector4D<T> left, in Vector4D<T> right)
+    static Vector4D<T> IVector<Vector4D<T>, T>.Add(Vector4D<T> left, Vector4D<T> right)
         => Vector4D.Add(left, right);
-    static Vector4D<T> IVector<Vector4D<T>, T>.Divide(in Vector4D<T> left, in Vector4D<T> right)
+    static Vector4D<T> IVector<Vector4D<T>, T>.Divide(Vector4D<T> left, Vector4D<T> right)
         => Vector4D.Divide(left, right);
-    static Vector4D<T> IVector<Vector4D<T>, T>.Divide(in Vector4D<T> left, T divisor)
+    static Vector4D<T> IVector<Vector4D<T>, T>.Divide(Vector4D<T> left, T divisor)
         => Vector4D.Divide(left, divisor);
-    static Vector4D<T> IVector<Vector4D<T>, T>.Clamp(in Vector4D<T> value1, in Vector4D<T> min, in Vector4D<T> max)
+    static Vector4D<T> IVector<Vector4D<T>, T>.Clamp(Vector4D<T> value1, Vector4D<T> min, Vector4D<T> max)
         => Vector4D.Clamp(value1, min, max);
-    static TReturn IVector<Vector4D<T>, T>.Distance<TReturn>(in Vector4D<T> value1, in Vector4D<T> value2)
+    static TReturn IVector<Vector4D<T>, T>.Distance<TReturn>(Vector4D<T> value1, Vector4D<T> value2)
         => Vector4D.Distance<T, TReturn>(value1, value2);
-    static T IVector<Vector4D<T>, T>.DistanceSquared(in Vector4D<T> value1, in Vector4D<T> value2)
+    static T IVector<Vector4D<T>, T>.DistanceSquared(Vector4D<T> value1, Vector4D<T> value2)
         => Vector4D.DistanceSquared(value1, value2);
-    static TReturn IVector<Vector4D<T>, T>.DistanceSquared<TReturn>(in Vector4D<T> value1, in Vector4D<T> value2)
+    static TReturn IVector<Vector4D<T>, T>.DistanceSquared<TReturn>(Vector4D<T> value1, Vector4D<T> value2)
         => Vector4D.DistanceSquared<T, TReturn>(value1, value2);
-    static T IVector<Vector4D<T>, T>.Dot(in Vector4D<T> vector1, in Vector4D<T> vector2)
+    static T IVector<Vector4D<T>, T>.Dot(Vector4D<T> vector1, Vector4D<T> vector2)
         => Vector4D.Dot(vector1, vector2);
-    static TReturn IVector<Vector4D<T>, T>.Dot<TReturn>(in Vector4D<T> vector1, in Vector4D<T> vector2)
+    static TReturn IVector<Vector4D<T>, T>.Dot<TReturn>(Vector4D<T> vector1, Vector4D<T> vector2)
         => Vector4D.Dot<T, TReturn>(vector1, vector2);
-    static Vector4D<T> IVector<Vector4D<T>, T>.Max(in Vector4D<T> value1, in Vector4D<T> value2)
+    static Vector4D<T> IVector<Vector4D<T>, T>.Max(Vector4D<T> value1, Vector4D<T> value2)
         => Vector4D.Max(value1, value2);
-    static Vector4D<T> IVector<Vector4D<T>, T>.Min(in Vector4D<T> value1, in Vector4D<T> value2)
+    static Vector4D<T> IVector<Vector4D<T>, T>.Min(Vector4D<T> value1, Vector4D<T> value2)
         => Vector4D.Min(value1, value2);
 
-    static Vector4D<T> IVector<Vector4D<T>, T>.Lerp(in Vector4D<T> value1, in Vector4D<T> value2, T amount) /* where T : IFloatingPoint<T> */
+    static Vector4D<T> IVector<Vector4D<T>, T>.Lerp(Vector4D<T> value1, Vector4D<T> value2, T amount) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<Vector4D<T>, T>(typeof(IFloatingPoint<>));
         return Vector4D.LerpUnchecked(value1, value2, amount);
     }
 
-    static Vector4D<T> IVector<Vector4D<T>, T>.LerpClamped(in Vector4D<T> value1, in Vector4D<T> value2, T amount) /* where T : IFloatingPoint<T> */
+    static Vector4D<T> IVector<Vector4D<T>, T>.LerpClamped(Vector4D<T> value1, Vector4D<T> value2, T amount) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<Vector4D<T>, T>(typeof(IFloatingPoint<>));
         return Vector4D.LerpClampedUnchecked(value1, value2, amount);
     }
 
-    static Vector4D<T> IVector<Vector4D<T>, T>.Lerp(in Vector4D<T> value1, in Vector4D<T> value2, in Vector4D<T> amount) /* where T : IFloatingPoint<T> */
+    static Vector4D<T> IVector<Vector4D<T>, T>.Lerp(Vector4D<T> value1, Vector4D<T> value2, Vector4D<T> amount) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<Vector4D<T>, T>(typeof(IFloatingPoint<>));
         return Vector4D.LerpUnchecked(value1, value2, amount);
     }
 
-    static Vector4D<T> IVector<Vector4D<T>, T>.LerpClamped(in Vector4D<T> value1, in Vector4D<T> value2, in Vector4D<T> amount) /* where T : IFloatingPoint<T> */
+    static Vector4D<T> IVector<Vector4D<T>, T>.LerpClamped(Vector4D<T> value1, Vector4D<T> value2, Vector4D<T> amount) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<Vector4D<T>, T>(typeof(IFloatingPoint<>));
         return Vector4D.LerpClampedUnchecked(value1, value2, amount);
     }
 
-    static Vector4D<T> IVector<Vector4D<T>, T>.Reflect(in Vector4D<T> vector, in Vector4D<T> normal) /* where T : IFloatingPoint<T> */
+    static Vector4D<T> IVector<Vector4D<T>, T>.Reflect(Vector4D<T> vector, Vector4D<T> normal) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<Vector4D<T>, T>(typeof(IFloatingPoint<>));
         return Vector4D.Reflect<T, T>(vector, normal);
