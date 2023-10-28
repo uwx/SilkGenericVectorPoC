@@ -12,24 +12,22 @@ public interface IVectorAlso<TVector, T> :
 public interface IVector<TVector, T> :
     INumberBase<TVector>,
     IAdditionOperators<TVector, TVector, TVector>,
-    // IAdditiveIdentity<TVector, TVector>,
-    // IDecrementOperators<TVector>,
+    IAdditiveIdentity<TVector, TVector>,
+    IDecrementOperators<TVector>,
     IDivisionOperators<TVector, TVector, TVector>,
     IEqualityOperators<TVector, TVector, bool>,
-    // IIncrementOperators<TVector>,
-    // IMultiplicativeIdentity<TVector, TVector>,
+    IIncrementOperators<TVector>,
+    IMultiplicativeIdentity<TVector, TVector>,
     IMultiplyOperators<TVector, TVector, TVector>,
-    // ISpanFormattable,
-    // ISpanParsable<TVector>,
+    ISpanFormattable,
+    ISpanParsable<TVector>,
     ISubtractionOperators<TVector, TVector, TVector>,
-    // IUnaryPlusOperators<TVector, TVector>,
+    IUnaryPlusOperators<TVector, TVector>,
     IUnaryNegationOperators<TVector, TVector>,
     IUtf8SpanFormattable,
     IUtf8SpanParsable<TVector>,
     IEquatable<TVector>,
     IReadOnlyList<T>
-    // IDivisionOperators<TVector, T, TVector>,
-    // IMultiplyOperators<TVector, T, TVector>
     where TVector : IVector<TVector, T>
     where T : INumberBase<T>
 {
@@ -49,7 +47,10 @@ public interface IVector<TVector, T> :
     new bool TryFormat(Span<byte> utf8Destination, out int bytesWritten, ReadOnlySpan<char> format, IFormatProvider? provider);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static abstract TVector CreateFromRepeatingComponent(T scalar);
+    static abstract TVector Create(T scalar);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    static abstract TVector Create(ReadOnlySpan<T> values);
 
     static TVector INumberBase<TVector>.Zero
     {
@@ -69,7 +70,7 @@ public interface IVector<TVector, T> :
     new static virtual TVector Zero
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => TVector.CreateFromRepeatingComponent(T.Zero);
+        get => TVector.Create(T.Zero);
     }
 
     /// <summary>Gets a vector whose elements are equal to one.</summary>
@@ -78,15 +79,19 @@ public interface IVector<TVector, T> :
     new static virtual TVector One
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => TVector.CreateFromRepeatingComponent(T.One);
+        get => TVector.Create(T.One);
     }
 
-    ReadOnlySpan<T> Components { get; }
-    
-    public T this[int index]
+    T IReadOnlyList<T>.this[int index]
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => Components[index];
+        get => this[index];
+    }
+    
+    public new T this[int index]
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => TVector.AsSpan((TVector)this)[index];
     }
     
     static abstract TVector operator /(TVector left, T right);
@@ -120,14 +125,16 @@ public interface IVector<TVector, T> :
     //static abstract TVector Sqrt(TVector value) /* where T : IFloatingPoint<T>, IRootFunctions<T> */;
 
     /// <summary>Copies the elements of the vector to a specified array.</summary>
+    /// <param name="vector">The vector to be copied.</param>
     /// <param name="array">The destination array.</param>
     /// <remarks><paramref name="array" /> must have enough elements to fit all scalars in this vector. The method copies the vector's elements starting at index 0.</remarks>
     /// <exception cref="NullReferenceException"><paramref name="array" /> is <see langword="null" />.</exception>
     /// <exception cref="ArgumentException">The number of elements in the current instance is greater than in the array.</exception>
     /// <exception cref="RankException"><paramref name="array" /> is multidimensional.</exception>
-    void CopyTo(T[] array);
+    static abstract void CopyTo(in TVector vector, T[] array);
 
     /// <summary>Copies the elements of the vector to a specified array starting at a specified index position.</summary>
+    /// <param name="vector">The vector to be copied.</param>
     /// <param name="array">The destination array.</param>
     /// <param name="index">The index at which to copy the first element of the vector.</param>
     /// <remarks><paramref name="array" /> must have a sufficient number of elements to accommodate the vector elements. In other words, elements <paramref name="index" /> through <paramref name="index" /> + 2 must already exist in <paramref name="array" />.</remarks>
@@ -137,17 +144,19 @@ public interface IVector<TVector, T> :
     /// -or-
     /// <paramref name="index" /> is greater than or equal to the array length.</exception>
     /// <exception cref="RankException"><paramref name="array" /> is multidimensional.</exception>
-    void CopyTo(T[] array, int index);
+    static abstract void CopyTo(in TVector vector, T[] array, int index);
 
     /// <summary>Copies the vector to the given <see cref="Span{T}" />. The length of the destination span must be at least enough to fit all scalars in this vector.</summary>
+    /// <param name="vector">The vector to be copied.</param>
     /// <param name="destination">The destination span which the values are copied into.</param>
     /// <exception cref="ArgumentException">If number of elements in source vector is greater than those available in destination span.</exception>
-    void CopyTo(Span<T> destination);
+    static abstract void CopyTo(in TVector vector, Span<T> destination);
 
     /// <summary>Attempts to copy the vector to the given <see cref="Span{Single}" />. The length of the destination span must be at least enough to fit all scalars in this vector.</summary>
+    /// <param name="vector">The vector to be copied.</param>
     /// <param name="destination">The destination span which the values are copied into.</param>
     /// <returns><see langword="true" /> if the source vector was successfully copied to <paramref name="destination" />. <see langword="false" /> if <paramref name="destination" /> is not large enough to hold the source vector.</returns>
-    bool TryCopyTo(Span<T> destination);
+    static abstract bool TryCopyTo(in TVector vector, Span<T> destination);
     
     static TVector IAdditiveIdentity<TVector, TVector>.AdditiveIdentity => TVector.Zero;
     static TVector IMultiplicativeIdentity<TVector, TVector>.MultiplicativeIdentity => TVector.One;
@@ -158,4 +167,6 @@ public interface IVector<TVector, T> :
     static TVector IUnaryPlusOperators<TVector, TVector>.operator +(TVector value) => value;
     
     static int INumberBase<TVector>.Radix => T.Radix;
+    
+    static abstract ReadOnlySpan<T> AsSpan(in TVector vec);
 }

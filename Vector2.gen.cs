@@ -17,12 +17,14 @@ namespace GenericVector;
 public readonly partial struct Vector2D<T> : IVector<Vector2D<T>, T>, IVectorAlso<Vector2D<T>, T>, IEquatable<Vector2>, ISpanFormattable
     where T : INumberBase<T>
 {
+    private readonly T _x;
     /// <summary>The X component of the vector.</summary>
     [DataMember]
-    public readonly T X;
+    public T X => _x;
+    private readonly T _y;
     /// <summary>The Y component of the vector.</summary>
     [DataMember]
-    public readonly T Y;
+    public T Y => _y;
 
     internal const int Count = 2;
 
@@ -40,11 +42,11 @@ public readonly partial struct Vector2D<T> : IVector<Vector2D<T>, T>, IVectorAls
     {
         Unsafe.SkipInit(out this);
 
-        X = x;
-        Y = y;
+        _x = x;
+        _y = y;
     }
 
-    /// <summary>Constructs a vector from the given <see cref="ReadOnlySpan{T}" />. The span must contain at least 4 elements.</summary>
+    /// <summary>Constructs a vector from the given <see cref="ReadOnlySpan{T}" />. The span must contain at least 2 elements.</summary>
     /// <param name="values">The span of elements to assign to the vector.</param>
     public Vector2D(ReadOnlySpan<T> values)
     {
@@ -55,11 +57,11 @@ public readonly partial struct Vector2D<T> : IVector<Vector2D<T>, T>, IVectorAls
         this = Unsafe.ReadUnaligned<Vector2D<T>>(ref Unsafe.As<T, byte>(ref MemoryMarshal.GetReference(values)));
     }
 
-    /// <summary>Gets a vector whose 4 elements are equal to zero.</summary>
+    /// <summary>Gets a vector whose 2 elements are equal to zero.</summary>
     /// <value>A vector whose two elements are equal to zero (that is, it returns the vector <c>(0,0)</c>.</value>
     public static Vector2D<T> Zero => new(T.Zero);
 
-    /// <summary>Gets a vector whose 4 elements are equal to one.</summary>
+    /// <summary>Gets a vector whose 2 elements are equal to one.</summary>
     /// <value>Returns <see cref="Vector2D{T}" />.</value>
     /// <remarks>A vector whose two elements are equal to one (that is, it returns the vector <c>(1,1)</c>.</remarks>
     public static Vector2D<T> One => new(T.One);
@@ -71,14 +73,21 @@ public readonly partial struct Vector2D<T> : IVector<Vector2D<T>, T>, IVectorAls
     /// <value>The vector <c>(0,1)</c>.</value>
     public static Vector2D<T> UnitY => new(T.Zero, T.One);
 
-    public ReadOnlySpan<T> Components
-    {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => MemoryMarshal.CreateReadOnlySpan<T>(ref Unsafe.AsRef(in X), Count);
-    }
-
+    /// <summary>Creates a new <see cref="Vector2D{T}" /> object whose two elements have the same value.</summary>
+    /// <param name="value">The value to assign to all two elements.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static Vector2D<T> IVector<Vector2D<T>, T>.CreateFromRepeatingComponent(T scalar) => new(scalar);
+    public static Vector2D<T> Create(T scalar) => new(scalar);
+
+    /// <summary>Creates a vector whose elements have the specified values.</summary>
+    /// <param name="x">The value to assign to the <see cref="X" /> field.</param>
+    /// <param name="y">The value to assign to the <see cref="Y" /> field.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2D<T> Create(T x, T y) => new(x, y);
+
+    /// <summary>Constructs a vector from the given <see cref="ReadOnlySpan{T}" />. The span must contain at least 2 elements.</summary>
+    /// <param name="values">The span of elements to assign to the vector.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2D<T> Create(ReadOnlySpan<T> values) => new(values);
 
     /// <summary>Gets or sets the element at the specified index.</summary>
     /// <param name="index">The index of the element to get or set.</param>
@@ -87,7 +96,7 @@ public readonly partial struct Vector2D<T> : IVector<Vector2D<T>, T>, IVectorAls
     public T this[int index]
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => Components[index];
+        get => this.AsSpan()[index];
     }
 
     #region Operators
@@ -424,71 +433,6 @@ public readonly partial struct Vector2D<T> : IVector<Vector2D<T>, T>, IVectorAls
     }
     #endregion
 
-    #region CopyTo
-    /// <summary>Copies the elements of the vector to a specified array.</summary>
-    /// <param name="array">The destination array.</param>
-    /// <remarks><paramref name="array" /> must have at least two elements. The method copies the vector's elements starting at index 0.</remarks>
-    /// <exception cref="NullReferenceException"><paramref name="array" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentException">The number of elements in the current instance is greater than in the array.</exception>
-    /// <exception cref="RankException"><paramref name="array" /> is multidimensional.</exception>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void CopyTo(T[] array)
-    {
-        // We explicitly don't check for `null` because historically this has thrown `NullReferenceException` for perf reasons
-
-        ArgumentOutOfRangeException.ThrowIfLessThan(array.Length, Count, nameof(array));
-
-        Unsafe.WriteUnaligned(ref Unsafe.As<T, byte>(ref array[0]), this);
-    }
-
-    /// <summary>Copies the elements of the vector to a specified array starting at a specified index position.</summary>
-    /// <param name="array">The destination array.</param>
-    /// <param name="index">The index at which to copy the first element of the vector.</param>
-    /// <remarks><paramref name="array" /> must have a sufficient number of elements to accommodate the two vector elements. In other words, elements <paramref name="index" /> through <paramref name="index" /> + 2 must already exist in <paramref name="array" />.</remarks>
-    /// <exception cref="NullReferenceException"><paramref name="array" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentException">The number of elements in the current instance is greater than in the array.</exception>
-    /// <exception cref="ArgumentOutOfRangeException"><paramref name="index" /> is less than zero.
-    /// -or-
-    /// <paramref name="index" /> is greater than or equal to the array length.</exception>
-    /// <exception cref="RankException"><paramref name="array" /> is multidimensional.</exception>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void CopyTo(T[] array, int index)
-    {
-        // We explicitly don't check for `null` because historically this has thrown `NullReferenceException` for perf reasons
-
-        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual((uint)index, (uint)array.Length);
-        ArgumentOutOfRangeException.ThrowIfLessThan((array.Length - index), Count);
-
-        Unsafe.WriteUnaligned(ref Unsafe.As<T, byte>(ref array[index]), this);
-    }
-
-    /// <summary>Copies the vector to the given <see cref="Span{T}" />. The length of the destination span must be at least 4.</summary>
-    /// <param name="destination">The destination span which the values are copied into.</param>
-    /// <exception cref="ArgumentException">If number of elements in source vector is greater than those available in destination span.</exception>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void CopyTo(Span<T> destination)
-    {
-        ArgumentOutOfRangeException.ThrowIfLessThan(destination.Length, Count, nameof(destination));
-
-        Unsafe.WriteUnaligned(ref Unsafe.As<T, byte>(ref MemoryMarshal.GetReference(destination)), this);
-    }
-
-    /// <summary>Attempts to copy the vector to the given <see cref="Span{Single}" />. The length of the destination span must be at least 4.</summary>
-    /// <param name="destination">The destination span which the values are copied into.</param>
-    /// <returns><see langword="true" /> if the source vector was successfully copied to <paramref name="destination" />. <see langword="false" /> if <paramref name="destination" /> is not large enough to hold the source vector.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryCopyTo(Span<T> destination)
-    {
-        if (destination.Length < Count)
-        {
-            return false;
-        }
-
-        Unsafe.WriteUnaligned(ref Unsafe.As<T, byte>(ref MemoryMarshal.GetReference(destination)), this);
-        return true;
-    }
-    #endregion
-
     #region Equality
     /// <summary>Returns a value that indicates whether this instance and another vector are equal.</summary>
     /// <param name="other">The other vector.</param>
@@ -739,6 +683,7 @@ unsafe
     // Upcast
     public static explicit operator Vector3D<T>(Vector2D<T> self) => new(self, T.Zero);
     public static explicit operator Vector4D<T>(Vector2D<T> self) => new(self, T.Zero, T.Zero);
+    public static explicit operator Vector5D<T>(Vector2D<T> self) => new(self, T.Zero, T.Zero, T.Zero);
 
     // Upcast from System.Numerics.Vector < 2
 
@@ -793,7 +738,7 @@ public readonly partial struct Vector2D<T> :
         => Parse(s.AsSpan(), style, provider);
 
     public static Vector2D<T> Parse(ReadOnlySpan<char> s, NumberStyles style = NumberStyles.None, IFormatProvider? provider = null)
-        => TryParse(s, style, provider, out var result) ? result : throw new ArgumentException($"Failed to parse {nameof(Vector2)}<{typeof(T)}>");
+        => TryParse(s, style, provider, out var result) ? result : throw new ArgumentException($"Failed to parse {nameof(Vector2D)}<{typeof(T)}>");
 
     public static bool TryParse(string? s, IFormatProvider? provider, out Vector2D<T> result)
         => TryParse(s.AsSpan(), NumberStyles.None, provider, out result);
@@ -949,6 +894,8 @@ public readonly partial struct Vector2D<T> :
     Vector2D<T1>? IVec2.GetChecked<T1>() => T1.TryConvertFromChecked(X, out var x) ? new(x, T1.CreateChecked(Y)) : null;
     Vector2D<T1>? IVec2.GetSaturating<T1>() => T1.TryConvertFromSaturating(X, out var x) ? new(x, T1.CreateSaturating(Y)) : null;
     Vector2D<T1>? IVec2.GetTruncating<T1>() => T1.TryConvertFromTruncating(X, out var x) ? new(x, T1.CreateTruncating(Y)) : null;
+
+    static ReadOnlySpan<T> IVector<Vector2D<T>, T>.AsSpan(in Vector2D<T> vec) => vec.AsSpan();
 }
 
 // Vector2D<T>.IReadOnlyList
@@ -1051,12 +998,92 @@ public partial struct Vector2D<T> :
         [UnsafeAccessor(UnsafeAccessorKind.Method, Name = nameof(NumberGroupSeparatorTChar))]
         static extern ReadOnlySpan<TChar> NumberGroupSeparatorTChar<TChar>(NumberFormatInfo? c) where TChar : unmanaged;
     }
+
+    static void IVector<Vector2D<T>, T>.CopyTo(in Vector2D<T> vector, T[] array) => vector.CopyTo(array);
+    static void IVector<Vector2D<T>, T>.CopyTo(in Vector2D<T> vector, T[] array, int index) => vector.CopyTo(array, index);
+    static void IVector<Vector2D<T>, T>.CopyTo(in Vector2D<T> vector, Span<T> destination) => vector.CopyTo(destination);
+    static bool IVector<Vector2D<T>, T>.TryCopyTo(in Vector2D<T> vector, Span<T> destination) => vector.TryCopyTo(destination);
 }
 
 // Vector2D
 public static partial class Vector2D
 {
+    #region CopyTo
+    /// <summary>Copies the elements of the vector to a specified array.</summary>
+    /// <param name="self">The vector to be copied.</param>
+    /// <param name="array">The destination array.</param>
+    /// <remarks><paramref name="array" /> must have at least two elements. The method copies the vector's elements starting at index 0.</remarks>
+    /// <exception cref="NullReferenceException"><paramref name="array" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentException">The number of elements in the current instance is greater than in the array.</exception>
+    /// <exception cref="RankException"><paramref name="array" /> is multidimensional.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void CopyTo<T>(in this Vector2D<T> self, T[] array) where T : INumberBase<T>
+    {
+        // We explicitly don't check for `null` because historically this has thrown `NullReferenceException` for perf reasons
+
+        ArgumentOutOfRangeException.ThrowIfLessThan(array.Length, Vector2D<T>.Count, nameof(array));
+
+        Unsafe.WriteUnaligned(ref Unsafe.As<T, byte>(ref array[0]), self);
+    }
+
+    /// <summary>Copies the elements of the vector to a specified array starting at a specified index position.</summary>
+    /// <param name="self">The vector to be copied.</param>
+    /// <param name="array">The destination array.</param>
+    /// <param name="index">The index at which to copy the first element of the vector.</param>
+    /// <remarks><paramref name="array" /> must have a sufficient number of elements to accommodate the two vector elements. In other words, elements <paramref name="index" /> through <paramref name="index" /> + 2 must already exist in <paramref name="array" />.</remarks>
+    /// <exception cref="NullReferenceException"><paramref name="array" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentException">The number of elements in the current instance is greater than in the array.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="index" /> is less than zero.
+    /// -or-
+    /// <paramref name="index" /> is greater than or equal to the array length.</exception>
+    /// <exception cref="RankException"><paramref name="array" /> is multidimensional.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void CopyTo<T>(in this Vector2D<T> self, T[] array, int index) where T : INumberBase<T>
+    {
+        // We explicitly don't check for `null` because historically this has thrown `NullReferenceException` for perf reasons
+
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual((uint)index, (uint)array.Length);
+        ArgumentOutOfRangeException.ThrowIfLessThan((array.Length - index), Vector2D<T>.Count);
+
+        Unsafe.WriteUnaligned(ref Unsafe.As<T, byte>(ref array[index]), self);
+    }
+
+    /// <summary>Copies the vector to the given <see cref="Span{T}" />. The length of the destination span must be at least 2.</summary>
+    /// <param name="self">The vector to be copied.</param>
+    /// <param name="destination">The destination span which the values are copied into.</param>
+    /// <exception cref="ArgumentException">If number of elements in source vector is greater than those available in destination span.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void CopyTo<T>(in this Vector2D<T> self, Span<T> destination) where T : INumberBase<T>
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(destination.Length, Vector2D<T>.Count, nameof(destination));
+
+        Unsafe.WriteUnaligned(ref Unsafe.As<T, byte>(ref MemoryMarshal.GetReference(destination)), self);
+    }
+
+    /// <summary>Attempts to copy the vector to the given <see cref="Span{Single}" />. The length of the destination span must be at least 2.</summary>
+    /// <param name="self">The vector to be copied.</param>
+    /// <param name="destination">The destination span which the values are copied into.</param>
+    /// <returns><see langword="true" /> if the source vector was successfully copied to <paramref name="destination" />. <see langword="false" /> if <paramref name="destination" /> is not large enough to hold the source vector.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool TryCopyTo<T>(in this Vector2D<T> self, Span<T> destination) where T : INumberBase<T>
+    {
+        if (destination.Length < Vector2D<T>.Count)
+        {
+            return false;
+        }
+
+        Unsafe.WriteUnaligned(ref Unsafe.As<T, byte>(ref MemoryMarshal.GetReference(destination)), self);
+        return true;
+    }
+    #endregion
+
     #region Extension
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ReadOnlySpan<T> AsSpan<T>(in this Vector2D<T> vec) where T : INumberBase<T>
+    {
+        return MemoryMarshal.CreateReadOnlySpan<T>(ref Unsafe.As<Vector2D<T>, T>(ref Unsafe.AsRef(in vec)), Vector2D<T>.Count);
+    }
 
     /// <summary>Returns the length of this vector object.</summary>
     /// <returns>The vector's length.</returns>

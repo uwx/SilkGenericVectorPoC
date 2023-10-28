@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿#if !ON
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -438,3 +439,4 @@ public readonly partial struct Matrix4X4<T> : IEquatable<Matrix4X4<T>>
     }
 
 }
+#endif
