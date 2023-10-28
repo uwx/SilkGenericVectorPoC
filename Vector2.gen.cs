@@ -1114,7 +1114,7 @@ public static partial class Vector2D
     /// <param name="right">The second vector.</param>
     /// <returns>The element-wise product vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Multiply<T>(Vector2D<T> left, Vector2D<T> right) where T : INumberBase<T>
+    public static Vector2D<T> Multiply<T>(in Vector2D<T> left, in Vector2D<T> right) where T : INumberBase<T>
     {
         return left * right;
     }
@@ -1124,7 +1124,7 @@ public static partial class Vector2D
     /// <param name="right">The scalar value.</param>
     /// <returns>The scaled vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Multiply<T>(Vector2D<T> left, T right) where T : INumberBase<T>
+    public static Vector2D<T> Multiply<T>(in Vector2D<T> left, T right) where T : INumberBase<T>
     {
         return left * right;
     }
@@ -1134,7 +1134,7 @@ public static partial class Vector2D
     /// <param name="right">The vector.</param>
     /// <returns>The scaled vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Multiply<T>(T left, Vector2D<T> right) where T : INumberBase<T>
+    public static Vector2D<T> Multiply<T>(T left, in Vector2D<T> right) where T : INumberBase<T>
     {
         return left * right;
     }
@@ -1143,7 +1143,7 @@ public static partial class Vector2D
     /// <param name="value">The vector to negate.</param>
     /// <returns>The negated vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Negate<T>(Vector2D<T> value) where T : INumberBase<T>
+    public static Vector2D<T> Negate<T>(in Vector2D<T> value) where T : INumberBase<T>
     {
         return -value;
     }
@@ -1153,7 +1153,7 @@ public static partial class Vector2D
     /// <param name="right">The second vector.</param>
     /// <returns>The difference vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Subtract<T>(Vector2D<T> left, Vector2D<T> right) where T : INumberBase<T>
+    public static Vector2D<T> Subtract<T>(in Vector2D<T> left, in Vector2D<T> right) where T : INumberBase<T>
     {
         return left - right;
     }
@@ -1163,7 +1163,7 @@ public static partial class Vector2D
     /// <param name="right">The second vector to add.</param>
     /// <returns>The summed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Add<T>(Vector2D<T> left, Vector2D<T> right) where T : INumberBase<T>
+    public static Vector2D<T> Add<T>(in Vector2D<T> left, in Vector2D<T> right) where T : INumberBase<T>
     {
         return left + right;
     }
@@ -1173,7 +1173,7 @@ public static partial class Vector2D
     /// <param name="right">The second vector.</param>
     /// <returns>The vector resulting from the division.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Divide<T>(Vector2D<T> left, Vector2D<T> right) where T : INumberBase<T>
+    public static Vector2D<T> Divide<T>(in Vector2D<T> left, in Vector2D<T> right) where T : INumberBase<T>
     {
         return left / right;
     }
@@ -1183,7 +1183,7 @@ public static partial class Vector2D
     /// <param name="divisor">The scalar value.</param>
     /// <returns>The vector that results from the division.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Divide<T>(Vector2D<T> left, T divisor) where T : INumberBase<T>
+    public static Vector2D<T> Divide<T>(in Vector2D<T> left, T divisor) where T : INumberBase<T>
     {
         return left / divisor;
     }
@@ -1196,7 +1196,7 @@ public static partial class Vector2D
     /// <param name="value">A vector.</param>
     /// <returns>The absolute value vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Abs<T>(Vector2D<T> value) where T : INumberBase<T>
+    public static Vector2D<T> Abs<T>(in Vector2D<T> value) where T : INumberBase<T>
     {
         // NOTE: COMPLETELY UNTESTED. MIGHT BE SLOW.
         unsafe
@@ -1252,7 +1252,7 @@ public static partial class Vector2D
     /// <param name="max">The maximum value.</param>
     /// <returns>The restricted vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Clamp<T>(Vector2D<T> value1, Vector2D<T> min, Vector2D<T> max) where T : INumberBase<T>
+    public static Vector2D<T> Clamp<T>(in Vector2D<T> value1, in Vector2D<T> min, Vector2D<T> max) where T : INumberBase<T>
     {
         // NOTE: COMPLETELY UNTESTED. MIGHT BE SLOW.
         unsafe
@@ -1324,7 +1324,7 @@ public static partial class Vector2D
     /// <param name="value2">The second point.</param>
     /// <returns>The distance.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TReturn Distance<T, TReturn>(Vector2D<T> value1, Vector2D<T> value2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
+    public static TReturn Distance<T, TReturn>(in Vector2D<T> value1, in Vector2D<T> value2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
     {
         var distanceSquared = DistanceSquared<T, TReturn>(value1, value2);
         return TReturn.Sqrt(distanceSquared);
@@ -1335,7 +1335,7 @@ public static partial class Vector2D
     /// <param name="value2">The second point.</param>
     /// <returns>The distance squared.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static T DistanceSquared<T>(Vector2D<T> value1, Vector2D<T> value2) where T : INumberBase<T>
+    public static T DistanceSquared<T>(in Vector2D<T> value1, in Vector2D<T> value2) where T : INumberBase<T>
     {
         var difference = value1 - value2;
         return Dot(difference, difference);
@@ -1346,7 +1346,7 @@ public static partial class Vector2D
     /// <param name="value2">The second point.</param>
     /// <returns>The distance squared.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TReturn DistanceSquared<T, TReturn>(Vector2D<T> value1, Vector2D<T> value2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
+    public static TReturn DistanceSquared<T, TReturn>(in Vector2D<T> value1, in Vector2D<T> value2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
     {
         var difference = value1 - value2;
         return Dot<T, TReturn>(difference, difference);
@@ -1357,7 +1357,7 @@ public static partial class Vector2D
     /// <param name="vector2">The second vector.</param>
     /// <returns>The dot product.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static T Dot<T>(Vector2D<T> vector1, Vector2D<T> vector2) where T : INumberBase<T>
+    public static T Dot<T>(in Vector2D<T> vector1, in Vector2D<T> vector2) where T : INumberBase<T>
     {
         // TODO: vectorize return scalar
         return
@@ -1370,7 +1370,7 @@ public static partial class Vector2D
     /// <param name="vector2">The second vector.</param>
     /// <returns>The dot product.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TReturn Dot<T, TReturn>(Vector2D<T> vector1, Vector2D<T> vector2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
+    public static TReturn Dot<T, TReturn>(in Vector2D<T> vector1, in Vector2D<T> vector2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
     {
         // TODO vectorize return converted (maybe not possible)
         return
@@ -1384,26 +1384,26 @@ public static partial class Vector2D
     /// <param name="amount">A value between 0 and 1 that indicates the weight of <paramref name="value2" />.</param>
     /// <returns>The interpolated vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<TFloat> Lerp<T, TFloat>(Vector2D<T> value1, Vector2D<T> value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    public static Vector2D<TFloat> Lerp<T, TFloat>(in Vector2D<T> value1, in Vector2D<T> value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         return (value1.As<TFloat>() * (TFloat.One - amount)) + (value2.As<TFloat>() * amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static Vector2D<T> LerpUnchecked<T>(Vector2D<T> value1, Vector2D<T> value2, T amount) where T : INumberBase<T>
+    internal static Vector2D<T> LerpUnchecked<T>(in Vector2D<T> value1, in Vector2D<T> value2, T amount) where T : INumberBase<T>
     {
         return (value1.As<T>() * (T.One - amount)) + (value2.As<T>() * amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<TFloat> LerpClamped<T, TFloat>(Vector2D<T> value1, Vector2D<T> value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    public static Vector2D<TFloat> LerpClamped<T, TFloat>(in Vector2D<T> value1, in Vector2D<T> value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         amount = TFloat.Clamp(amount, TFloat.Zero, TFloat.One);
         return Lerp(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static Vector2D<T> LerpClampedUnchecked<T>(Vector2D<T> value1, Vector2D<T> value2, T amount) where T : INumberBase<T>
+    internal static Vector2D<T> LerpClampedUnchecked<T>(in Vector2D<T> value1, in Vector2D<T> value2, T amount) where T : INumberBase<T>
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static T ClampT(T value, T min, T max)
@@ -1416,26 +1416,26 @@ public static partial class Vector2D
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<TFloat> Lerp<T, TFloat>(Vector2D<T> value1, Vector2D<T> value2, Vector2D<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    public static Vector2D<TFloat> Lerp<T, TFloat>(in Vector2D<T> value1, in Vector2D<T> value2, Vector2D<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         return (value1.As<TFloat>() * (Vector2D<TFloat>.One - amount)) + (value2.As<TFloat>() * amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static Vector2D<T> LerpUnchecked<T>(Vector2D<T> value1, Vector2D<T> value2, Vector2D<T> amount) where T : INumberBase<T>
+    internal static Vector2D<T> LerpUnchecked<T>(in Vector2D<T> value1, in Vector2D<T> value2, Vector2D<T> amount) where T : INumberBase<T>
     {
         return (value1.As<T>() * (Vector2D<T>.One - amount)) + (value2.As<T>() * amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<TFloat> LerpClamped<T, TFloat>(Vector2D<T> value1, Vector2D<T> value2, Vector2D<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    public static Vector2D<TFloat> LerpClamped<T, TFloat>(in Vector2D<T> value1, in Vector2D<T> value2, Vector2D<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         amount = Clamp(amount, Vector2D<TFloat>.Zero, Vector2D<TFloat>.One);
         return Lerp(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static Vector2D<T> LerpClampedUnchecked<T>(Vector2D<T> value1, Vector2D<T> value2, Vector2D<T> amount) where T : INumberBase<T>
+    internal static Vector2D<T> LerpClampedUnchecked<T>(in Vector2D<T> value1, in Vector2D<T> value2, Vector2D<T> amount) where T : INumberBase<T>
     {
         amount = Clamp(amount, Vector2D<T>.Zero, Vector2D<T>.One);
         return LerpUnchecked(value1, value2, amount);
@@ -1446,7 +1446,7 @@ public static partial class Vector2D
     /// <param name="value2">The second vector.</param>
     /// <returns>The maximized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Max<T>(Vector2D<T> value1, Vector2D<T> value2) where T : INumberBase<T>
+    public static Vector2D<T> Max<T>(in Vector2D<T> value1, in Vector2D<T> value2) where T : INumberBase<T>
     {
         return new Vector2D<T>(
             T.MaxMagnitudeNumber(value1.X, value2.X), 
@@ -1459,7 +1459,7 @@ public static partial class Vector2D
     /// <param name="value2">The second vector.</param>
     /// <returns>The minimized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Min<T>(Vector2D<T> value1, Vector2D<T> value2) where T : INumberBase<T>
+    public static Vector2D<T> Min<T>(in Vector2D<T> value1, in Vector2D<T> value2) where T : INumberBase<T>
     {
         return new Vector2D<T>(
         T.MinMagnitudeNumber(value1.X, value2.X), 
@@ -1471,7 +1471,7 @@ public static partial class Vector2D
     /// <param name="value">The vector to normalize.</param>
     /// <returns>The normalized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<TReturn> Normalize<T, TReturn>(Vector2D<T> value) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
+    public static Vector2D<TReturn> Normalize<T, TReturn>(in Vector2D<T> value) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
     {
         return value.As<TReturn>() / value.Length<T, TReturn>();
     }
@@ -1480,7 +1480,7 @@ public static partial class Vector2D
     /// <param name="value">The vector to normalize.</param>
     /// <returns>The normalized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Normalize<T>(Vector2D<T> value) where T : INumberBase<T>, IRootFunctions<T>
+    public static Vector2D<T> Normalize<T>(in Vector2D<T> value) where T : INumberBase<T>, IRootFunctions<T>
     {
         return value / value.Length();
     }
@@ -1490,7 +1490,7 @@ public static partial class Vector2D
     /// <param name="normal">The normal of the surface being reflected off.</param>
     /// <returns>The reflected vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<TReturn> Reflect<T, TReturn>(Vector2D<T> vector, Vector2D<T> normal) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
+    public static Vector2D<TReturn> Reflect<T, TReturn>(in Vector2D<T> vector, in Vector2D<T> normal) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
     {
         var dot = Dot<T, TReturn>(vector, normal);
         return vector.As<TReturn>() - (NumericConstants<TReturn>.Two * (dot * normal.As<TReturn>()));
@@ -1500,7 +1500,7 @@ public static partial class Vector2D
     /// <param name="value">A vector.</param>
     /// <returns>The square root vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<TReturn> Sqrt<T, TReturn>(Vector2D<T> value) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
+    public static Vector2D<TReturn> Sqrt<T, TReturn>(in Vector2D<T> value) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
     {
         return new Vector2D<TReturn>(
             TReturn.Sqrt(TReturn.CreateTruncating(value.X)), 
@@ -1515,9 +1515,9 @@ public static partial class Vector2D
     /// <param name="matrix">The transformation matrix.</param>
     /// <returns>The transformed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Transform<T>(Vector2D<T> position, Matrix4X4<T> matrix) where T : INumberBase<T>
+    public static Vector2D<T> Transform<T>(in Vector2D<T> position, Matrix4X4<T> matrix) where T : INumberBase<T>
     {
-        return (Vector2D<T>)Vector4D.Transform(position, matrix);
+        return (in Vector2D<T>)Vector4D.Transform(position, matrix);
     }
 
     /// <summary>Transforms a vector by the specified Quaternion rotation value.</summary>
@@ -1525,7 +1525,7 @@ public static partial class Vector2D
     /// <param name="rotation">The rotation to apply.</param>
     /// <returns>The transformed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<TReturn> Transform<T, TQuat, TReturn>(Vector2D<T> value, Quaternion<TQuat> rotation) where T : INumberBase<T> where TReturn : INumberBase<TReturn> where TQuat : ITrigonometricFunctions<TQuat>, IRootFunctions<TQuat>
+    public static Vector2D<TReturn> Transform<T, TQuat, TReturn>(in Vector2D<T> value, Quaternion<TQuat> rotation) where T : INumberBase<T> where TReturn : INumberBase<TReturn> where TQuat : ITrigonometricFunctions<TQuat>, IRootFunctions<TQuat>
     {
         var  = rotation.X + rotation.X;
         var  = rotation.Y + rotation.Y;var x2 = rotation.X + rotation.X;
@@ -1561,7 +1561,7 @@ public static partial class Vector2D
     // /// <param name="matrix">The matrix.</param>
     // /// <returns>The transformed vector.</returns>
     // [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    // internal static Vector2D<T> TransformNormal<T>(Vector2D<T> normal, in Matrix4x4 matrix) where T : INumberBase<T>
+    // internal static Vector2D<T> TransformNormal<T>(in Vector2D<T> normal, in Matrix4x4 matrix) where T : INumberBase<T>
     // {
     //     var matrixX = new Vector4(matrix.M11, matrix.M12, matrix.M13, matrix.M14);
     //     var matrixY = new Vector4(matrix.M21, matrix.M22, matrix.M23, matrix.M24);
@@ -1576,7 +1576,7 @@ public static partial class Vector2D
     */
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Remainder<T>(this Vector2D<T> left, Vector2D<T> right) where T : INumberBase<T>, IModulusOperators<T, T, T>
+    public static Vector2D<T> Remainder<T>(this Vector2D<T> left, in Vector2D<T> right) where T : INumberBase<T>, IModulusOperators<T, T, T>
     {
         return new Vector2D<T>(
             left.X % right.X,
@@ -1621,25 +1621,25 @@ public static partial class Vector2D
     /// <param name="amount">A value between 0 and 1 that indicates the weight of <paramref name="value2" />.</param>
     /// <returns>The interpolated vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Lerp<T>(Vector2D<T> value1, Vector2D<T> value2, T amount) where T : INumberBase<T>, IFloatingPoint<T>
+    public static Vector2D<T> Lerp<T>(in Vector2D<T> value1, in Vector2D<T> value2, T amount) where T : INumberBase<T>, IFloatingPoint<T>
     {
         return Lerp<T, T>(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> LerpClamped<T>(Vector2D<T> value1, Vector2D<T> value2, T amount) where T : INumberBase<T>, IFloatingPoint<T>
+    public static Vector2D<T> LerpClamped<T>(in Vector2D<T> value1, in Vector2D<T> value2, T amount) where T : INumberBase<T>, IFloatingPoint<T>
     {
         return LerpClamped<T, T>(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Lerp<T>(Vector2D<T> value1, Vector2D<T> value2, Vector2D<T> amount) where T : INumberBase<T>, IFloatingPoint<T>
+    public static Vector2D<T> Lerp<T>(in Vector2D<T> value1, in Vector2D<T> value2, Vector2D<T> amount) where T : INumberBase<T>, IFloatingPoint<T>
     {
         return Lerp<T, T>(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> LerpClamped<T>(Vector2D<T> value1, Vector2D<T> value2, Vector2D<T> amount) where T : INumberBase<T>, IFloatingPoint<T>
+    public static Vector2D<T> LerpClamped<T>(in Vector2D<T> value1, in Vector2D<T> value2, Vector2D<T> amount) where T : INumberBase<T>, IFloatingPoint<T>
     {
         return LerpClamped<T, T>(value1, value2, amount);
     }
@@ -1649,7 +1649,7 @@ public static partial class Vector2D
     /// <param name="normal">The normal of the surface being reflected off.</param>
     /// <returns>The reflected vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Reflect<T>(Vector2D<T> vector, Vector2D<T> normal) where T : IFloatingPoint<T>
+    public static Vector2D<T> Reflect<T>(in Vector2D<T> vector, in Vector2D<T> normal) where T : IFloatingPoint<T>
     {
         return Reflect<T, T>(vector, normal);
     }
@@ -1658,7 +1658,7 @@ public static partial class Vector2D
     /// <param name="value">A vector.</param>
     /// <returns>The square root vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Sqrt<T>(Vector2D<T> value) where T : IFloatingPoint<T>, IRootFunctions<T>
+    public static Vector2D<T> Sqrt<T>(in Vector2D<T> value) where T : IFloatingPoint<T>, IRootFunctions<T>
     {
         return Sqrt<T, T>(value);
     }
@@ -1670,7 +1670,7 @@ public static partial class Vector2D
     /// <param name="rotation">The rotation to apply.</param>
     /// <returns>The transformed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Transform<T>(Vector2D<T> value, Quaternion<T> rotation)
+    public static Vector2D<T> Transform<T>(in Vector2D<T> value, Quaternion<T> rotation)
         where T : IFloatingPoint<T>, ITrigonometricFunctions<T>, IRootFunctions<T>
     {
         return Transform<T, T, T>(value, rotation);
@@ -1682,7 +1682,7 @@ public static partial class Vector2D
     /// <param name="rotation">The rotation to apply.</param>
     /// <returns>The transformed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D<T> Transform<T, TQuat>(Vector2D<T> value, Quaternion<TQuat> rotation)
+    public static Vector2D<T> Transform<T, TQuat>(in Vector2D<T> value, Quaternion<TQuat> rotation)
         where T : IFloatingPoint<T>
         where TQuat : ITrigonometricFunctions<TQuat>, IRootFunctions<TQuat>
     {
@@ -1692,31 +1692,31 @@ public static partial class Vector2D
     #endregion
 
     // Equivalent implementing IHyperbolicFunctions<System.Runtime.Intrinsics.Vector3>
-    public static Vector2D<T> Acosh<T>(Vector2D<T> x) where T : IHyperbolicFunctions<T> => new(T.Acosh(x.X), T.Acosh(x.Y));
-    public static Vector2D<T> Asinh<T>(Vector2D<T> x) where T : IHyperbolicFunctions<T> => new(T.Asinh(x.X), T.Asinh(x.Y));
-    public static Vector2D<T> Atanh<T>(Vector2D<T> x) where T : IHyperbolicFunctions<T> => new(T.Atanh(x.X), T.Atanh(x.Y));
-    public static Vector2D<T> Cosh<T>(Vector2D<T> x) where T : IHyperbolicFunctions<T> => new(T.Cosh(x.X), T.Cosh(x.Y));
-    public static Vector2D<T> Sinh<T>(Vector2D<T> x) where T : IHyperbolicFunctions<T> => new(T.Sinh(x.X), T.Sinh(x.Y));
-    public static Vector2D<T> Tanh<T>(Vector2D<T> x) where T : IHyperbolicFunctions<T> => new(T.Tanh(x.X), T.Tanh(x.Y));
+    public static Vector2D<T> Acosh<T>(in Vector2D<T> x) where T : IHyperbolicFunctions<T> => new(T.Acosh(x.X), T.Acosh(x.Y));
+    public static Vector2D<T> Asinh<T>(in Vector2D<T> x) where T : IHyperbolicFunctions<T> => new(T.Asinh(x.X), T.Asinh(x.Y));
+    public static Vector2D<T> Atanh<T>(in Vector2D<T> x) where T : IHyperbolicFunctions<T> => new(T.Atanh(x.X), T.Atanh(x.Y));
+    public static Vector2D<T> Cosh<T>(in Vector2D<T> x) where T : IHyperbolicFunctions<T> => new(T.Cosh(x.X), T.Cosh(x.Y));
+    public static Vector2D<T> Sinh<T>(in Vector2D<T> x) where T : IHyperbolicFunctions<T> => new(T.Sinh(x.X), T.Sinh(x.Y));
+    public static Vector2D<T> Tanh<T>(in Vector2D<T> x) where T : IHyperbolicFunctions<T> => new(T.Tanh(x.X), T.Tanh(x.Y));
 
     // Equivalent implementing ITrigonometricFunctions<System.Runtime.Intrinsics.Vector3>
-    public static Vector2D<T> Acos<T>(Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.Acos(x.X), T.Acos(x.Y));
-    public static Vector2D<T> AcosPi<T>(Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.AcosPi(x.X), T.AcosPi(x.Y));
-    public static Vector2D<T> Asin<T>(Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.Asin(x.X), T.Asin(x.Y));
-    public static Vector2D<T> AsinPi<T>(Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.AsinPi(x.X), T.AsinPi(x.Y));
-    public static Vector2D<T> Atan<T>(Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.Atan(x.X), T.Atan(x.Y));
-    public static Vector2D<T> AtanPi<T>(Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.AtanPi(x.X), T.AtanPi(x.Y));
-    public static Vector2D<T> Cos<T>(Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.Cos(x.X), T.Cos(x.Y));
-    public static Vector2D<T> CosPi<T>(Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.CosPi(x.X), T.CosPi(x.Y));
-    public static Vector2D<T> DegreesToRadians<T>(Vector2D<T> degrees) where T : ITrigonometricFunctions<T> => new(T.DegreesToRadians(degrees.X), T.DegreesToRadians(degrees.Y));
-    public static Vector2D<T> RadiansToDegrees<T>(Vector2D<T> radians) where T : ITrigonometricFunctions<T> => new(T.RadiansToDegrees(radians.X), T.RadiansToDegrees(radians.Y));
-    public static Vector2D<T> Sin<T>(Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.Sin(x.X), T.Sin(x.Y));
-    public static Vector2D<T> SinPi<T>(Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.SinPi(x.X), T.SinPi(x.Y));
-    public static Vector2D<T> Tan<T>(Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.Tan(x.X), T.Tan(x.Y));
-    public static Vector2D<T> TanPi<T>(Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.TanPi(x.X), T.TanPi(x.Y));
+    public static Vector2D<T> Acos<T>(in Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.Acos(x.X), T.Acos(x.Y));
+    public static Vector2D<T> AcosPi<T>(in Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.AcosPi(x.X), T.AcosPi(x.Y));
+    public static Vector2D<T> Asin<T>(in Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.Asin(x.X), T.Asin(x.Y));
+    public static Vector2D<T> AsinPi<T>(in Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.AsinPi(x.X), T.AsinPi(x.Y));
+    public static Vector2D<T> Atan<T>(in Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.Atan(x.X), T.Atan(x.Y));
+    public static Vector2D<T> AtanPi<T>(in Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.AtanPi(x.X), T.AtanPi(x.Y));
+    public static Vector2D<T> Cos<T>(in Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.Cos(x.X), T.Cos(x.Y));
+    public static Vector2D<T> CosPi<T>(in Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.CosPi(x.X), T.CosPi(x.Y));
+    public static Vector2D<T> DegreesToRadians<T>(in Vector2D<T> degrees) where T : ITrigonometricFunctions<T> => new(T.DegreesToRadians(degrees.X), T.DegreesToRadians(degrees.Y));
+    public static Vector2D<T> RadiansToDegrees<T>(in Vector2D<T> radians) where T : ITrigonometricFunctions<T> => new(T.RadiansToDegrees(radians.X), T.RadiansToDegrees(radians.Y));
+    public static Vector2D<T> Sin<T>(in Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.Sin(x.X), T.Sin(x.Y));
+    public static Vector2D<T> SinPi<T>(in Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.SinPi(x.X), T.SinPi(x.Y));
+    public static Vector2D<T> Tan<T>(in Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.Tan(x.X), T.Tan(x.Y));
+    public static Vector2D<T> TanPi<T>(in Vector2D<T> x) where T : ITrigonometricFunctions<T> => new(T.TanPi(x.X), T.TanPi(x.Y));
 
 
-    public static (Vector2D<T> Sin, Vector2D<T> Cos) SinCos<T>(Vector2D<T> x) where T : ITrigonometricFunctions<T>
+    public static (Vector2D<T> Sin, Vector2D<T> Cos) SinCos<T>(in Vector2D<T> x) where T : ITrigonometricFunctions<T>
     {
         var (sinX, cosX) = T.SinCos(x.X);
         var (sinY, cosY) = T.SinCos(x.Y);
@@ -1727,7 +1727,7 @@ public static partial class Vector2D
         );
     }
 
-    public static (Vector2D<T> SinPi, Vector2D<T> CosPi) SinCosPi<T>(Vector2D<T> x) where T : ITrigonometricFunctions<T>
+    public static (Vector2D<T> SinPi, Vector2D<T> CosPi) SinCosPi<T>(in Vector2D<T> x) where T : ITrigonometricFunctions<T>
     {
         var (sinX, cosX) = T.SinCosPi(x.X);
         var (sinY, cosY) = T.SinCosPi(x.Y);
@@ -1739,75 +1739,75 @@ public static partial class Vector2D
     }
 
     // Equivalent implementing ILogarithmicFunctions<System.Runtime.Intrinsics.Vector3>
-    public static Vector2D<T> Log<T>(Vector2D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log(x.X), T.Log(x.Y));
+    public static Vector2D<T> Log<T>(in Vector2D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log(x.X), T.Log(x.Y));
 
-    public static Vector2D<T> Log<T>(Vector2D<T> x, Vector2D<T> newBase) where T : ILogarithmicFunctions<T> => new(T.Log(x.X, newBase.X), T.Log(x.Y, newBase.Y));
-    public static Vector2D<T> Log<T>(Vector2D<T> x, T newBase) where T : ILogarithmicFunctions<T> => new(T.Log(x.X, newBase), T.Log(x.Y, newBase));
-    public static Vector2D<T> LogP1<T>(Vector2D<T> x) where T : ILogarithmicFunctions<T> => Log(x + Vector2D<T>.One);
-    public static Vector2D<T> Log2<T>(Vector2D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log2(x.X), T.Log2(x.Y));
-    public static Vector2D<T> Log2P1<T>(Vector2D<T> x) where T : ILogarithmicFunctions<T> => Log2(x + Vector2D<T>.One);
-    public static Vector2D<T> Log10<T>(Vector2D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log10(x.X), T.Log10(x.Y));
-    public static Vector2D<T> Log10P1<T>(Vector2D<T> x) where T : ILogarithmicFunctions<T> => Log10(x + Vector2D<T>.One);
+    public static Vector2D<T> Log<T>(in Vector2D<T> x, in Vector2D<T> newBase) where T : ILogarithmicFunctions<T> => new(T.Log(x.X, newBase.X), T.Log(x.Y, newBase.Y));
+    public static Vector2D<T> Log<T>(in Vector2D<T> x, T newBase) where T : ILogarithmicFunctions<T> => new(T.Log(x.X, newBase), T.Log(x.Y, newBase));
+    public static Vector2D<T> LogP1<T>(in Vector2D<T> x) where T : ILogarithmicFunctions<T> => Log(x + Vector2D<T>.One);
+    public static Vector2D<T> Log2<T>(in Vector2D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log2(x.X), T.Log2(x.Y));
+    public static Vector2D<T> Log2P1<T>(in Vector2D<T> x) where T : ILogarithmicFunctions<T> => Log2(x + Vector2D<T>.One);
+    public static Vector2D<T> Log10<T>(in Vector2D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log10(x.X), T.Log10(x.Y));
+    public static Vector2D<T> Log10P1<T>(in Vector2D<T> x) where T : ILogarithmicFunctions<T> => Log10(x + Vector2D<T>.One);
 
     // Equivalent implementing IExponentialFunctions<System.Runtime.Intrinsics.Vector3>
-    public static Vector2D<T> Exp<T>(Vector2D<T> x) where T : IExponentialFunctions<T> => new(T.Exp(x.X), T.Exp(x.Y));
-    public static Vector2D<T> ExpM1<T>(Vector2D<T> x) where T : IExponentialFunctions<T> => Exp(x) - Vector2D<T>.One;
-    public static Vector2D<T> Exp2<T>(Vector2D<T> x) where T : IExponentialFunctions<T> => new(T.Exp2(x.X), T.Exp2(x.Y));
-    public static Vector2D<T> Exp2M1<T>(Vector2D<T> x) where T : IExponentialFunctions<T> => Exp2(x) - Vector2D<T>.One;
-    public static Vector2D<T> Exp10<T>(Vector2D<T> x) where T : IExponentialFunctions<T> => new(T.Exp10(x.X), T.Exp10(x.Y));
-    public static Vector2D<T> Exp10M1<T>(Vector2D<T> x) where T : IExponentialFunctions<T> => Exp10(x) - Vector2D<T>.One;
+    public static Vector2D<T> Exp<T>(in Vector2D<T> x) where T : IExponentialFunctions<T> => new(T.Exp(x.X), T.Exp(x.Y));
+    public static Vector2D<T> ExpM1<T>(in Vector2D<T> x) where T : IExponentialFunctions<T> => Exp(x) - Vector2D<T>.One;
+    public static Vector2D<T> Exp2<T>(in Vector2D<T> x) where T : IExponentialFunctions<T> => new(T.Exp2(x.X), T.Exp2(x.Y));
+    public static Vector2D<T> Exp2M1<T>(in Vector2D<T> x) where T : IExponentialFunctions<T> => Exp2(x) - Vector2D<T>.One;
+    public static Vector2D<T> Exp10<T>(in Vector2D<T> x) where T : IExponentialFunctions<T> => new(T.Exp10(x.X), T.Exp10(x.Y));
+    public static Vector2D<T> Exp10M1<T>(in Vector2D<T> x) where T : IExponentialFunctions<T> => Exp10(x) - Vector2D<T>.One;
 
     // Equivalent implementing IPowerFunctions<System.Runtime.Intrinsics.Vector3>
-    public static Vector2D<T> Pow<T>(Vector2D<T> x, Vector2D<T> y) where T : IPowerFunctions<T> => new(T.Pow(x.X, y.X), T.Pow(x.Y, y.Y));
-    public static Vector2D<T> Pow<T>(Vector2D<T> x, T y) where T : IPowerFunctions<T> => new(T.Pow(x.X, y), T.Pow(x.Y, y));
+    public static Vector2D<T> Pow<T>(in Vector2D<T> x, in Vector2D<T> y) where T : IPowerFunctions<T> => new(T.Pow(x.X, y.X), T.Pow(x.Y, y.Y));
+    public static Vector2D<T> Pow<T>(in Vector2D<T> x, T y) where T : IPowerFunctions<T> => new(T.Pow(x.X, y), T.Pow(x.Y, y));
 
     // Equivalent implementing IRootFunctions<System.Runtime.Intrinsics.Vector3>
-    public static Vector2D<T> Cbrt<T>(Vector2D<T> x) where T : IRootFunctions<T> => new(T.Cbrt(x.X), T.Cbrt(x.Y));
-    public static Vector2D<T> Hypot<T>(Vector2D<T> x, Vector2D<T> y) where T : IRootFunctions<T> => new(T.Hypot(x.X, y.X), T.Hypot(x.Y, y.Y));
-    public static Vector2D<T> Hypot<T>(Vector2D<T> x, T y) where T : IRootFunctions<T> => new(T.Hypot(x.X, y), T.Hypot(x.Y, y));
-    public static Vector2D<T> RootN<T>(Vector2D<T> x, int n) where T : IRootFunctions<T> => new(T.RootN(x.X, n), T.RootN(x.Y, n));
+    public static Vector2D<T> Cbrt<T>(in Vector2D<T> x) where T : IRootFunctions<T> => new(T.Cbrt(x.X), T.Cbrt(x.Y));
+    public static Vector2D<T> Hypot<T>(in Vector2D<T> x, in Vector2D<T> y) where T : IRootFunctions<T> => new(T.Hypot(x.X, y.X), T.Hypot(x.Y, y.Y));
+    public static Vector2D<T> Hypot<T>(in Vector2D<T> x, T y) where T : IRootFunctions<T> => new(T.Hypot(x.X, y), T.Hypot(x.Y, y));
+    public static Vector2D<T> RootN<T>(in Vector2D<T> x, int n) where T : IRootFunctions<T> => new(T.RootN(x.X, n), T.RootN(x.Y, n));
 
     // IFloatingPoint<TSelf>
-    public static Vector2D<T> Round<T>(Vector2D<T> x) where T : IFloatingPoint<T> => new(T.Round(x.X), T.Round(x.Y));
-    public static Vector2D<T> Round<T>(Vector2D<T> x, int digits) where T : IFloatingPoint<T> => new(T.Round(x.X, digits), T.Round(x.Y, digits));
-    public static Vector2D<T> Round<T>(Vector2D<T> x, MidpointRounding mode) where T : IFloatingPoint<T> => new(T.Round(x.X, mode), T.Round(x.Y, mode));
-    public static Vector2D<T> Round<T>(Vector2D<T> x, int digits, MidpointRounding mode) where T : IFloatingPoint<T> => new(T.Round(x.X, digits, mode), T.Round(x.Y, digits, mode));
-    public static Vector2D<T> Truncate<T>(Vector2D<T> x) where T : IFloatingPoint<T> => new(T.Truncate(x.X), T.Truncate(x.Y));
+    public static Vector2D<T> Round<T>(in Vector2D<T> x) where T : IFloatingPoint<T> => new(T.Round(x.X), T.Round(x.Y));
+    public static Vector2D<T> Round<T>(in Vector2D<T> x, int digits) where T : IFloatingPoint<T> => new(T.Round(x.X, digits), T.Round(x.Y, digits));
+    public static Vector2D<T> Round<T>(in Vector2D<T> x, MidpointRounding mode) where T : IFloatingPoint<T> => new(T.Round(x.X, mode), T.Round(x.Y, mode));
+    public static Vector2D<T> Round<T>(in Vector2D<T> x, int digits, MidpointRounding mode) where T : IFloatingPoint<T> => new(T.Round(x.X, digits, mode), T.Round(x.Y, digits, mode));
+    public static Vector2D<T> Truncate<T>(in Vector2D<T> x) where T : IFloatingPoint<T> => new(T.Truncate(x.X), T.Truncate(x.Y));
 
     // IFloatingPointIeee754<TSelf>
-    public static Vector2D<T> Atan2<T>(Vector2D<T> x, Vector2D<T> y) where T : IFloatingPointIeee754<T> => new(T.Atan2(x.X, y.X), T.Atan2(x.Y, y.Y));
-    public static Vector2D<T> Atan2Pi<T>(Vector2D<T> x, Vector2D<T> y) where T : IFloatingPointIeee754<T> => new(T.Atan2Pi(x.X, y.X), T.Atan2Pi(x.Y, y.Y));
-    public static Vector2D<T> Atan2<T>(Vector2D<T> x, T y) where T : IFloatingPointIeee754<T> => new(T.Atan2(x.X, y), T.Atan2(x.Y, y));
-    public static Vector2D<T> Atan2Pi<T>(Vector2D<T> x, T y) where T : IFloatingPointIeee754<T> => new(T.Atan2Pi(x.X, y), T.Atan2Pi(x.Y, y));
-    public static Vector2D<T> BitDecrement<T>(Vector2D<T> x) where T : IFloatingPointIeee754<T> => new(T.BitDecrement(x.X), T.BitDecrement(x.Y));
-    public static Vector2D<T> BitIncrement<T>(Vector2D<T> x) where T : IFloatingPointIeee754<T> => new(T.BitIncrement(x.X), T.BitIncrement(x.Y));
+    public static Vector2D<T> Atan2<T>(in Vector2D<T> x, in Vector2D<T> y) where T : IFloatingPointIeee754<T> => new(T.Atan2(x.X, y.X), T.Atan2(x.Y, y.Y));
+    public static Vector2D<T> Atan2Pi<T>(in Vector2D<T> x, in Vector2D<T> y) where T : IFloatingPointIeee754<T> => new(T.Atan2Pi(x.X, y.X), T.Atan2Pi(x.Y, y.Y));
+    public static Vector2D<T> Atan2<T>(in Vector2D<T> x, T y) where T : IFloatingPointIeee754<T> => new(T.Atan2(x.X, y), T.Atan2(x.Y, y));
+    public static Vector2D<T> Atan2Pi<T>(in Vector2D<T> x, T y) where T : IFloatingPointIeee754<T> => new(T.Atan2Pi(x.X, y), T.Atan2Pi(x.Y, y));
+    public static Vector2D<T> BitDecrement<T>(in Vector2D<T> x) where T : IFloatingPointIeee754<T> => new(T.BitDecrement(x.X), T.BitDecrement(x.Y));
+    public static Vector2D<T> BitIncrement<T>(in Vector2D<T> x) where T : IFloatingPointIeee754<T> => new(T.BitIncrement(x.X), T.BitIncrement(x.Y));
 
-    public static Vector2D<T> FusedMultiplyAdd<T>(Vector2D<T> left, Vector2D<T> right, Vector2D<T> addend) where T : IFloatingPointIeee754<T> => new(T.FusedMultiplyAdd(left.X, right.X, addend.X), T.FusedMultiplyAdd(left.Y, right.Y, addend.Y));
-    public static Vector2D<T> ReciprocalEstimate<T>(Vector2D<T> x) where T : IFloatingPointIeee754<T> => new(T.ReciprocalEstimate(x.X), T.ReciprocalEstimate(x.Y));
-    public static Vector2D<T> ReciprocalSqrtEstimate<T>(Vector2D<T> x) where T : IFloatingPointIeee754<T> => new(T.ReciprocalSqrtEstimate(x.X), T.ReciprocalSqrtEstimate(x.Y));
+    public static Vector2D<T> FusedMultiplyAdd<T>(in Vector2D<T> left, in Vector2D<T> right, Vector2D<T> addend) where T : IFloatingPointIeee754<T> => new(T.FusedMultiplyAdd(left.X, right.X, addend.X), T.FusedMultiplyAdd(left.Y, right.Y, addend.Y));
+    public static Vector2D<T> ReciprocalEstimate<T>(in Vector2D<T> x) where T : IFloatingPointIeee754<T> => new(T.ReciprocalEstimate(x.X), T.ReciprocalEstimate(x.Y));
+    public static Vector2D<T> ReciprocalSqrtEstimate<T>(in Vector2D<T> x) where T : IFloatingPointIeee754<T> => new(T.ReciprocalSqrtEstimate(x.X), T.ReciprocalSqrtEstimate(x.Y));
 
     // INumber<T>
-    // public static Vector2D<T> Clamp<T>(Vector2D<T> value, Vector2D<T> min, Vector2D<T> max) where T : INumber<T> => new(T.Clamp(x.X), T.Clamp(x.Y));
-    public static Vector2D<T> CopySign<T>(Vector2D<T> value, Vector2D<T> sign) where T : INumber<T> => new(T.CopySign(value.X, sign.X), T.CopySign(value.Y, sign.Y));
-    public static Vector2D<T> CopySign<T>(Vector2D<T> value, T sign) where T : INumber<T> => new(T.CopySign(value.X, sign), T.CopySign(value.Y, sign));
-    public static Vector2D<T> MaxNumber<T>(Vector2D<T> x, Vector2D<T> y) where T : INumber<T> => new(T.MaxNumber(x.X, y.X), T.MaxNumber(x.Y, y.Y));
-    public static Vector2D<T> MinNumber<T>(Vector2D<T> x, Vector2D<T> y) where T : INumber<T> => new(T.MinNumber(x.X, y.X), T.MinNumber(x.Y, y.Y));
+    // public static Vector2D<T> Clamp<T>(in Vector2D<T> value, in Vector2D<T> min, Vector2D<T> max) where T : INumber<T> => new(T.Clamp(x.X), T.Clamp(x.Y));
+    public static Vector2D<T> CopySign<T>(in Vector2D<T> value, in Vector2D<T> sign) where T : INumber<T> => new(T.CopySign(value.X, sign.X), T.CopySign(value.Y, sign.Y));
+    public static Vector2D<T> CopySign<T>(in Vector2D<T> value, T sign) where T : INumber<T> => new(T.CopySign(value.X, sign), T.CopySign(value.Y, sign));
+    public static Vector2D<T> MaxNumber<T>(in Vector2D<T> x, in Vector2D<T> y) where T : INumber<T> => new(T.MaxNumber(x.X, y.X), T.MaxNumber(x.Y, y.Y));
+    public static Vector2D<T> MinNumber<T>(in Vector2D<T> x, in Vector2D<T> y) where T : INumber<T> => new(T.MinNumber(x.X, y.X), T.MinNumber(x.Y, y.Y));
 
     // INumberBase<T>
-    // public static Vector2D<T> MaxMagnitude<T>(Vector2D<T> x, Vector2D<T> y) where T : INumberBase<T> => new(T.MaxMagnitude(x.X, y.X), T.MaxMagnitude(x.Y, y.Y));
-    // public static Vector2D<T> MaxMagnitudeNumber<T>(Vector2D<T> x, Vector2D<T> y) where T : INumberBase<T> => new(T.MaxMagnitudeNumber(x.X, y.X), T.MaxMagnitudeNumber(x.Y, y.Y));
-    // public static Vector2D<T> MinMagnitude<T>(Vector2D<T> x, Vector2D<T> y) where T : INumberBase<T> => new(T.MinMagnitude(x.X, y.X), T.MinMagnitude(x.Y, y.Y));
-    // public static Vector2D<T> MinMagnitudeNumber<T>(Vector2D<T> x, Vector2D<T> y) where T : INumberBase<T> => new(T.MinMagnitudeNumber(x.X, y.X), T.MinMagnitudeNumber(x.Y, y.Y));
+    // public static Vector2D<T> MaxMagnitude<T>(in Vector2D<T> x, in Vector2D<T> y) where T : INumberBase<T> => new(T.MaxMagnitude(x.X, y.X), T.MaxMagnitude(x.Y, y.Y));
+    // public static Vector2D<T> MaxMagnitudeNumber<T>(in Vector2D<T> x, in Vector2D<T> y) where T : INumberBase<T> => new(T.MaxMagnitudeNumber(x.X, y.X), T.MaxMagnitudeNumber(x.Y, y.Y));
+    // public static Vector2D<T> MinMagnitude<T>(in Vector2D<T> x, in Vector2D<T> y) where T : INumberBase<T> => new(T.MinMagnitude(x.X, y.X), T.MinMagnitude(x.Y, y.Y));
+    // public static Vector2D<T> MinMagnitudeNumber<T>(in Vector2D<T> x, in Vector2D<T> y) where T : INumberBase<T> => new(T.MinMagnitudeNumber(x.X, y.X), T.MinMagnitudeNumber(x.Y, y.Y));
     // (there's no reason you would want these.)
 
 
 
     // IFloatingPointIeee754<TSelf>
-    public static Vector2D<int> ILogB<T>(Vector2D<T> x) where T : IFloatingPointIeee754<T> => new(T.ILogB(x.X), T.ILogB(x.Y));
-    public static Vector2D<T> ScaleB<T>(Vector2D<T> x, Vector2D<int> n) where T : IFloatingPointIeee754<T> => new(T.ScaleB(x.X, n.X), T.ScaleB(x.Y, n.Y));
-    public static Vector2D<T> ScaleB<T>(Vector2D<T> x, int n) where T : IFloatingPointIeee754<T> => new(T.ScaleB(x.X, n), T.ScaleB(x.Y, n));
+    public static Vector2D<int> ILogB<T>(in Vector2D<T> x) where T : IFloatingPointIeee754<T> => new(T.ILogB(x.X), T.ILogB(x.Y));
+    public static Vector2D<T> ScaleB<T>(in Vector2D<T> x, Vector2D<int> n) where T : IFloatingPointIeee754<T> => new(T.ScaleB(x.X, n.X), T.ScaleB(x.Y, n.Y));
+    public static Vector2D<T> ScaleB<T>(in Vector2D<T> x, int n) where T : IFloatingPointIeee754<T> => new(T.ScaleB(x.X, n), T.ScaleB(x.Y, n));
 
-    public static Vector2D<int> RoundToInt<T>(Vector2D<T> vector) where T : IFloatingPoint<T>
+    public static Vector2D<int> RoundToInt<T>(in Vector2D<T> vector) where T : IFloatingPoint<T>
     {
         return new Vector2D<int>(
             int.CreateSaturating(T.Round(vector.X)),
@@ -1815,7 +1815,7 @@ public static partial class Vector2D
         );
     }
 
-    public static Vector2D<int> FloorToInt<T>(Vector2D<T> vector) where T : IFloatingPoint<T>
+    public static Vector2D<int> FloorToInt<T>(in Vector2D<T> vector) where T : IFloatingPoint<T>
     {
         return new Vector2D<int>(
             int.CreateSaturating(T.Floor(vector.X)),
@@ -1823,7 +1823,7 @@ public static partial class Vector2D
         );
     }
 
-    public static Vector2D<int> CeilingToInt<T>(Vector2D<T> vector) where T : IFloatingPoint<T>
+    public static Vector2D<int> CeilingToInt<T>(in Vector2D<T> vector) where T : IFloatingPoint<T>
     {
         return new Vector2D<int>(
             int.CreateSaturating(T.Ceiling(vector.X)),
@@ -1831,7 +1831,7 @@ public static partial class Vector2D
         );
     }
 
-    public static Vector2D<TInt> RoundToInt<T, TInt>(Vector2D<T> vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
+    public static Vector2D<TInt> RoundToInt<T, TInt>(in Vector2D<T> vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
     {
         return new Vector2D<TInt>(
             TInt.CreateSaturating(T.Round(vector.X)),
@@ -1839,7 +1839,7 @@ public static partial class Vector2D
         );
     }
 
-    public static Vector2D<TInt> FloorToInt<T, TInt>(Vector2D<T> vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
+    public static Vector2D<TInt> FloorToInt<T, TInt>(in Vector2D<T> vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
     {
         return new Vector2D<TInt>(
             TInt.CreateSaturating(T.Floor(vector.X)),
@@ -1847,7 +1847,7 @@ public static partial class Vector2D
         );
     }
 
-    public static Vector2D<TInt> CeilingToInt<T, TInt>(Vector2D<T> vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
+    public static Vector2D<TInt> CeilingToInt<T, TInt>(in Vector2D<T> vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
     {
         return new Vector2D<TInt>(
             TInt.CreateSaturating(T.Ceiling(vector.X)),
@@ -1867,64 +1867,64 @@ public readonly partial struct Vector2D<T>
 {
     T IVector<Vector2D<T>, T>.LengthSquared()
         => this.LengthSquared();
-    static Vector2D<T> IVector<Vector2D<T>, T>.Multiply(Vector2D<T> left, Vector2D<T> right)
+    static Vector2D<T> IVector<Vector2D<T>, T>.Multiply(in Vector2D<T> left, in Vector2D<T> right)
         => Vector2D.Multiply(left, right);
-    static Vector2D<T> IVector<Vector2D<T>, T>.Multiply(Vector2D<T> left, T right)
+    static Vector2D<T> IVector<Vector2D<T>, T>.Multiply(in Vector2D<T> left, T right)
         => Vector2D.Multiply(left, right);
-    static Vector2D<T> IVector<Vector2D<T>, T>.Multiply(T left, Vector2D<T> right)
+    static Vector2D<T> IVector<Vector2D<T>, T>.Multiply(T left, in Vector2D<T> right)
         => Vector2D.Multiply(left, right);
-    static Vector2D<T> IVector<Vector2D<T>, T>.Negate(Vector2D<T> value)
+    static Vector2D<T> IVector<Vector2D<T>, T>.Negate(in Vector2D<T> value)
         => Vector2D.Negate(value);
-    static Vector2D<T> IVector<Vector2D<T>, T>.Subtract(Vector2D<T> left, Vector2D<T> right)
+    static Vector2D<T> IVector<Vector2D<T>, T>.Subtract(in Vector2D<T> left, in Vector2D<T> right)
         => Vector2D.Subtract(left, right);
-    static Vector2D<T> IVector<Vector2D<T>, T>.Add(Vector2D<T> left, Vector2D<T> right)
+    static Vector2D<T> IVector<Vector2D<T>, T>.Add(in Vector2D<T> left, in Vector2D<T> right)
         => Vector2D.Add(left, right);
-    static Vector2D<T> IVector<Vector2D<T>, T>.Divide(Vector2D<T> left, Vector2D<T> right)
+    static Vector2D<T> IVector<Vector2D<T>, T>.Divide(in Vector2D<T> left, in Vector2D<T> right)
         => Vector2D.Divide(left, right);
-    static Vector2D<T> IVector<Vector2D<T>, T>.Divide(Vector2D<T> left, T divisor)
+    static Vector2D<T> IVector<Vector2D<T>, T>.Divide(in Vector2D<T> left, T divisor)
         => Vector2D.Divide(left, divisor);
-    static Vector2D<T> IVector<Vector2D<T>, T>.Clamp(Vector2D<T> value1, Vector2D<T> min, Vector2D<T> max)
+    static Vector2D<T> IVector<Vector2D<T>, T>.Clamp(in Vector2D<T> value1, in Vector2D<T> min, in Vector2D<T> max)
         => Vector2D.Clamp(value1, min, max);
-    static TReturn IVector<Vector2D<T>, T>.Distance<TReturn>(Vector2D<T> value1, Vector2D<T> value2)
+    static TReturn IVector<Vector2D<T>, T>.Distance<TReturn>(in Vector2D<T> value1, in Vector2D<T> value2)
         => Vector2D.Distance<T, TReturn>(value1, value2);
-    static T IVector<Vector2D<T>, T>.DistanceSquared(Vector2D<T> value1, Vector2D<T> value2)
+    static T IVector<Vector2D<T>, T>.DistanceSquared(in Vector2D<T> value1, in Vector2D<T> value2)
         => Vector2D.DistanceSquared(value1, value2);
-    static TReturn IVector<Vector2D<T>, T>.DistanceSquared<TReturn>(Vector2D<T> value1, Vector2D<T> value2)
+    static TReturn IVector<Vector2D<T>, T>.DistanceSquared<TReturn>(in Vector2D<T> value1, in Vector2D<T> value2)
         => Vector2D.DistanceSquared<T, TReturn>(value1, value2);
-    static T IVector<Vector2D<T>, T>.Dot(Vector2D<T> vector1, Vector2D<T> vector2)
+    static T IVector<Vector2D<T>, T>.Dot(in Vector2D<T> vector1, in Vector2D<T> vector2)
         => Vector2D.Dot(vector1, vector2);
-    static TReturn IVector<Vector2D<T>, T>.Dot<TReturn>(Vector2D<T> vector1, Vector2D<T> vector2)
+    static TReturn IVector<Vector2D<T>, T>.Dot<TReturn>(in Vector2D<T> vector1, in Vector2D<T> vector2)
         => Vector2D.Dot<T, TReturn>(vector1, vector2);
-    static Vector2D<T> IVector<Vector2D<T>, T>.Max(Vector2D<T> value1, Vector2D<T> value2)
+    static Vector2D<T> IVector<Vector2D<T>, T>.Max(in Vector2D<T> value1, in Vector2D<T> value2)
         => Vector2D.Max(value1, value2);
-    static Vector2D<T> IVector<Vector2D<T>, T>.Min(Vector2D<T> value1, Vector2D<T> value2)
+    static Vector2D<T> IVector<Vector2D<T>, T>.Min(in Vector2D<T> value1, in Vector2D<T> value2)
         => Vector2D.Min(value1, value2);
 
-    static Vector2D<T> IVector<Vector2D<T>, T>.Lerp(Vector2D<T> value1, Vector2D<T> value2, T amount) /* where T : IFloatingPoint<T> */
+    static Vector2D<T> IVector<Vector2D<T>, T>.Lerp(in Vector2D<T> value1, in Vector2D<T> value2, T amount) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<Vector2D<T>, T>(typeof(IFloatingPoint<>));
         return Vector2D.LerpUnchecked(value1, value2, amount);
     }
 
-    static Vector2D<T> IVector<Vector2D<T>, T>.LerpClamped(Vector2D<T> value1, Vector2D<T> value2, T amount) /* where T : IFloatingPoint<T> */
+    static Vector2D<T> IVector<Vector2D<T>, T>.LerpClamped(in Vector2D<T> value1, in Vector2D<T> value2, T amount) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<Vector2D<T>, T>(typeof(IFloatingPoint<>));
         return Vector2D.LerpClampedUnchecked(value1, value2, amount);
     }
 
-    static Vector2D<T> IVector<Vector2D<T>, T>.Lerp(Vector2D<T> value1, Vector2D<T> value2, Vector2D<T> amount) /* where T : IFloatingPoint<T> */
+    static Vector2D<T> IVector<Vector2D<T>, T>.Lerp(in Vector2D<T> value1, in Vector2D<T> value2, in Vector2D<T> amount) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<Vector2D<T>, T>(typeof(IFloatingPoint<>));
         return Vector2D.LerpUnchecked(value1, value2, amount);
     }
 
-    static Vector2D<T> IVector<Vector2D<T>, T>.LerpClamped(Vector2D<T> value1, Vector2D<T> value2, Vector2D<T> amount) /* where T : IFloatingPoint<T> */
+    static Vector2D<T> IVector<Vector2D<T>, T>.LerpClamped(in Vector2D<T> value1, in Vector2D<T> value2, in Vector2D<T> amount) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<Vector2D<T>, T>(typeof(IFloatingPoint<>));
         return Vector2D.LerpClampedUnchecked(value1, value2, amount);
     }
 
-    static Vector2D<T> IVector<Vector2D<T>, T>.Reflect(Vector2D<T> vector, Vector2D<T> normal) /* where T : IFloatingPoint<T> */
+    static Vector2D<T> IVector<Vector2D<T>, T>.Reflect(in Vector2D<T> vector, in Vector2D<T> normal) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<Vector2D<T>, T>(typeof(IFloatingPoint<>));
         return Vector2D.Reflect<T, T>(vector, normal);

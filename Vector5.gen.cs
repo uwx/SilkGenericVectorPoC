@@ -1282,7 +1282,7 @@ public static partial class Vector5D
     /// <param name="right">The second vector.</param>
     /// <returns>The element-wise product vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Multiply<T>(Vector5D<T> left, Vector5D<T> right) where T : INumberBase<T>
+    public static Vector5D<T> Multiply<T>(in Vector5D<T> left, in Vector5D<T> right) where T : INumberBase<T>
     {
         return left * right;
     }
@@ -1292,7 +1292,7 @@ public static partial class Vector5D
     /// <param name="right">The scalar value.</param>
     /// <returns>The scaled vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Multiply<T>(Vector5D<T> left, T right) where T : INumberBase<T>
+    public static Vector5D<T> Multiply<T>(in Vector5D<T> left, T right) where T : INumberBase<T>
     {
         return left * right;
     }
@@ -1302,7 +1302,7 @@ public static partial class Vector5D
     /// <param name="right">The vector.</param>
     /// <returns>The scaled vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Multiply<T>(T left, Vector5D<T> right) where T : INumberBase<T>
+    public static Vector5D<T> Multiply<T>(T left, in Vector5D<T> right) where T : INumberBase<T>
     {
         return left * right;
     }
@@ -1311,7 +1311,7 @@ public static partial class Vector5D
     /// <param name="value">The vector to negate.</param>
     /// <returns>The negated vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Negate<T>(Vector5D<T> value) where T : INumberBase<T>
+    public static Vector5D<T> Negate<T>(in Vector5D<T> value) where T : INumberBase<T>
     {
         return -value;
     }
@@ -1321,7 +1321,7 @@ public static partial class Vector5D
     /// <param name="right">The second vector.</param>
     /// <returns>The difference vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Subtract<T>(Vector5D<T> left, Vector5D<T> right) where T : INumberBase<T>
+    public static Vector5D<T> Subtract<T>(in Vector5D<T> left, in Vector5D<T> right) where T : INumberBase<T>
     {
         return left - right;
     }
@@ -1331,7 +1331,7 @@ public static partial class Vector5D
     /// <param name="right">The second vector to add.</param>
     /// <returns>The summed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Add<T>(Vector5D<T> left, Vector5D<T> right) where T : INumberBase<T>
+    public static Vector5D<T> Add<T>(in Vector5D<T> left, in Vector5D<T> right) where T : INumberBase<T>
     {
         return left + right;
     }
@@ -1341,7 +1341,7 @@ public static partial class Vector5D
     /// <param name="right">The second vector.</param>
     /// <returns>The vector resulting from the division.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Divide<T>(Vector5D<T> left, Vector5D<T> right) where T : INumberBase<T>
+    public static Vector5D<T> Divide<T>(in Vector5D<T> left, in Vector5D<T> right) where T : INumberBase<T>
     {
         return left / right;
     }
@@ -1351,7 +1351,7 @@ public static partial class Vector5D
     /// <param name="divisor">The scalar value.</param>
     /// <returns>The vector that results from the division.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Divide<T>(Vector5D<T> left, T divisor) where T : INumberBase<T>
+    public static Vector5D<T> Divide<T>(in Vector5D<T> left, T divisor) where T : INumberBase<T>
     {
         return left / divisor;
     }
@@ -1364,7 +1364,7 @@ public static partial class Vector5D
     /// <param name="value">A vector.</param>
     /// <returns>The absolute value vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Abs<T>(Vector5D<T> value) where T : INumberBase<T>
+    public static Vector5D<T> Abs<T>(in Vector5D<T> value) where T : INumberBase<T>
     {
         // NOTE: COMPLETELY UNTESTED. MIGHT BE SLOW.
         unsafe
@@ -1420,7 +1420,7 @@ public static partial class Vector5D
     /// <param name="max">The maximum value.</param>
     /// <returns>The restricted vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Clamp<T>(Vector5D<T> value1, Vector5D<T> min, Vector5D<T> max) where T : INumberBase<T>
+    public static Vector5D<T> Clamp<T>(in Vector5D<T> value1, in Vector5D<T> min, Vector5D<T> max) where T : INumberBase<T>
     {
         // NOTE: COMPLETELY UNTESTED. MIGHT BE SLOW.
         unsafe
@@ -1492,7 +1492,7 @@ public static partial class Vector5D
     /// <param name="value2">The second point.</param>
     /// <returns>The distance.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TReturn Distance<T, TReturn>(Vector5D<T> value1, Vector5D<T> value2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
+    public static TReturn Distance<T, TReturn>(in Vector5D<T> value1, in Vector5D<T> value2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
     {
         var distanceSquared = DistanceSquared<T, TReturn>(value1, value2);
         return TReturn.Sqrt(distanceSquared);
@@ -1503,7 +1503,7 @@ public static partial class Vector5D
     /// <param name="value2">The second point.</param>
     /// <returns>The distance squared.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static T DistanceSquared<T>(Vector5D<T> value1, Vector5D<T> value2) where T : INumberBase<T>
+    public static T DistanceSquared<T>(in Vector5D<T> value1, in Vector5D<T> value2) where T : INumberBase<T>
     {
         var difference = value1 - value2;
         return Dot(difference, difference);
@@ -1514,7 +1514,7 @@ public static partial class Vector5D
     /// <param name="value2">The second point.</param>
     /// <returns>The distance squared.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TReturn DistanceSquared<T, TReturn>(Vector5D<T> value1, Vector5D<T> value2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
+    public static TReturn DistanceSquared<T, TReturn>(in Vector5D<T> value1, in Vector5D<T> value2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
     {
         var difference = value1 - value2;
         return Dot<T, TReturn>(difference, difference);
@@ -1525,7 +1525,7 @@ public static partial class Vector5D
     /// <param name="vector2">The second vector.</param>
     /// <returns>The dot product.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static T Dot<T>(Vector5D<T> vector1, Vector5D<T> vector2) where T : INumberBase<T>
+    public static T Dot<T>(in Vector5D<T> vector1, in Vector5D<T> vector2) where T : INumberBase<T>
     {
         // TODO: vectorize return scalar
         return
@@ -1541,7 +1541,7 @@ public static partial class Vector5D
     /// <param name="vector2">The second vector.</param>
     /// <returns>The dot product.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TReturn Dot<T, TReturn>(Vector5D<T> vector1, Vector5D<T> vector2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
+    public static TReturn Dot<T, TReturn>(in Vector5D<T> vector1, in Vector5D<T> vector2) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
     {
         // TODO vectorize return converted (maybe not possible)
         return
@@ -1558,26 +1558,26 @@ public static partial class Vector5D
     /// <param name="amount">A value between 0 and 1 that indicates the weight of <paramref name="value2" />.</param>
     /// <returns>The interpolated vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<TFloat> Lerp<T, TFloat>(Vector5D<T> value1, Vector5D<T> value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    public static Vector5D<TFloat> Lerp<T, TFloat>(in Vector5D<T> value1, in Vector5D<T> value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         return (value1.As<TFloat>() * (TFloat.One - amount)) + (value2.As<TFloat>() * amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static Vector5D<T> LerpUnchecked<T>(Vector5D<T> value1, Vector5D<T> value2, T amount) where T : INumberBase<T>
+    internal static Vector5D<T> LerpUnchecked<T>(in Vector5D<T> value1, in Vector5D<T> value2, T amount) where T : INumberBase<T>
     {
         return (value1.As<T>() * (T.One - amount)) + (value2.As<T>() * amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<TFloat> LerpClamped<T, TFloat>(Vector5D<T> value1, Vector5D<T> value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    public static Vector5D<TFloat> LerpClamped<T, TFloat>(in Vector5D<T> value1, in Vector5D<T> value2, TFloat amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         amount = TFloat.Clamp(amount, TFloat.Zero, TFloat.One);
         return Lerp(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static Vector5D<T> LerpClampedUnchecked<T>(Vector5D<T> value1, Vector5D<T> value2, T amount) where T : INumberBase<T>
+    internal static Vector5D<T> LerpClampedUnchecked<T>(in Vector5D<T> value1, in Vector5D<T> value2, T amount) where T : INumberBase<T>
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static T ClampT(T value, T min, T max)
@@ -1590,26 +1590,26 @@ public static partial class Vector5D
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<TFloat> Lerp<T, TFloat>(Vector5D<T> value1, Vector5D<T> value2, Vector5D<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    public static Vector5D<TFloat> Lerp<T, TFloat>(in Vector5D<T> value1, in Vector5D<T> value2, Vector5D<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         return (value1.As<TFloat>() * (Vector5D<TFloat>.One - amount)) + (value2.As<TFloat>() * amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static Vector5D<T> LerpUnchecked<T>(Vector5D<T> value1, Vector5D<T> value2, Vector5D<T> amount) where T : INumberBase<T>
+    internal static Vector5D<T> LerpUnchecked<T>(in Vector5D<T> value1, in Vector5D<T> value2, Vector5D<T> amount) where T : INumberBase<T>
     {
         return (value1.As<T>() * (Vector5D<T>.One - amount)) + (value2.As<T>() * amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<TFloat> LerpClamped<T, TFloat>(Vector5D<T> value1, Vector5D<T> value2, Vector5D<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
+    public static Vector5D<TFloat> LerpClamped<T, TFloat>(in Vector5D<T> value1, in Vector5D<T> value2, Vector5D<TFloat> amount) where T : INumberBase<T> where TFloat : INumberBase<TFloat>, IFloatingPoint<TFloat>
     {
         amount = Clamp(amount, Vector5D<TFloat>.Zero, Vector5D<TFloat>.One);
         return Lerp(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static Vector5D<T> LerpClampedUnchecked<T>(Vector5D<T> value1, Vector5D<T> value2, Vector5D<T> amount) where T : INumberBase<T>
+    internal static Vector5D<T> LerpClampedUnchecked<T>(in Vector5D<T> value1, in Vector5D<T> value2, Vector5D<T> amount) where T : INumberBase<T>
     {
         amount = Clamp(amount, Vector5D<T>.Zero, Vector5D<T>.One);
         return LerpUnchecked(value1, value2, amount);
@@ -1620,7 +1620,7 @@ public static partial class Vector5D
     /// <param name="value2">The second vector.</param>
     /// <returns>The maximized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Max<T>(Vector5D<T> value1, Vector5D<T> value2) where T : INumberBase<T>
+    public static Vector5D<T> Max<T>(in Vector5D<T> value1, in Vector5D<T> value2) where T : INumberBase<T>
     {
         return new Vector5D<T>(
             T.MaxMagnitudeNumber(value1.X, value2.X), 
@@ -1636,7 +1636,7 @@ public static partial class Vector5D
     /// <param name="value2">The second vector.</param>
     /// <returns>The minimized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Min<T>(Vector5D<T> value1, Vector5D<T> value2) where T : INumberBase<T>
+    public static Vector5D<T> Min<T>(in Vector5D<T> value1, in Vector5D<T> value2) where T : INumberBase<T>
     {
         return new Vector5D<T>(
         T.MinMagnitudeNumber(value1.X, value2.X), 
@@ -1651,7 +1651,7 @@ public static partial class Vector5D
     /// <param name="value">The vector to normalize.</param>
     /// <returns>The normalized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<TReturn> Normalize<T, TReturn>(Vector5D<T> value) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
+    public static Vector5D<TReturn> Normalize<T, TReturn>(in Vector5D<T> value) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
     {
         return value.As<TReturn>() / value.Length<T, TReturn>();
     }
@@ -1660,7 +1660,7 @@ public static partial class Vector5D
     /// <param name="value">The vector to normalize.</param>
     /// <returns>The normalized vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Normalize<T>(Vector5D<T> value) where T : INumberBase<T>, IRootFunctions<T>
+    public static Vector5D<T> Normalize<T>(in Vector5D<T> value) where T : INumberBase<T>, IRootFunctions<T>
     {
         return value / value.Length();
     }
@@ -1670,7 +1670,7 @@ public static partial class Vector5D
     /// <param name="normal">The normal of the surface being reflected off.</param>
     /// <returns>The reflected vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<TReturn> Reflect<T, TReturn>(Vector5D<T> vector, Vector5D<T> normal) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
+    public static Vector5D<TReturn> Reflect<T, TReturn>(in Vector5D<T> vector, in Vector5D<T> normal) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
     {
         var dot = Dot<T, TReturn>(vector, normal);
         return vector.As<TReturn>() - (NumericConstants<TReturn>.Two * (dot * normal.As<TReturn>()));
@@ -1680,7 +1680,7 @@ public static partial class Vector5D
     /// <param name="value">A vector.</param>
     /// <returns>The square root vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<TReturn> Sqrt<T, TReturn>(Vector5D<T> value) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
+    public static Vector5D<TReturn> Sqrt<T, TReturn>(in Vector5D<T> value) where T : INumberBase<T> where TReturn : INumberBase<TReturn>, IRootFunctions<TReturn>
     {
         return new Vector5D<TReturn>(
             TReturn.Sqrt(TReturn.CreateTruncating(value.X)), 
@@ -1698,9 +1698,9 @@ public static partial class Vector5D
     /// <param name="matrix">The transformation matrix.</param>
     /// <returns>The transformed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Transform<T>(Vector5D<T> position, Matrix4X4<T> matrix) where T : INumberBase<T>
+    public static Vector5D<T> Transform<T>(in Vector5D<T> position, Matrix4X4<T> matrix) where T : INumberBase<T>
     {
-        return (Vector5D<T>)Vector4D.Transform(position, matrix);
+        return (in Vector5D<T>)Vector4D.Transform(position, matrix);
     }
 
     /// <summary>Transforms a vector by the specified Quaternion rotation value.</summary>
@@ -1708,7 +1708,7 @@ public static partial class Vector5D
     /// <param name="rotation">The rotation to apply.</param>
     /// <returns>The transformed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<TReturn> Transform<T, TQuat, TReturn>(Vector5D<T> value, Quaternion<TQuat> rotation) where T : INumberBase<T> where TReturn : INumberBase<TReturn> where TQuat : ITrigonometricFunctions<TQuat>, IRootFunctions<TQuat>
+    public static Vector5D<TReturn> Transform<T, TQuat, TReturn>(in Vector5D<T> value, Quaternion<TQuat> rotation) where T : INumberBase<T> where TReturn : INumberBase<TReturn> where TQuat : ITrigonometricFunctions<TQuat>, IRootFunctions<TQuat>
     {
         var  = rotation.X + rotation.X;
         var  = rotation.Y + rotation.Y;
@@ -1753,7 +1753,7 @@ public static partial class Vector5D
     // /// <param name="matrix">The matrix.</param>
     // /// <returns>The transformed vector.</returns>
     // [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    // internal static Vector5D<T> TransformNormal<T>(Vector5D<T> normal, in Matrix4x4 matrix) where T : INumberBase<T>
+    // internal static Vector5D<T> TransformNormal<T>(in Vector5D<T> normal, in Matrix4x4 matrix) where T : INumberBase<T>
     // {
     //     var matrixX = new Vector4(matrix.M11, matrix.M12, matrix.M13, matrix.M14);
     //     var matrixY = new Vector4(matrix.M21, matrix.M22, matrix.M23, matrix.M24);
@@ -1768,7 +1768,7 @@ public static partial class Vector5D
     */
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Remainder<T>(this Vector5D<T> left, Vector5D<T> right) where T : INumberBase<T>, IModulusOperators<T, T, T>
+    public static Vector5D<T> Remainder<T>(this Vector5D<T> left, in Vector5D<T> right) where T : INumberBase<T>, IModulusOperators<T, T, T>
     {
         return new Vector5D<T>(
             left.X % right.X,
@@ -1819,25 +1819,25 @@ public static partial class Vector5D
     /// <param name="amount">A value between 0 and 1 that indicates the weight of <paramref name="value2" />.</param>
     /// <returns>The interpolated vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Lerp<T>(Vector5D<T> value1, Vector5D<T> value2, T amount) where T : INumberBase<T>, IFloatingPoint<T>
+    public static Vector5D<T> Lerp<T>(in Vector5D<T> value1, in Vector5D<T> value2, T amount) where T : INumberBase<T>, IFloatingPoint<T>
     {
         return Lerp<T, T>(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> LerpClamped<T>(Vector5D<T> value1, Vector5D<T> value2, T amount) where T : INumberBase<T>, IFloatingPoint<T>
+    public static Vector5D<T> LerpClamped<T>(in Vector5D<T> value1, in Vector5D<T> value2, T amount) where T : INumberBase<T>, IFloatingPoint<T>
     {
         return LerpClamped<T, T>(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Lerp<T>(Vector5D<T> value1, Vector5D<T> value2, Vector5D<T> amount) where T : INumberBase<T>, IFloatingPoint<T>
+    public static Vector5D<T> Lerp<T>(in Vector5D<T> value1, in Vector5D<T> value2, Vector5D<T> amount) where T : INumberBase<T>, IFloatingPoint<T>
     {
         return Lerp<T, T>(value1, value2, amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> LerpClamped<T>(Vector5D<T> value1, Vector5D<T> value2, Vector5D<T> amount) where T : INumberBase<T>, IFloatingPoint<T>
+    public static Vector5D<T> LerpClamped<T>(in Vector5D<T> value1, in Vector5D<T> value2, Vector5D<T> amount) where T : INumberBase<T>, IFloatingPoint<T>
     {
         return LerpClamped<T, T>(value1, value2, amount);
     }
@@ -1847,7 +1847,7 @@ public static partial class Vector5D
     /// <param name="normal">The normal of the surface being reflected off.</param>
     /// <returns>The reflected vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Reflect<T>(Vector5D<T> vector, Vector5D<T> normal) where T : IFloatingPoint<T>
+    public static Vector5D<T> Reflect<T>(in Vector5D<T> vector, in Vector5D<T> normal) where T : IFloatingPoint<T>
     {
         return Reflect<T, T>(vector, normal);
     }
@@ -1856,7 +1856,7 @@ public static partial class Vector5D
     /// <param name="value">A vector.</param>
     /// <returns>The square root vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Sqrt<T>(Vector5D<T> value) where T : IFloatingPoint<T>, IRootFunctions<T>
+    public static Vector5D<T> Sqrt<T>(in Vector5D<T> value) where T : IFloatingPoint<T>, IRootFunctions<T>
     {
         return Sqrt<T, T>(value);
     }
@@ -1868,7 +1868,7 @@ public static partial class Vector5D
     /// <param name="rotation">The rotation to apply.</param>
     /// <returns>The transformed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Transform<T>(Vector5D<T> value, Quaternion<T> rotation)
+    public static Vector5D<T> Transform<T>(in Vector5D<T> value, Quaternion<T> rotation)
         where T : IFloatingPoint<T>, ITrigonometricFunctions<T>, IRootFunctions<T>
     {
         return Transform<T, T, T>(value, rotation);
@@ -1880,7 +1880,7 @@ public static partial class Vector5D
     /// <param name="rotation">The rotation to apply.</param>
     /// <returns>The transformed vector.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector5D<T> Transform<T, TQuat>(Vector5D<T> value, Quaternion<TQuat> rotation)
+    public static Vector5D<T> Transform<T, TQuat>(in Vector5D<T> value, Quaternion<TQuat> rotation)
         where T : IFloatingPoint<T>
         where TQuat : ITrigonometricFunctions<TQuat>, IRootFunctions<TQuat>
     {
@@ -1890,31 +1890,31 @@ public static partial class Vector5D
     #endregion
 
     // Equivalent implementing IHyperbolicFunctions<System.Runtime.Intrinsics.Vector3>
-    public static Vector5D<T> Acosh<T>(Vector5D<T> x) where T : IHyperbolicFunctions<T> => new(T.Acosh(x.X), T.Acosh(x.Y), T.Acosh(x.Z), T.Acosh(x.W), T.Acosh(x.V));
-    public static Vector5D<T> Asinh<T>(Vector5D<T> x) where T : IHyperbolicFunctions<T> => new(T.Asinh(x.X), T.Asinh(x.Y), T.Asinh(x.Z), T.Asinh(x.W), T.Asinh(x.V));
-    public static Vector5D<T> Atanh<T>(Vector5D<T> x) where T : IHyperbolicFunctions<T> => new(T.Atanh(x.X), T.Atanh(x.Y), T.Atanh(x.Z), T.Atanh(x.W), T.Atanh(x.V));
-    public static Vector5D<T> Cosh<T>(Vector5D<T> x) where T : IHyperbolicFunctions<T> => new(T.Cosh(x.X), T.Cosh(x.Y), T.Cosh(x.Z), T.Cosh(x.W), T.Cosh(x.V));
-    public static Vector5D<T> Sinh<T>(Vector5D<T> x) where T : IHyperbolicFunctions<T> => new(T.Sinh(x.X), T.Sinh(x.Y), T.Sinh(x.Z), T.Sinh(x.W), T.Sinh(x.V));
-    public static Vector5D<T> Tanh<T>(Vector5D<T> x) where T : IHyperbolicFunctions<T> => new(T.Tanh(x.X), T.Tanh(x.Y), T.Tanh(x.Z), T.Tanh(x.W), T.Tanh(x.V));
+    public static Vector5D<T> Acosh<T>(in Vector5D<T> x) where T : IHyperbolicFunctions<T> => new(T.Acosh(x.X), T.Acosh(x.Y), T.Acosh(x.Z), T.Acosh(x.W), T.Acosh(x.V));
+    public static Vector5D<T> Asinh<T>(in Vector5D<T> x) where T : IHyperbolicFunctions<T> => new(T.Asinh(x.X), T.Asinh(x.Y), T.Asinh(x.Z), T.Asinh(x.W), T.Asinh(x.V));
+    public static Vector5D<T> Atanh<T>(in Vector5D<T> x) where T : IHyperbolicFunctions<T> => new(T.Atanh(x.X), T.Atanh(x.Y), T.Atanh(x.Z), T.Atanh(x.W), T.Atanh(x.V));
+    public static Vector5D<T> Cosh<T>(in Vector5D<T> x) where T : IHyperbolicFunctions<T> => new(T.Cosh(x.X), T.Cosh(x.Y), T.Cosh(x.Z), T.Cosh(x.W), T.Cosh(x.V));
+    public static Vector5D<T> Sinh<T>(in Vector5D<T> x) where T : IHyperbolicFunctions<T> => new(T.Sinh(x.X), T.Sinh(x.Y), T.Sinh(x.Z), T.Sinh(x.W), T.Sinh(x.V));
+    public static Vector5D<T> Tanh<T>(in Vector5D<T> x) where T : IHyperbolicFunctions<T> => new(T.Tanh(x.X), T.Tanh(x.Y), T.Tanh(x.Z), T.Tanh(x.W), T.Tanh(x.V));
 
     // Equivalent implementing ITrigonometricFunctions<System.Runtime.Intrinsics.Vector3>
-    public static Vector5D<T> Acos<T>(Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.Acos(x.X), T.Acos(x.Y), T.Acos(x.Z), T.Acos(x.W), T.Acos(x.V));
-    public static Vector5D<T> AcosPi<T>(Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.AcosPi(x.X), T.AcosPi(x.Y), T.AcosPi(x.Z), T.AcosPi(x.W), T.AcosPi(x.V));
-    public static Vector5D<T> Asin<T>(Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.Asin(x.X), T.Asin(x.Y), T.Asin(x.Z), T.Asin(x.W), T.Asin(x.V));
-    public static Vector5D<T> AsinPi<T>(Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.AsinPi(x.X), T.AsinPi(x.Y), T.AsinPi(x.Z), T.AsinPi(x.W), T.AsinPi(x.V));
-    public static Vector5D<T> Atan<T>(Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.Atan(x.X), T.Atan(x.Y), T.Atan(x.Z), T.Atan(x.W), T.Atan(x.V));
-    public static Vector5D<T> AtanPi<T>(Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.AtanPi(x.X), T.AtanPi(x.Y), T.AtanPi(x.Z), T.AtanPi(x.W), T.AtanPi(x.V));
-    public static Vector5D<T> Cos<T>(Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.Cos(x.X), T.Cos(x.Y), T.Cos(x.Z), T.Cos(x.W), T.Cos(x.V));
-    public static Vector5D<T> CosPi<T>(Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.CosPi(x.X), T.CosPi(x.Y), T.CosPi(x.Z), T.CosPi(x.W), T.CosPi(x.V));
-    public static Vector5D<T> DegreesToRadians<T>(Vector5D<T> degrees) where T : ITrigonometricFunctions<T> => new(T.DegreesToRadians(degrees.X), T.DegreesToRadians(degrees.Y), T.DegreesToRadians(degrees.Z), T.DegreesToRadians(degrees.W), T.DegreesToRadians(degrees.V));
-    public static Vector5D<T> RadiansToDegrees<T>(Vector5D<T> radians) where T : ITrigonometricFunctions<T> => new(T.RadiansToDegrees(radians.X), T.RadiansToDegrees(radians.Y), T.RadiansToDegrees(radians.Z), T.RadiansToDegrees(radians.W), T.RadiansToDegrees(radians.V));
-    public static Vector5D<T> Sin<T>(Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.Sin(x.X), T.Sin(x.Y), T.Sin(x.Z), T.Sin(x.W), T.Sin(x.V));
-    public static Vector5D<T> SinPi<T>(Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.SinPi(x.X), T.SinPi(x.Y), T.SinPi(x.Z), T.SinPi(x.W), T.SinPi(x.V));
-    public static Vector5D<T> Tan<T>(Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.Tan(x.X), T.Tan(x.Y), T.Tan(x.Z), T.Tan(x.W), T.Tan(x.V));
-    public static Vector5D<T> TanPi<T>(Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.TanPi(x.X), T.TanPi(x.Y), T.TanPi(x.Z), T.TanPi(x.W), T.TanPi(x.V));
+    public static Vector5D<T> Acos<T>(in Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.Acos(x.X), T.Acos(x.Y), T.Acos(x.Z), T.Acos(x.W), T.Acos(x.V));
+    public static Vector5D<T> AcosPi<T>(in Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.AcosPi(x.X), T.AcosPi(x.Y), T.AcosPi(x.Z), T.AcosPi(x.W), T.AcosPi(x.V));
+    public static Vector5D<T> Asin<T>(in Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.Asin(x.X), T.Asin(x.Y), T.Asin(x.Z), T.Asin(x.W), T.Asin(x.V));
+    public static Vector5D<T> AsinPi<T>(in Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.AsinPi(x.X), T.AsinPi(x.Y), T.AsinPi(x.Z), T.AsinPi(x.W), T.AsinPi(x.V));
+    public static Vector5D<T> Atan<T>(in Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.Atan(x.X), T.Atan(x.Y), T.Atan(x.Z), T.Atan(x.W), T.Atan(x.V));
+    public static Vector5D<T> AtanPi<T>(in Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.AtanPi(x.X), T.AtanPi(x.Y), T.AtanPi(x.Z), T.AtanPi(x.W), T.AtanPi(x.V));
+    public static Vector5D<T> Cos<T>(in Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.Cos(x.X), T.Cos(x.Y), T.Cos(x.Z), T.Cos(x.W), T.Cos(x.V));
+    public static Vector5D<T> CosPi<T>(in Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.CosPi(x.X), T.CosPi(x.Y), T.CosPi(x.Z), T.CosPi(x.W), T.CosPi(x.V));
+    public static Vector5D<T> DegreesToRadians<T>(in Vector5D<T> degrees) where T : ITrigonometricFunctions<T> => new(T.DegreesToRadians(degrees.X), T.DegreesToRadians(degrees.Y), T.DegreesToRadians(degrees.Z), T.DegreesToRadians(degrees.W), T.DegreesToRadians(degrees.V));
+    public static Vector5D<T> RadiansToDegrees<T>(in Vector5D<T> radians) where T : ITrigonometricFunctions<T> => new(T.RadiansToDegrees(radians.X), T.RadiansToDegrees(radians.Y), T.RadiansToDegrees(radians.Z), T.RadiansToDegrees(radians.W), T.RadiansToDegrees(radians.V));
+    public static Vector5D<T> Sin<T>(in Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.Sin(x.X), T.Sin(x.Y), T.Sin(x.Z), T.Sin(x.W), T.Sin(x.V));
+    public static Vector5D<T> SinPi<T>(in Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.SinPi(x.X), T.SinPi(x.Y), T.SinPi(x.Z), T.SinPi(x.W), T.SinPi(x.V));
+    public static Vector5D<T> Tan<T>(in Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.Tan(x.X), T.Tan(x.Y), T.Tan(x.Z), T.Tan(x.W), T.Tan(x.V));
+    public static Vector5D<T> TanPi<T>(in Vector5D<T> x) where T : ITrigonometricFunctions<T> => new(T.TanPi(x.X), T.TanPi(x.Y), T.TanPi(x.Z), T.TanPi(x.W), T.TanPi(x.V));
 
 
-    public static (Vector5D<T> Sin, Vector5D<T> Cos) SinCos<T>(Vector5D<T> x) where T : ITrigonometricFunctions<T>
+    public static (Vector5D<T> Sin, Vector5D<T> Cos) SinCos<T>(in Vector5D<T> x) where T : ITrigonometricFunctions<T>
     {
         var (sinX, cosX) = T.SinCos(x.X);
         var (sinY, cosY) = T.SinCos(x.Y);
@@ -1928,7 +1928,7 @@ public static partial class Vector5D
         );
     }
 
-    public static (Vector5D<T> SinPi, Vector5D<T> CosPi) SinCosPi<T>(Vector5D<T> x) where T : ITrigonometricFunctions<T>
+    public static (Vector5D<T> SinPi, Vector5D<T> CosPi) SinCosPi<T>(in Vector5D<T> x) where T : ITrigonometricFunctions<T>
     {
         var (sinX, cosX) = T.SinCosPi(x.X);
         var (sinY, cosY) = T.SinCosPi(x.Y);
@@ -1943,75 +1943,75 @@ public static partial class Vector5D
     }
 
     // Equivalent implementing ILogarithmicFunctions<System.Runtime.Intrinsics.Vector3>
-    public static Vector5D<T> Log<T>(Vector5D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log(x.X), T.Log(x.Y), T.Log(x.Z), T.Log(x.W), T.Log(x.V));
+    public static Vector5D<T> Log<T>(in Vector5D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log(x.X), T.Log(x.Y), T.Log(x.Z), T.Log(x.W), T.Log(x.V));
 
-    public static Vector5D<T> Log<T>(Vector5D<T> x, Vector5D<T> newBase) where T : ILogarithmicFunctions<T> => new(T.Log(x.X, newBase.X), T.Log(x.Y, newBase.Y), T.Log(x.Z, newBase.Z), T.Log(x.W, newBase.W), T.Log(x.V, newBase.V));
-    public static Vector5D<T> Log<T>(Vector5D<T> x, T newBase) where T : ILogarithmicFunctions<T> => new(T.Log(x.X, newBase), T.Log(x.Y, newBase), T.Log(x.Z, newBase), T.Log(x.W, newBase), T.Log(x.V, newBase));
-    public static Vector5D<T> LogP1<T>(Vector5D<T> x) where T : ILogarithmicFunctions<T> => Log(x + Vector5D<T>.One);
-    public static Vector5D<T> Log2<T>(Vector5D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log2(x.X), T.Log2(x.Y), T.Log2(x.Z), T.Log2(x.W), T.Log2(x.V));
-    public static Vector5D<T> Log2P1<T>(Vector5D<T> x) where T : ILogarithmicFunctions<T> => Log2(x + Vector5D<T>.One);
-    public static Vector5D<T> Log10<T>(Vector5D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log10(x.X), T.Log10(x.Y), T.Log10(x.Z), T.Log10(x.W), T.Log10(x.V));
-    public static Vector5D<T> Log10P1<T>(Vector5D<T> x) where T : ILogarithmicFunctions<T> => Log10(x + Vector5D<T>.One);
+    public static Vector5D<T> Log<T>(in Vector5D<T> x, in Vector5D<T> newBase) where T : ILogarithmicFunctions<T> => new(T.Log(x.X, newBase.X), T.Log(x.Y, newBase.Y), T.Log(x.Z, newBase.Z), T.Log(x.W, newBase.W), T.Log(x.V, newBase.V));
+    public static Vector5D<T> Log<T>(in Vector5D<T> x, T newBase) where T : ILogarithmicFunctions<T> => new(T.Log(x.X, newBase), T.Log(x.Y, newBase), T.Log(x.Z, newBase), T.Log(x.W, newBase), T.Log(x.V, newBase));
+    public static Vector5D<T> LogP1<T>(in Vector5D<T> x) where T : ILogarithmicFunctions<T> => Log(x + Vector5D<T>.One);
+    public static Vector5D<T> Log2<T>(in Vector5D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log2(x.X), T.Log2(x.Y), T.Log2(x.Z), T.Log2(x.W), T.Log2(x.V));
+    public static Vector5D<T> Log2P1<T>(in Vector5D<T> x) where T : ILogarithmicFunctions<T> => Log2(x + Vector5D<T>.One);
+    public static Vector5D<T> Log10<T>(in Vector5D<T> x) where T : ILogarithmicFunctions<T> => new(T.Log10(x.X), T.Log10(x.Y), T.Log10(x.Z), T.Log10(x.W), T.Log10(x.V));
+    public static Vector5D<T> Log10P1<T>(in Vector5D<T> x) where T : ILogarithmicFunctions<T> => Log10(x + Vector5D<T>.One);
 
     // Equivalent implementing IExponentialFunctions<System.Runtime.Intrinsics.Vector3>
-    public static Vector5D<T> Exp<T>(Vector5D<T> x) where T : IExponentialFunctions<T> => new(T.Exp(x.X), T.Exp(x.Y), T.Exp(x.Z), T.Exp(x.W), T.Exp(x.V));
-    public static Vector5D<T> ExpM1<T>(Vector5D<T> x) where T : IExponentialFunctions<T> => Exp(x) - Vector5D<T>.One;
-    public static Vector5D<T> Exp2<T>(Vector5D<T> x) where T : IExponentialFunctions<T> => new(T.Exp2(x.X), T.Exp2(x.Y), T.Exp2(x.Z), T.Exp2(x.W), T.Exp2(x.V));
-    public static Vector5D<T> Exp2M1<T>(Vector5D<T> x) where T : IExponentialFunctions<T> => Exp2(x) - Vector5D<T>.One;
-    public static Vector5D<T> Exp10<T>(Vector5D<T> x) where T : IExponentialFunctions<T> => new(T.Exp10(x.X), T.Exp10(x.Y), T.Exp10(x.Z), T.Exp10(x.W), T.Exp10(x.V));
-    public static Vector5D<T> Exp10M1<T>(Vector5D<T> x) where T : IExponentialFunctions<T> => Exp10(x) - Vector5D<T>.One;
+    public static Vector5D<T> Exp<T>(in Vector5D<T> x) where T : IExponentialFunctions<T> => new(T.Exp(x.X), T.Exp(x.Y), T.Exp(x.Z), T.Exp(x.W), T.Exp(x.V));
+    public static Vector5D<T> ExpM1<T>(in Vector5D<T> x) where T : IExponentialFunctions<T> => Exp(x) - Vector5D<T>.One;
+    public static Vector5D<T> Exp2<T>(in Vector5D<T> x) where T : IExponentialFunctions<T> => new(T.Exp2(x.X), T.Exp2(x.Y), T.Exp2(x.Z), T.Exp2(x.W), T.Exp2(x.V));
+    public static Vector5D<T> Exp2M1<T>(in Vector5D<T> x) where T : IExponentialFunctions<T> => Exp2(x) - Vector5D<T>.One;
+    public static Vector5D<T> Exp10<T>(in Vector5D<T> x) where T : IExponentialFunctions<T> => new(T.Exp10(x.X), T.Exp10(x.Y), T.Exp10(x.Z), T.Exp10(x.W), T.Exp10(x.V));
+    public static Vector5D<T> Exp10M1<T>(in Vector5D<T> x) where T : IExponentialFunctions<T> => Exp10(x) - Vector5D<T>.One;
 
     // Equivalent implementing IPowerFunctions<System.Runtime.Intrinsics.Vector3>
-    public static Vector5D<T> Pow<T>(Vector5D<T> x, Vector5D<T> y) where T : IPowerFunctions<T> => new(T.Pow(x.X, y.X), T.Pow(x.Y, y.Y), T.Pow(x.Z, y.Z), T.Pow(x.W, y.W), T.Pow(x.V, y.V));
-    public static Vector5D<T> Pow<T>(Vector5D<T> x, T y) where T : IPowerFunctions<T> => new(T.Pow(x.X, y), T.Pow(x.Y, y), T.Pow(x.Z, y), T.Pow(x.W, y), T.Pow(x.V, y));
+    public static Vector5D<T> Pow<T>(in Vector5D<T> x, in Vector5D<T> y) where T : IPowerFunctions<T> => new(T.Pow(x.X, y.X), T.Pow(x.Y, y.Y), T.Pow(x.Z, y.Z), T.Pow(x.W, y.W), T.Pow(x.V, y.V));
+    public static Vector5D<T> Pow<T>(in Vector5D<T> x, T y) where T : IPowerFunctions<T> => new(T.Pow(x.X, y), T.Pow(x.Y, y), T.Pow(x.Z, y), T.Pow(x.W, y), T.Pow(x.V, y));
 
     // Equivalent implementing IRootFunctions<System.Runtime.Intrinsics.Vector3>
-    public static Vector5D<T> Cbrt<T>(Vector5D<T> x) where T : IRootFunctions<T> => new(T.Cbrt(x.X), T.Cbrt(x.Y), T.Cbrt(x.Z), T.Cbrt(x.W), T.Cbrt(x.V));
-    public static Vector5D<T> Hypot<T>(Vector5D<T> x, Vector5D<T> y) where T : IRootFunctions<T> => new(T.Hypot(x.X, y.X), T.Hypot(x.Y, y.Y), T.Hypot(x.Z, y.Z), T.Hypot(x.W, y.W), T.Hypot(x.V, y.V));
-    public static Vector5D<T> Hypot<T>(Vector5D<T> x, T y) where T : IRootFunctions<T> => new(T.Hypot(x.X, y), T.Hypot(x.Y, y), T.Hypot(x.Z, y), T.Hypot(x.W, y), T.Hypot(x.V, y));
-    public static Vector5D<T> RootN<T>(Vector5D<T> x, int n) where T : IRootFunctions<T> => new(T.RootN(x.X, n), T.RootN(x.Y, n), T.RootN(x.Z, n), T.RootN(x.W, n), T.RootN(x.V, n));
+    public static Vector5D<T> Cbrt<T>(in Vector5D<T> x) where T : IRootFunctions<T> => new(T.Cbrt(x.X), T.Cbrt(x.Y), T.Cbrt(x.Z), T.Cbrt(x.W), T.Cbrt(x.V));
+    public static Vector5D<T> Hypot<T>(in Vector5D<T> x, in Vector5D<T> y) where T : IRootFunctions<T> => new(T.Hypot(x.X, y.X), T.Hypot(x.Y, y.Y), T.Hypot(x.Z, y.Z), T.Hypot(x.W, y.W), T.Hypot(x.V, y.V));
+    public static Vector5D<T> Hypot<T>(in Vector5D<T> x, T y) where T : IRootFunctions<T> => new(T.Hypot(x.X, y), T.Hypot(x.Y, y), T.Hypot(x.Z, y), T.Hypot(x.W, y), T.Hypot(x.V, y));
+    public static Vector5D<T> RootN<T>(in Vector5D<T> x, int n) where T : IRootFunctions<T> => new(T.RootN(x.X, n), T.RootN(x.Y, n), T.RootN(x.Z, n), T.RootN(x.W, n), T.RootN(x.V, n));
 
     // IFloatingPoint<TSelf>
-    public static Vector5D<T> Round<T>(Vector5D<T> x) where T : IFloatingPoint<T> => new(T.Round(x.X), T.Round(x.Y), T.Round(x.Z), T.Round(x.W), T.Round(x.V));
-    public static Vector5D<T> Round<T>(Vector5D<T> x, int digits) where T : IFloatingPoint<T> => new(T.Round(x.X, digits), T.Round(x.Y, digits), T.Round(x.Z, digits), T.Round(x.W, digits), T.Round(x.V, digits));
-    public static Vector5D<T> Round<T>(Vector5D<T> x, MidpointRounding mode) where T : IFloatingPoint<T> => new(T.Round(x.X, mode), T.Round(x.Y, mode), T.Round(x.Z, mode), T.Round(x.W, mode), T.Round(x.V, mode));
-    public static Vector5D<T> Round<T>(Vector5D<T> x, int digits, MidpointRounding mode) where T : IFloatingPoint<T> => new(T.Round(x.X, digits, mode), T.Round(x.Y, digits, mode), T.Round(x.Z, digits, mode), T.Round(x.W, digits, mode), T.Round(x.V, digits, mode));
-    public static Vector5D<T> Truncate<T>(Vector5D<T> x) where T : IFloatingPoint<T> => new(T.Truncate(x.X), T.Truncate(x.Y), T.Truncate(x.Z), T.Truncate(x.W), T.Truncate(x.V));
+    public static Vector5D<T> Round<T>(in Vector5D<T> x) where T : IFloatingPoint<T> => new(T.Round(x.X), T.Round(x.Y), T.Round(x.Z), T.Round(x.W), T.Round(x.V));
+    public static Vector5D<T> Round<T>(in Vector5D<T> x, int digits) where T : IFloatingPoint<T> => new(T.Round(x.X, digits), T.Round(x.Y, digits), T.Round(x.Z, digits), T.Round(x.W, digits), T.Round(x.V, digits));
+    public static Vector5D<T> Round<T>(in Vector5D<T> x, MidpointRounding mode) where T : IFloatingPoint<T> => new(T.Round(x.X, mode), T.Round(x.Y, mode), T.Round(x.Z, mode), T.Round(x.W, mode), T.Round(x.V, mode));
+    public static Vector5D<T> Round<T>(in Vector5D<T> x, int digits, MidpointRounding mode) where T : IFloatingPoint<T> => new(T.Round(x.X, digits, mode), T.Round(x.Y, digits, mode), T.Round(x.Z, digits, mode), T.Round(x.W, digits, mode), T.Round(x.V, digits, mode));
+    public static Vector5D<T> Truncate<T>(in Vector5D<T> x) where T : IFloatingPoint<T> => new(T.Truncate(x.X), T.Truncate(x.Y), T.Truncate(x.Z), T.Truncate(x.W), T.Truncate(x.V));
 
     // IFloatingPointIeee754<TSelf>
-    public static Vector5D<T> Atan2<T>(Vector5D<T> x, Vector5D<T> y) where T : IFloatingPointIeee754<T> => new(T.Atan2(x.X, y.X), T.Atan2(x.Y, y.Y), T.Atan2(x.Z, y.Z), T.Atan2(x.W, y.W), T.Atan2(x.V, y.V));
-    public static Vector5D<T> Atan2Pi<T>(Vector5D<T> x, Vector5D<T> y) where T : IFloatingPointIeee754<T> => new(T.Atan2Pi(x.X, y.X), T.Atan2Pi(x.Y, y.Y), T.Atan2Pi(x.Z, y.Z), T.Atan2Pi(x.W, y.W), T.Atan2Pi(x.V, y.V));
-    public static Vector5D<T> Atan2<T>(Vector5D<T> x, T y) where T : IFloatingPointIeee754<T> => new(T.Atan2(x.X, y), T.Atan2(x.Y, y), T.Atan2(x.Z, y), T.Atan2(x.W, y), T.Atan2(x.V, y));
-    public static Vector5D<T> Atan2Pi<T>(Vector5D<T> x, T y) where T : IFloatingPointIeee754<T> => new(T.Atan2Pi(x.X, y), T.Atan2Pi(x.Y, y), T.Atan2Pi(x.Z, y), T.Atan2Pi(x.W, y), T.Atan2Pi(x.V, y));
-    public static Vector5D<T> BitDecrement<T>(Vector5D<T> x) where T : IFloatingPointIeee754<T> => new(T.BitDecrement(x.X), T.BitDecrement(x.Y), T.BitDecrement(x.Z), T.BitDecrement(x.W), T.BitDecrement(x.V));
-    public static Vector5D<T> BitIncrement<T>(Vector5D<T> x) where T : IFloatingPointIeee754<T> => new(T.BitIncrement(x.X), T.BitIncrement(x.Y), T.BitIncrement(x.Z), T.BitIncrement(x.W), T.BitIncrement(x.V));
+    public static Vector5D<T> Atan2<T>(in Vector5D<T> x, in Vector5D<T> y) where T : IFloatingPointIeee754<T> => new(T.Atan2(x.X, y.X), T.Atan2(x.Y, y.Y), T.Atan2(x.Z, y.Z), T.Atan2(x.W, y.W), T.Atan2(x.V, y.V));
+    public static Vector5D<T> Atan2Pi<T>(in Vector5D<T> x, in Vector5D<T> y) where T : IFloatingPointIeee754<T> => new(T.Atan2Pi(x.X, y.X), T.Atan2Pi(x.Y, y.Y), T.Atan2Pi(x.Z, y.Z), T.Atan2Pi(x.W, y.W), T.Atan2Pi(x.V, y.V));
+    public static Vector5D<T> Atan2<T>(in Vector5D<T> x, T y) where T : IFloatingPointIeee754<T> => new(T.Atan2(x.X, y), T.Atan2(x.Y, y), T.Atan2(x.Z, y), T.Atan2(x.W, y), T.Atan2(x.V, y));
+    public static Vector5D<T> Atan2Pi<T>(in Vector5D<T> x, T y) where T : IFloatingPointIeee754<T> => new(T.Atan2Pi(x.X, y), T.Atan2Pi(x.Y, y), T.Atan2Pi(x.Z, y), T.Atan2Pi(x.W, y), T.Atan2Pi(x.V, y));
+    public static Vector5D<T> BitDecrement<T>(in Vector5D<T> x) where T : IFloatingPointIeee754<T> => new(T.BitDecrement(x.X), T.BitDecrement(x.Y), T.BitDecrement(x.Z), T.BitDecrement(x.W), T.BitDecrement(x.V));
+    public static Vector5D<T> BitIncrement<T>(in Vector5D<T> x) where T : IFloatingPointIeee754<T> => new(T.BitIncrement(x.X), T.BitIncrement(x.Y), T.BitIncrement(x.Z), T.BitIncrement(x.W), T.BitIncrement(x.V));
 
-    public static Vector5D<T> FusedMultiplyAdd<T>(Vector5D<T> left, Vector5D<T> right, Vector5D<T> addend) where T : IFloatingPointIeee754<T> => new(T.FusedMultiplyAdd(left.X, right.X, addend.X), T.FusedMultiplyAdd(left.Y, right.Y, addend.Y), T.FusedMultiplyAdd(left.Z, right.Z, addend.Z), T.FusedMultiplyAdd(left.W, right.W, addend.W), T.FusedMultiplyAdd(left.V, right.V, addend.V));
-    public static Vector5D<T> ReciprocalEstimate<T>(Vector5D<T> x) where T : IFloatingPointIeee754<T> => new(T.ReciprocalEstimate(x.X), T.ReciprocalEstimate(x.Y), T.ReciprocalEstimate(x.Z), T.ReciprocalEstimate(x.W), T.ReciprocalEstimate(x.V));
-    public static Vector5D<T> ReciprocalSqrtEstimate<T>(Vector5D<T> x) where T : IFloatingPointIeee754<T> => new(T.ReciprocalSqrtEstimate(x.X), T.ReciprocalSqrtEstimate(x.Y), T.ReciprocalSqrtEstimate(x.Z), T.ReciprocalSqrtEstimate(x.W), T.ReciprocalSqrtEstimate(x.V));
+    public static Vector5D<T> FusedMultiplyAdd<T>(in Vector5D<T> left, in Vector5D<T> right, Vector5D<T> addend) where T : IFloatingPointIeee754<T> => new(T.FusedMultiplyAdd(left.X, right.X, addend.X), T.FusedMultiplyAdd(left.Y, right.Y, addend.Y), T.FusedMultiplyAdd(left.Z, right.Z, addend.Z), T.FusedMultiplyAdd(left.W, right.W, addend.W), T.FusedMultiplyAdd(left.V, right.V, addend.V));
+    public static Vector5D<T> ReciprocalEstimate<T>(in Vector5D<T> x) where T : IFloatingPointIeee754<T> => new(T.ReciprocalEstimate(x.X), T.ReciprocalEstimate(x.Y), T.ReciprocalEstimate(x.Z), T.ReciprocalEstimate(x.W), T.ReciprocalEstimate(x.V));
+    public static Vector5D<T> ReciprocalSqrtEstimate<T>(in Vector5D<T> x) where T : IFloatingPointIeee754<T> => new(T.ReciprocalSqrtEstimate(x.X), T.ReciprocalSqrtEstimate(x.Y), T.ReciprocalSqrtEstimate(x.Z), T.ReciprocalSqrtEstimate(x.W), T.ReciprocalSqrtEstimate(x.V));
 
     // INumber<T>
-    // public static Vector5D<T> Clamp<T>(Vector5D<T> value, Vector5D<T> min, Vector5D<T> max) where T : INumber<T> => new(T.Clamp(x.X), T.Clamp(x.Y), T.Clamp(x.Z), T.Clamp(x.W), T.Clamp(x.V));
-    public static Vector5D<T> CopySign<T>(Vector5D<T> value, Vector5D<T> sign) where T : INumber<T> => new(T.CopySign(value.X, sign.X), T.CopySign(value.Y, sign.Y), T.CopySign(value.Z, sign.Z), T.CopySign(value.W, sign.W), T.CopySign(value.V, sign.V));
-    public static Vector5D<T> CopySign<T>(Vector5D<T> value, T sign) where T : INumber<T> => new(T.CopySign(value.X, sign), T.CopySign(value.Y, sign), T.CopySign(value.Z, sign), T.CopySign(value.W, sign), T.CopySign(value.V, sign));
-    public static Vector5D<T> MaxNumber<T>(Vector5D<T> x, Vector5D<T> y) where T : INumber<T> => new(T.MaxNumber(x.X, y.X), T.MaxNumber(x.Y, y.Y), T.MaxNumber(x.Z, y.Z), T.MaxNumber(x.W, y.W), T.MaxNumber(x.V, y.V));
-    public static Vector5D<T> MinNumber<T>(Vector5D<T> x, Vector5D<T> y) where T : INumber<T> => new(T.MinNumber(x.X, y.X), T.MinNumber(x.Y, y.Y), T.MinNumber(x.Z, y.Z), T.MinNumber(x.W, y.W), T.MinNumber(x.V, y.V));
+    // public static Vector5D<T> Clamp<T>(in Vector5D<T> value, in Vector5D<T> min, Vector5D<T> max) where T : INumber<T> => new(T.Clamp(x.X), T.Clamp(x.Y), T.Clamp(x.Z), T.Clamp(x.W), T.Clamp(x.V));
+    public static Vector5D<T> CopySign<T>(in Vector5D<T> value, in Vector5D<T> sign) where T : INumber<T> => new(T.CopySign(value.X, sign.X), T.CopySign(value.Y, sign.Y), T.CopySign(value.Z, sign.Z), T.CopySign(value.W, sign.W), T.CopySign(value.V, sign.V));
+    public static Vector5D<T> CopySign<T>(in Vector5D<T> value, T sign) where T : INumber<T> => new(T.CopySign(value.X, sign), T.CopySign(value.Y, sign), T.CopySign(value.Z, sign), T.CopySign(value.W, sign), T.CopySign(value.V, sign));
+    public static Vector5D<T> MaxNumber<T>(in Vector5D<T> x, in Vector5D<T> y) where T : INumber<T> => new(T.MaxNumber(x.X, y.X), T.MaxNumber(x.Y, y.Y), T.MaxNumber(x.Z, y.Z), T.MaxNumber(x.W, y.W), T.MaxNumber(x.V, y.V));
+    public static Vector5D<T> MinNumber<T>(in Vector5D<T> x, in Vector5D<T> y) where T : INumber<T> => new(T.MinNumber(x.X, y.X), T.MinNumber(x.Y, y.Y), T.MinNumber(x.Z, y.Z), T.MinNumber(x.W, y.W), T.MinNumber(x.V, y.V));
 
     // INumberBase<T>
-    // public static Vector5D<T> MaxMagnitude<T>(Vector5D<T> x, Vector5D<T> y) where T : INumberBase<T> => new(T.MaxMagnitude(x.X, y.X), T.MaxMagnitude(x.Y, y.Y), T.MaxMagnitude(x.Z, y.Z), T.MaxMagnitude(x.W, y.W), T.MaxMagnitude(x.V, y.V));
-    // public static Vector5D<T> MaxMagnitudeNumber<T>(Vector5D<T> x, Vector5D<T> y) where T : INumberBase<T> => new(T.MaxMagnitudeNumber(x.X, y.X), T.MaxMagnitudeNumber(x.Y, y.Y), T.MaxMagnitudeNumber(x.Z, y.Z), T.MaxMagnitudeNumber(x.W, y.W), T.MaxMagnitudeNumber(x.V, y.V));
-    // public static Vector5D<T> MinMagnitude<T>(Vector5D<T> x, Vector5D<T> y) where T : INumberBase<T> => new(T.MinMagnitude(x.X, y.X), T.MinMagnitude(x.Y, y.Y), T.MinMagnitude(x.Z, y.Z), T.MinMagnitude(x.W, y.W), T.MinMagnitude(x.V, y.V));
-    // public static Vector5D<T> MinMagnitudeNumber<T>(Vector5D<T> x, Vector5D<T> y) where T : INumberBase<T> => new(T.MinMagnitudeNumber(x.X, y.X), T.MinMagnitudeNumber(x.Y, y.Y), T.MinMagnitudeNumber(x.Z, y.Z), T.MinMagnitudeNumber(x.W, y.W), T.MinMagnitudeNumber(x.V, y.V));
+    // public static Vector5D<T> MaxMagnitude<T>(in Vector5D<T> x, in Vector5D<T> y) where T : INumberBase<T> => new(T.MaxMagnitude(x.X, y.X), T.MaxMagnitude(x.Y, y.Y), T.MaxMagnitude(x.Z, y.Z), T.MaxMagnitude(x.W, y.W), T.MaxMagnitude(x.V, y.V));
+    // public static Vector5D<T> MaxMagnitudeNumber<T>(in Vector5D<T> x, in Vector5D<T> y) where T : INumberBase<T> => new(T.MaxMagnitudeNumber(x.X, y.X), T.MaxMagnitudeNumber(x.Y, y.Y), T.MaxMagnitudeNumber(x.Z, y.Z), T.MaxMagnitudeNumber(x.W, y.W), T.MaxMagnitudeNumber(x.V, y.V));
+    // public static Vector5D<T> MinMagnitude<T>(in Vector5D<T> x, in Vector5D<T> y) where T : INumberBase<T> => new(T.MinMagnitude(x.X, y.X), T.MinMagnitude(x.Y, y.Y), T.MinMagnitude(x.Z, y.Z), T.MinMagnitude(x.W, y.W), T.MinMagnitude(x.V, y.V));
+    // public static Vector5D<T> MinMagnitudeNumber<T>(in Vector5D<T> x, in Vector5D<T> y) where T : INumberBase<T> => new(T.MinMagnitudeNumber(x.X, y.X), T.MinMagnitudeNumber(x.Y, y.Y), T.MinMagnitudeNumber(x.Z, y.Z), T.MinMagnitudeNumber(x.W, y.W), T.MinMagnitudeNumber(x.V, y.V));
     // (there's no reason you would want these.)
 
 
 
     // IFloatingPointIeee754<TSelf>
-    public static Vector5D<int> ILogB<T>(Vector5D<T> x) where T : IFloatingPointIeee754<T> => new(T.ILogB(x.X), T.ILogB(x.Y), T.ILogB(x.Z), T.ILogB(x.W), T.ILogB(x.V));
-    public static Vector5D<T> ScaleB<T>(Vector5D<T> x, Vector5D<int> n) where T : IFloatingPointIeee754<T> => new(T.ScaleB(x.X, n.X), T.ScaleB(x.Y, n.Y), T.ScaleB(x.Z, n.Z), T.ScaleB(x.W, n.W), T.ScaleB(x.V, n.V));
-    public static Vector5D<T> ScaleB<T>(Vector5D<T> x, int n) where T : IFloatingPointIeee754<T> => new(T.ScaleB(x.X, n), T.ScaleB(x.Y, n), T.ScaleB(x.Z, n), T.ScaleB(x.W, n), T.ScaleB(x.V, n));
+    public static Vector5D<int> ILogB<T>(in Vector5D<T> x) where T : IFloatingPointIeee754<T> => new(T.ILogB(x.X), T.ILogB(x.Y), T.ILogB(x.Z), T.ILogB(x.W), T.ILogB(x.V));
+    public static Vector5D<T> ScaleB<T>(in Vector5D<T> x, Vector5D<int> n) where T : IFloatingPointIeee754<T> => new(T.ScaleB(x.X, n.X), T.ScaleB(x.Y, n.Y), T.ScaleB(x.Z, n.Z), T.ScaleB(x.W, n.W), T.ScaleB(x.V, n.V));
+    public static Vector5D<T> ScaleB<T>(in Vector5D<T> x, int n) where T : IFloatingPointIeee754<T> => new(T.ScaleB(x.X, n), T.ScaleB(x.Y, n), T.ScaleB(x.Z, n), T.ScaleB(x.W, n), T.ScaleB(x.V, n));
 
-    public static Vector5D<int> RoundToInt<T>(Vector5D<T> vector) where T : IFloatingPoint<T>
+    public static Vector5D<int> RoundToInt<T>(in Vector5D<T> vector) where T : IFloatingPoint<T>
     {
         return new Vector5D<int>(
             int.CreateSaturating(T.Round(vector.X)),
@@ -2022,7 +2022,7 @@ public static partial class Vector5D
         );
     }
 
-    public static Vector5D<int> FloorToInt<T>(Vector5D<T> vector) where T : IFloatingPoint<T>
+    public static Vector5D<int> FloorToInt<T>(in Vector5D<T> vector) where T : IFloatingPoint<T>
     {
         return new Vector5D<int>(
             int.CreateSaturating(T.Floor(vector.X)),
@@ -2033,7 +2033,7 @@ public static partial class Vector5D
         );
     }
 
-    public static Vector5D<int> CeilingToInt<T>(Vector5D<T> vector) where T : IFloatingPoint<T>
+    public static Vector5D<int> CeilingToInt<T>(in Vector5D<T> vector) where T : IFloatingPoint<T>
     {
         return new Vector5D<int>(
             int.CreateSaturating(T.Ceiling(vector.X)),
@@ -2044,7 +2044,7 @@ public static partial class Vector5D
         );
     }
 
-    public static Vector5D<TInt> RoundToInt<T, TInt>(Vector5D<T> vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
+    public static Vector5D<TInt> RoundToInt<T, TInt>(in Vector5D<T> vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
     {
         return new Vector5D<TInt>(
             TInt.CreateSaturating(T.Round(vector.X)),
@@ -2055,7 +2055,7 @@ public static partial class Vector5D
         );
     }
 
-    public static Vector5D<TInt> FloorToInt<T, TInt>(Vector5D<T> vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
+    public static Vector5D<TInt> FloorToInt<T, TInt>(in Vector5D<T> vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
     {
         return new Vector5D<TInt>(
             TInt.CreateSaturating(T.Floor(vector.X)),
@@ -2066,7 +2066,7 @@ public static partial class Vector5D
         );
     }
 
-    public static Vector5D<TInt> CeilingToInt<T, TInt>(Vector5D<T> vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
+    public static Vector5D<TInt> CeilingToInt<T, TInt>(in Vector5D<T> vector) where T : IFloatingPoint<T> where TInt : IBinaryInteger<TInt>
     {
         return new Vector5D<TInt>(
             TInt.CreateSaturating(T.Ceiling(vector.X)),
@@ -2084,64 +2084,64 @@ public readonly partial struct Vector5D<T>
 {
     T IVector<Vector5D<T>, T>.LengthSquared()
         => this.LengthSquared();
-    static Vector5D<T> IVector<Vector5D<T>, T>.Multiply(Vector5D<T> left, Vector5D<T> right)
+    static Vector5D<T> IVector<Vector5D<T>, T>.Multiply(in Vector5D<T> left, in Vector5D<T> right)
         => Vector5D.Multiply(left, right);
-    static Vector5D<T> IVector<Vector5D<T>, T>.Multiply(Vector5D<T> left, T right)
+    static Vector5D<T> IVector<Vector5D<T>, T>.Multiply(in Vector5D<T> left, T right)
         => Vector5D.Multiply(left, right);
-    static Vector5D<T> IVector<Vector5D<T>, T>.Multiply(T left, Vector5D<T> right)
+    static Vector5D<T> IVector<Vector5D<T>, T>.Multiply(T left, in Vector5D<T> right)
         => Vector5D.Multiply(left, right);
-    static Vector5D<T> IVector<Vector5D<T>, T>.Negate(Vector5D<T> value)
+    static Vector5D<T> IVector<Vector5D<T>, T>.Negate(in Vector5D<T> value)
         => Vector5D.Negate(value);
-    static Vector5D<T> IVector<Vector5D<T>, T>.Subtract(Vector5D<T> left, Vector5D<T> right)
+    static Vector5D<T> IVector<Vector5D<T>, T>.Subtract(in Vector5D<T> left, in Vector5D<T> right)
         => Vector5D.Subtract(left, right);
-    static Vector5D<T> IVector<Vector5D<T>, T>.Add(Vector5D<T> left, Vector5D<T> right)
+    static Vector5D<T> IVector<Vector5D<T>, T>.Add(in Vector5D<T> left, in Vector5D<T> right)
         => Vector5D.Add(left, right);
-    static Vector5D<T> IVector<Vector5D<T>, T>.Divide(Vector5D<T> left, Vector5D<T> right)
+    static Vector5D<T> IVector<Vector5D<T>, T>.Divide(in Vector5D<T> left, in Vector5D<T> right)
         => Vector5D.Divide(left, right);
-    static Vector5D<T> IVector<Vector5D<T>, T>.Divide(Vector5D<T> left, T divisor)
+    static Vector5D<T> IVector<Vector5D<T>, T>.Divide(in Vector5D<T> left, T divisor)
         => Vector5D.Divide(left, divisor);
-    static Vector5D<T> IVector<Vector5D<T>, T>.Clamp(Vector5D<T> value1, Vector5D<T> min, Vector5D<T> max)
+    static Vector5D<T> IVector<Vector5D<T>, T>.Clamp(in Vector5D<T> value1, in Vector5D<T> min, in Vector5D<T> max)
         => Vector5D.Clamp(value1, min, max);
-    static TReturn IVector<Vector5D<T>, T>.Distance<TReturn>(Vector5D<T> value1, Vector5D<T> value2)
+    static TReturn IVector<Vector5D<T>, T>.Distance<TReturn>(in Vector5D<T> value1, in Vector5D<T> value2)
         => Vector5D.Distance<T, TReturn>(value1, value2);
-    static T IVector<Vector5D<T>, T>.DistanceSquared(Vector5D<T> value1, Vector5D<T> value2)
+    static T IVector<Vector5D<T>, T>.DistanceSquared(in Vector5D<T> value1, in Vector5D<T> value2)
         => Vector5D.DistanceSquared(value1, value2);
-    static TReturn IVector<Vector5D<T>, T>.DistanceSquared<TReturn>(Vector5D<T> value1, Vector5D<T> value2)
+    static TReturn IVector<Vector5D<T>, T>.DistanceSquared<TReturn>(in Vector5D<T> value1, in Vector5D<T> value2)
         => Vector5D.DistanceSquared<T, TReturn>(value1, value2);
-    static T IVector<Vector5D<T>, T>.Dot(Vector5D<T> vector1, Vector5D<T> vector2)
+    static T IVector<Vector5D<T>, T>.Dot(in Vector5D<T> vector1, in Vector5D<T> vector2)
         => Vector5D.Dot(vector1, vector2);
-    static TReturn IVector<Vector5D<T>, T>.Dot<TReturn>(Vector5D<T> vector1, Vector5D<T> vector2)
+    static TReturn IVector<Vector5D<T>, T>.Dot<TReturn>(in Vector5D<T> vector1, in Vector5D<T> vector2)
         => Vector5D.Dot<T, TReturn>(vector1, vector2);
-    static Vector5D<T> IVector<Vector5D<T>, T>.Max(Vector5D<T> value1, Vector5D<T> value2)
+    static Vector5D<T> IVector<Vector5D<T>, T>.Max(in Vector5D<T> value1, in Vector5D<T> value2)
         => Vector5D.Max(value1, value2);
-    static Vector5D<T> IVector<Vector5D<T>, T>.Min(Vector5D<T> value1, Vector5D<T> value2)
+    static Vector5D<T> IVector<Vector5D<T>, T>.Min(in Vector5D<T> value1, in Vector5D<T> value2)
         => Vector5D.Min(value1, value2);
 
-    static Vector5D<T> IVector<Vector5D<T>, T>.Lerp(Vector5D<T> value1, Vector5D<T> value2, T amount) /* where T : IFloatingPoint<T> */
+    static Vector5D<T> IVector<Vector5D<T>, T>.Lerp(in Vector5D<T> value1, in Vector5D<T> value2, T amount) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<Vector5D<T>, T>(typeof(IFloatingPoint<>));
         return Vector5D.LerpUnchecked(value1, value2, amount);
     }
 
-    static Vector5D<T> IVector<Vector5D<T>, T>.LerpClamped(Vector5D<T> value1, Vector5D<T> value2, T amount) /* where T : IFloatingPoint<T> */
+    static Vector5D<T> IVector<Vector5D<T>, T>.LerpClamped(in Vector5D<T> value1, in Vector5D<T> value2, T amount) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<Vector5D<T>, T>(typeof(IFloatingPoint<>));
         return Vector5D.LerpClampedUnchecked(value1, value2, amount);
     }
 
-    static Vector5D<T> IVector<Vector5D<T>, T>.Lerp(Vector5D<T> value1, Vector5D<T> value2, Vector5D<T> amount) /* where T : IFloatingPoint<T> */
+    static Vector5D<T> IVector<Vector5D<T>, T>.Lerp(in Vector5D<T> value1, in Vector5D<T> value2, in Vector5D<T> amount) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<Vector5D<T>, T>(typeof(IFloatingPoint<>));
         return Vector5D.LerpUnchecked(value1, value2, amount);
     }
 
-    static Vector5D<T> IVector<Vector5D<T>, T>.LerpClamped(Vector5D<T> value1, Vector5D<T> value2, Vector5D<T> amount) /* where T : IFloatingPoint<T> */
+    static Vector5D<T> IVector<Vector5D<T>, T>.LerpClamped(in Vector5D<T> value1, in Vector5D<T> value2, in Vector5D<T> amount) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<Vector5D<T>, T>(typeof(IFloatingPoint<>));
         return Vector5D.LerpClampedUnchecked(value1, value2, amount);
     }
 
-    static Vector5D<T> IVector<Vector5D<T>, T>.Reflect(Vector5D<T> vector, Vector5D<T> normal) /* where T : IFloatingPoint<T> */
+    static Vector5D<T> IVector<Vector5D<T>, T>.Reflect(in Vector5D<T> vector, in Vector5D<T> normal) /* where T : IFloatingPoint<T> */
     {
         Helpers.CheckTypeAndThrow<Vector5D<T>, T>(typeof(IFloatingPoint<>));
         return Vector5D.Reflect<T, T>(vector, normal);
