@@ -70,7 +70,7 @@ public static class Quaternion
     public static Quaternion<T> CreateFromAxisAngle<T>(Vector3D<T> axis, T angle)
         where T : IRootFunctions<T>, ITrigonometricFunctions<T>
     {
-        var halfAngle = angle * NumericConstants<T>.Half;
+        var halfAngle = angle * Scalar<T>.Half;
         var s = T.Sin(halfAngle);
         var c = T.Cos(halfAngle);
 
@@ -96,9 +96,9 @@ public static class Quaternion
         {
             T s = T.Sqrt(trace + T.One);
             var s1 = s;
-            s = NumericConstants<T>.Half / s;
+            s = Scalar<T>.Half / s;
             q = new Quaternion<T>(
-                s1 * NumericConstants<T>.Half,
+                s1 * Scalar<T>.Half,
                 (matrix.M23 - matrix.M32) * s,
                 (matrix.M31 - matrix.M13) * s,
                 (matrix.M12 - matrix.M21) * s
@@ -109,9 +109,9 @@ public static class Quaternion
             if (matrix.M11 >= matrix.M22 && matrix.M11 >= matrix.M33)
             {
                 T s = T.Sqrt(T.One + matrix.M11 - matrix.M22 - matrix.M33);
-                var invS = NumericConstants<T>.Half / s;
+                var invS = Scalar<T>.Half / s;
                 q = new Quaternion<T>(
-                    NumericConstants<T>.Half * s,
+                    Scalar<T>.Half * s,
                     (matrix.M12 + matrix.M21) * invS,
                     (matrix.M13 + matrix.M31) * invS,
                     (matrix.M23 - matrix.M32) * invS
@@ -120,10 +120,10 @@ public static class Quaternion
             else if (matrix.M22 > matrix.M33)
             {
                 T s = T.Sqrt(T.One + matrix.M22 - matrix.M11 - matrix.M33);
-                var invS = NumericConstants<T>.Half / s;
+                var invS = Scalar<T>.Half / s;
                 q = new Quaternion<T>(
                     (matrix.M21 + matrix.M12) * invS,
-                    NumericConstants<T>.Half * s,
+                    Scalar<T>.Half * s,
                     (matrix.M32 + matrix.M23) * invS,
                     (matrix.M31 - matrix.M13) * invS
                 );
@@ -131,11 +131,11 @@ public static class Quaternion
             else
             {
                 T s = T.Sqrt(T.One + matrix.M33 - matrix.M11 - matrix.M22);
-                var invS = NumericConstants<T>.Half / s;
+                var invS = Scalar<T>.Half / s;
                 q = new Quaternion<T>(
                     (matrix.M31 + matrix.M13) * invS,
                     (matrix.M32 + matrix.M23) * invS,
-                    NumericConstants<T>.Half * s,
+                    Scalar<T>.Half * s,
                     (matrix.M12 - matrix.M21) * invS
                 );
             }
@@ -156,15 +156,15 @@ public static class Quaternion
         //  pitch upward, then yaw to face into the new heading
         T sr, cr, sp, cp, sy, cy;
 
-        var halfRoll = roll * NumericConstants<T>.Half;
+        var halfRoll = roll * Scalar<T>.Half;
         sr = T.Sin(halfRoll);
         cr = T.Cos(halfRoll);
 
-        var halfPitch = pitch * NumericConstants<T>.Half;
+        var halfPitch = pitch * Scalar<T>.Half;
         sp = T.Sin(halfPitch);
         cp = T.Cos(halfPitch);
 
-        var halfYaw = yaw * NumericConstants<T>.Half;
+        var halfYaw = yaw * Scalar<T>.Half;
         sy = T.Sin(halfYaw);
         cy = T.Cos(halfYaw);
 
@@ -356,7 +356,7 @@ public static class Quaternion
 
         T s1, s2;
 
-        if (cosOmega > (T.One - NumericConstants<T>.SlerpEpsilon))
+        if (cosOmega > (T.One - Scalar<T>.SlerpEpsilon))
         {
             // Too close, do straight linear interpolation.
             s1 = T.One - t;

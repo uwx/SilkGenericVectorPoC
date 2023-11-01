@@ -30,7 +30,7 @@ public static class Matrix4X4
         Vector3D<T> axisZ = objectPosition - cameraPosition;
         T norm = axisZ.LengthSquared();
 
-        if (norm < NumericConstants<T>.BillboardEpsilon)
+        if (norm < Scalar<T>.BillboardEpsilon)
         {
             axisZ = -cameraForwardVector;
         }
@@ -59,13 +59,13 @@ public static class Matrix4X4
     /// <returns>The billboard matrix.</returns>
     public static Matrix4X4<T> CreateConstrainedBillboard<T>(
         Vector3D<T> objectPosition, Vector3D<T> cameraPosition, Vector3D<T> rotateAxis, Vector3D<T> cameraForwardVector, Vector3D<T> objectForwardVector
-    ) where T : INumberBase<T>, IComparisonOperators<T, T, bool>, IRootFunctions<T>
+    ) where T : INumberBase<T>, IComparisonOperators<T, T, bool>, IRootFunctions<T>, IFloatingPoint<T>
     {
         // Treat the case when object and camera positions are too close.
         Vector3D<T> faceDir = objectPosition - cameraPosition;
         T norm = faceDir.LengthSquared();
 
-        if (norm < NumericConstants<T>.BillboardEpsilon)
+        if (norm < Scalar<T>.BillboardEpsilon)
         {
             faceDir = -cameraForwardVector;
         }
@@ -79,16 +79,16 @@ public static class Matrix4X4
         // Treat the case when angle between faceDir and rotateAxis is too close to 0.
         T dot = Vector3D.Dot(axisY, faceDir);
 
-        if (T.Abs(dot) > NumericConstants<T>.BillboardMinAngle)
+        if (T.Abs(dot) > Scalar.BillboardMinAngle<T>())
         {
             faceDir = objectForwardVector;
 
             // Make sure passed values are useful for compute.
             dot = Vector3D.Dot(axisY, faceDir);
 
-            if (T.Abs(dot) > NumericConstants<T>.BillboardMinAngle)
+            if (T.Abs(dot) > Scalar.BillboardMinAngle<T>())
             {
-                faceDir = (T.Abs(axisY.Z) > NumericConstants<T>.BillboardMinAngle) ? Vector3D<T>.UnitX : new Vector3D<T>(T.Zero, T.Zero, -T.One);
+                faceDir = (T.Abs(axisY.Z) > Scalar.BillboardMinAngle<T>()) ? Vector3D<T>.UnitX : new Vector3D<T>(T.Zero, T.Zero, -T.One);
             }
         }
 
@@ -193,21 +193,21 @@ public static class Matrix4X4
 
         return new Matrix4X4<T>(
             new Vector4D<T>(
-                T.One - NumericConstants<T>.Two * (yy + zz),
-                NumericConstants<T>.Two * (xy + wz),
-                NumericConstants<T>.Two * (xz - wy),
+                T.One - Scalar<T>.Two * (yy + zz),
+                Scalar<T>.Two * (xy + wz),
+                Scalar<T>.Two * (xz - wy),
                 T.Zero
             ),
             new Vector4D<T>(
-                NumericConstants<T>.Two * (xy - wz),
-                T.One - NumericConstants<T>.Two * (zz + xx),
-                NumericConstants<T>.Two * (yz + wx),
+                Scalar<T>.Two * (xy - wz),
+                T.One - Scalar<T>.Two * (zz + xx),
+                Scalar<T>.Two * (yz + wx),
                 T.Zero
             ),
             new Vector4D<T>(
-                NumericConstants<T>.Two * (xz + wy),
-                NumericConstants<T>.Two * (yz - wx),
-                T.One - NumericConstants<T>.Two * (yy + xx),
+                Scalar<T>.Two * (xz + wy),
+                Scalar<T>.Two * (yz - wx),
+                T.One - Scalar<T>.Two * (yy + xx),
                 T.Zero
             ),
             Vector4D<T>.UnitW
@@ -344,8 +344,8 @@ public static class Matrix4X4
         T range = T.One / (zNearPlane - zFarPlane);
 
         return new Matrix4X4<T>(
-            new Vector4D<T>(NumericConstants<T>.Two / width, T.Zero, T.Zero, T.Zero),
-            new Vector4D<T>(T.Zero, NumericConstants<T>.Two / height, T.Zero, T.Zero),
+            new Vector4D<T>(Scalar<T>.Two / width, T.Zero, T.Zero, T.Zero),
+            new Vector4D<T>(T.Zero, Scalar<T>.Two / height, T.Zero, T.Zero),
             new Vector4D<T>(T.Zero, T.Zero, range, T.Zero),
             new Vector4D<T>(T.Zero, T.Zero, range * zNearPlane, T.One)
         );
@@ -363,8 +363,8 @@ public static class Matrix4X4
         T range = T.One / (zFarPlane - zNearPlane);
 
         return new Matrix4X4<T>(
-            new Vector4D<T>(NumericConstants<T>.Two / width, T.Zero, T.Zero, T.Zero),
-            new Vector4D<T>(T.Zero, NumericConstants<T>.Two / height, T.Zero, T.Zero),
+            new Vector4D<T>(Scalar<T>.Two / width, T.Zero, T.Zero, T.Zero),
+            new Vector4D<T>(T.Zero, Scalar<T>.Two / height, T.Zero, T.Zero),
             new Vector4D<T>(T.Zero, T.Zero, range, T.Zero),
             new Vector4D<T>(T.Zero, T.Zero, -range * zNearPlane, T.One)
         );
@@ -512,7 +512,7 @@ public static class Matrix4X4
         ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(farPlaneDistance, T.Zero);
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(nearPlaneDistance, farPlaneDistance);
 
-        T height = T.One / T.Tan(fieldOfView * NumericConstants<T>.Half);
+        T height = T.One / T.Tan(fieldOfView * Scalar<T>.Half);
         T width = height / aspectRatio;
         T range = T.IsPositiveInfinity(farPlaneDistance) ? -T.One : farPlaneDistance / (nearPlaneDistance - farPlaneDistance);
 
@@ -550,7 +550,7 @@ public static class Matrix4X4
         ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(farPlaneDistance, T.Zero);
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(nearPlaneDistance, farPlaneDistance);
 
-        T height = T.One / T.Tan(fieldOfView * NumericConstants<T>.Half);
+        T height = T.One / T.Tan(fieldOfView * Scalar<T>.Half);
         T width = height / aspectRatio;
         T range = T.IsPositiveInfinity(farPlaneDistance) ? T.One : farPlaneDistance / (farPlaneDistance - nearPlaneDistance);
 
@@ -646,10 +646,10 @@ public static class Matrix4X4
     /// <param name="value">The plane about which to create a reflection.</param>
     /// <returns>A new matrix expressing the reflection.</returns>
     public static Matrix4X4<T> CreateReflection<T>(Plane<T> value)
-        where T : INumberBase<T>, IComparisonOperators<T, T, bool>, IRootFunctions<T>
+        where T : INumberBase<T>, IComparisonOperators<T, T, bool>, IRootFunctions<T>, IFloatingPointIeee754<T>
     {
         Plane<T> p = Plane.Normalize(value);
-        Vector3D<T> f = p.Normal * -NumericConstants<T>.Two;
+        Vector3D<T> f = p.Normal * -Scalar<T>.Two;
 
         return new Matrix4X4<T>(
             new Vector4D<T>(f * p.Normal.X, T.Zero) + Vector4D<T>.UnitX,
@@ -900,7 +900,7 @@ public static class Matrix4X4
     /// <param name="plane">The plane onto which the new matrix should flatten geometry so as to cast a shadow.</param>
     /// <returns>A new matrix that can be used to flatten geometry onto the specified plane from the specified direction.</returns>
     public static Matrix4X4<T> CreateShadow<T>(Vector3D<T> lightDirection, Plane<T> plane)
-        where T : INumberBase<T>, IComparisonOperators<T, T, bool>, IRootFunctions<T>
+        where T : INumberBase<T>, IComparisonOperators<T, T, bool>, IRootFunctions<T>, IFloatingPointIeee754<T>
     {
         Plane<T> p = Plane.Normalize(plane);
         T dot = Vector3D.Dot(lightDirection, p.Normal);
@@ -965,7 +965,7 @@ public static class Matrix4X4
     {
         // 4x SIMD fields to get a lot better codegen
         var a = new Vector4D<T>(width, height, T.Zero, T.Zero);
-        a *= new Vector4D<T>(NumericConstants<T>.Half, NumericConstants<T>.Half, T.Zero, T.Zero);
+        a *= new Vector4D<T>(Scalar<T>.Half, Scalar<T>.Half, T.Zero, T.Zero);
 
         return new Matrix4X4<T>(
             new Vector4D<T>(a.X, T.Zero, T.Zero, T.Zero),
@@ -995,7 +995,7 @@ public static class Matrix4X4
     {
         // 4x SIMD fields to get a lot better codegen
         var a = new Vector4D<T>(width, height, T.Zero, T.Zero);
-        a *= new Vector4D<T>(NumericConstants<T>.Half, NumericConstants<T>.Half, T.Zero, T.Zero);
+        a *= new Vector4D<T>(Scalar<T>.Half, Scalar<T>.Half, T.Zero, T.Zero);
 
         return new Matrix4X4<T>(
             new Vector4D<T>(a.X, T.Zero, T.Zero, T.Zero),
@@ -1007,7 +1007,7 @@ public static class Matrix4X4
         //
         // // 4x SIMD fields to get a lot better codegen
         // result.W = new Vector4D<T>(width, height, T.Zero, T.Zero);
-        // result.W *= new Vector4D<T>(NumericConstants<T>.Half, NumericConstants<T>.Half, T.Zero, T.Zero);
+        // result.W *= new Vector4D<T>(Scalar<T>.Half, Scalar<T>.Half, T.Zero, T.Zero);
         //
         // result.X = new Vector4D<T>(result.W.X, T.Zero, T.Zero, T.Zero);
         // result.Y = new Vector4D<T>(T.Zero, -result.W.Y, T.Zero, T.Zero);
@@ -1142,14 +1142,14 @@ public static class Matrix4X4
             }
             #endregion
 
-            if (pfScales[a] < NumericConstants<T>.DecomposeEpsilon)
+            if (pfScales[a] < Scalar<T>.DecomposeEpsilon)
             {
                 *(pVectorBasis[a]) = pCanonicalBasis[a];
             }
 
             *pVectorBasis[a] = Vector3D.Normalize(*pVectorBasis[a]);
 
-            if (pfScales[b] < NumericConstants<T>.DecomposeEpsilon)
+            if (pfScales[b] < Scalar<T>.DecomposeEpsilon)
             {
                 uint cc;
                 T fAbsX, fAbsY, fAbsZ;
@@ -1202,7 +1202,7 @@ public static class Matrix4X4
 
             *pVectorBasis[b] = Vector3D.Normalize(*pVectorBasis[b]);
 
-            if (pfScales[c] < NumericConstants<T>.DecomposeEpsilon)
+            if (pfScales[c] < Scalar<T>.DecomposeEpsilon)
             {
                 *pVectorBasis[c] = Vector3D.Cross(*pVectorBasis[a], *pVectorBasis[b]);
             }
@@ -1224,7 +1224,7 @@ public static class Matrix4X4
             det -= T.One;
             det *= det;
 
-            if ((NumericConstants<T>.DecomposeEpsilon < det))
+            if ((Scalar<T>.DecomposeEpsilon < det))
             {
                 // Non-SRT matrix encountered
                 rotation = Quaternion<T>.Identity;

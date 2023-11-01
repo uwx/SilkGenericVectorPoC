@@ -214,12 +214,12 @@ public static class Plane
     /// <returns>The normalized plane.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Plane<T> Normalize<T>(Plane<T> value)
-        where T : INumberBase<T>, IComparisonOperators<T, T, bool>, IRootFunctions<T>
+        where T : INumberBase<T>, IComparisonOperators<T, T, bool>, IRootFunctions<T>, IFloatingPointIeee754<T>
     {
         if (Vector128.IsHardwareAccelerated)
         {
             T normalLengthSquared = value.Normal.LengthSquared();
-            if (T.Abs(normalLengthSquared - T.One) < NumericConstants<T>.NormalizeEpsilon)
+            if (T.Abs(normalLengthSquared - T.One) < Scalar.NormalizeEpsilon<T>())
             {
                 // It already normalized, so we don't need to farther process.
                 return value;
@@ -233,7 +233,7 @@ public static class Plane
         {
             T f = value.Normal.X * value.Normal.X + value.Normal.Y * value.Normal.Y + value.Normal.Z * value.Normal.Z;
 
-            if (T.Abs(f - T.One) < NumericConstants<T>.NormalizeEpsilon)
+            if (T.Abs(f - T.One) < Scalar.NormalizeEpsilon<T>())
             {
                 return value; // It already normalized, so we don't need to further process.
             }

@@ -1,21 +1,32 @@
 ﻿using System.Numerics;
+using System.Runtime.CompilerServices;
+[assembly: InternalsVisibleTo("GenericVector.Perf")]
 
 namespace GenericVector;
 
-public static class NumericConstants<T> where T : INumberBase<T>
+internal static class Scalar
 {
-    public static readonly T Two = T.One + T.One;
-    public static readonly T Half = T.One / Two;
-    public static readonly T Four = Two + Two;
-    public static readonly T OneAndAHalf = T.One + Half;
-    public static readonly T Quarter = T.One / Four;
-    
-    public static readonly T BillboardEpsilon = T.CreateChecked(1e-4f);
-    public static readonly T BillboardMinAngle = T.CreateChecked(1.0f - (0.1f * (MathF.PI / 180.0f))); // 0.1 degrees
-    public static readonly T DecomposeEpsilon = T.CreateChecked(0.0001f);
-    
-    public static readonly T NormalizeEpsilon = T.CreateChecked(1.192092896e-07f); // smallest such that 1.0+NormalizeEpsilon != 1.0
-    
-    public static readonly T SlerpEpsilon = T.CreateChecked(1e-6f);
-    public static readonly T ThreeQuarters = (Two + T.One) / Four;
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    public static T BillboardMinAngle<T>() where T : IFloatingPoint<T>
+        => T.One - (T.CreateChecked(0.1m) * (T.Pi / T.CreateChecked(180))); // 0.1 degrees
+
+    // smallest such that 1.0+NormalizeEpsilon != 1.0
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    public static T NormalizeEpsilon<T>() where T : IFloatingPointIeee754<T>
+        => T.BitIncrement(T.One);
+}
+
+internal static class Scalar<T> where T : INumberBase<T>
+{
+    public static T Two => T.CreateChecked(2);
+    public static T Half => T.CreateChecked(0.5f);
+    public static T Four => T.CreateChecked(4);
+    public static T OneAndAHalf => T.CreateChecked(1.5f);
+    public static T Quarter => T.CreateChecked(0.25f);
+
+    public static T BillboardEpsilon => T.CreateChecked(0.0001m);
+    public static T DecomposeEpsilon => T.CreateChecked(0.0001m);
+
+    public static T SlerpEpsilon => T.CreateChecked(0.000001m);
+    public static T ThreeQuarters => T.CreateChecked(0.75f);
 }

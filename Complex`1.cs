@@ -35,13 +35,13 @@ public readonly struct Complex<T> :
         T.One / T.Log(T.One + T.One + T.One + T.One + T.One + T.One + T.One + T.One + T.One + T.One); // 1 / Log(10)
 
     // This is the largest x T which (Hypot(x,x) + x) will not overflow. It is used for branching inside Sqrt.
-    private static readonly T s_sqrtRescaleThreshold = T.MaxValue / (T.Sqrt(NumericConstants<T>.Two) + T.One);
+    private static readonly T s_sqrtRescaleThreshold = T.MaxValue / (T.Sqrt(Scalar<T>.Two) + T.One);
 
     // This is the largest x for which 2 x^2 will not overflow. It is used for branching inside Asin and Acos.
-    private static readonly T s_asinOverflowThreshold = T.Sqrt(T.MaxValue) / NumericConstants<T>.Two;
+    private static readonly T s_asinOverflowThreshold = T.Sqrt(T.MaxValue) / Scalar<T>.Two;
 
     // This value is used inside Asin and Acos.
-    private static readonly T s_log2 = T.Log(NumericConstants<T>.Two);
+    private static readonly T s_log2 = T.Log(Scalar<T>.Two);
 
     // Do not rename, these fields are needed for binary serialization
     private readonly T m_real; // Do not rename (binary serialization)
@@ -337,7 +337,7 @@ public readonly struct Complex<T> :
         {
             return x;
         }
-        else if (x < NumericConstants<T>.ThreeQuarters)
+        else if (x < Scalar<T>.ThreeQuarters)
         {
             // This is accurate to within 5 ulp with any floating-point system that uses a guard digit,
             // as proven in Theorem 4 of "What Every Computer Scientist Should Know About Floating-Point
@@ -416,8 +416,8 @@ public readonly struct Complex<T> :
         // we compute them both here from a single call to T.Exp.
         T p = T.Exp(value.m_imaginary);
         T q = T.One / p;
-        T sinh = (p - q) * NumericConstants<T>.Half;
-        T cosh = (p + q) * NumericConstants<T>.Half;
+        T sinh = (p - q) * Scalar<T>.Half;
+        T cosh = (p + q) * Scalar<T>.Half;
         return new Complex<T>(T.Sin(value.m_real) * cosh, T.Cos(value.m_real) * sinh);
         // There is a known limitation with this algorithm: inputs that cause sinh and cosh to overflow, but for
         // which sin or cos are small enough that sin * cosh or cos * sinh are still representable, nonetheless
@@ -457,8 +457,8 @@ public readonly struct Complex<T> :
     {
         T p = T.Exp(value.m_imaginary);
         T q = T.One / p;
-        T sinh = (p - q) * NumericConstants<T>.Half;
-        T cosh = (p + q) * NumericConstants<T>.Half;
+        T sinh = (p - q) * Scalar<T>.Half;
+        T cosh = (p + q) * Scalar<T>.Half;
         return new Complex<T>(T.Cos(value.m_real) * cosh, -T.Sin(value.m_real) * sinh);
     }
 
@@ -500,14 +500,14 @@ public readonly struct Complex<T> :
         //   tan z = (sin(2x) / cosh(2y) + i \tanh(2y)) / (1 + cos(2x) / cosh(2y))
         // which correctly computes the (tiny) real part and the (normal-sized) imaginary part.
 
-        T x2 = NumericConstants<T>.Two * value.m_real;
-        T y2 = NumericConstants<T>.Two * value.m_imaginary;
+        T x2 = Scalar<T>.Two * value.m_real;
+        T y2 = Scalar<T>.Two * value.m_imaginary;
         T p = T.Exp(y2);
         T q = T.One / p;
-        T cosh = (p + q) * NumericConstants<T>.Half;
-        if (T.Abs(value.m_imaginary) <= NumericConstants<T>.Four)
+        T cosh = (p + q) * Scalar<T>.Half;
+        if (T.Abs(value.m_imaginary) <= Scalar<T>.Four)
         {
-            T sinh = (p - q) * NumericConstants<T>.Half;
+            T sinh = (p - q) * Scalar<T>.Half;
             T D = T.Cos(x2) + cosh;
             return new Complex<T>(T.Sin(x2) / D, sinh / D);
         }
@@ -527,7 +527,7 @@ public readonly struct Complex<T> :
 
     public static Complex<T> Atan(Complex<T> value)
     {
-        Complex<T> two = new(NumericConstants<T>.Two, T.Zero);
+        Complex<T> two = new(Scalar<T>.Two, T.Zero);
         return (ImaginaryOne / two) * (Log(One - ImaginaryOne * value) - Log(One + ImaginaryOne * value));
     }
 
@@ -593,21 +593,21 @@ public readonly struct Complex<T> :
             }
 
             T ratio = small / big;
-            v = s_log2 + T.Log(big) + NumericConstants<T>.Half * Log1P(ratio * ratio);
+            v = s_log2 + T.Log(big) + Scalar<T>.Half * Log1P(ratio * ratio);
         }
         else
         {
             T r = Hypot((x + T.One), y);
             T s = Hypot((x - T.One), y);
 
-            T a = (r + s) * NumericConstants<T>.Half;
+            T a = (r + s) * Scalar<T>.Half;
             b = x / a;
 
-            if (b > NumericConstants<T>.ThreeQuarters)
+            if (b > Scalar<T>.ThreeQuarters)
             {
                 if (x <= T.One)
                 {
-                    T amx = (y * y / (r + (x + T.One)) + (s + (T.One - x))) * NumericConstants<T>.Half;
+                    T amx = (y * y / (r + (x + T.One)) + (s + (T.One - x))) * Scalar<T>.Half;
                     bPrime = x / T.Sqrt((a + x) * amx);
                 }
                 else
@@ -615,7 +615,7 @@ public readonly struct Complex<T> :
                     // In this case, amx ~ y^2. Since we take the square root of amx, we should
                     // pull y out from under the square root so we don't lose its contribution
                     // when y^2 underflows.
-                    T t = (T.One / (r + (x + T.One)) + T.One / (s + (x - T.One))) * NumericConstants<T>.Half;
+                    T t = (T.One / (r + (x + T.One)) + T.One / (s + (x - T.One))) * Scalar<T>.Half;
                     bPrime = x / y / T.Sqrt((a + x) * t);
                 }
             }
@@ -624,20 +624,20 @@ public readonly struct Complex<T> :
                 bPrime = -T.One;
             }
 
-            if (a < NumericConstants<T>.OneAndAHalf)
+            if (a < Scalar<T>.OneAndAHalf)
             {
                 if (x < T.One)
                 {
                     // This is another case where our expression is proportional to y^2 and
                     // we take its square root, so again we pull out a factor of y from
                     // under the square root.
-                    T t = (T.One / (r + (x + T.One)) + T.One / (s + (T.One - x))) * NumericConstants<T>.Half;
+                    T t = (T.One / (r + (x + T.One)) + T.One / (s + (T.One - x))) * Scalar<T>.Half;
                     T am1 = y * y * t;
                     v = Log1P(am1 + y * T.Sqrt(t * (a + T.One)));
                 }
                 else
                 {
-                    T am1 = (y * y / (r + (x + T.One)) + (s + (x - T.One))) * NumericConstants<T>.Half;
+                    T am1 = (y * y / (r + (x + T.One)) + (s + (x - T.One))) * Scalar<T>.Half;
                     v = Log1P(am1 + T.Sqrt(am1 * (a + T.One)));
                 }
             }
@@ -692,7 +692,7 @@ public readonly struct Complex<T> :
             return new Complex<T>(T.Sqrt(value.m_real), T.Zero);
         }
 
-        // One way to compute Sqrt(z) is just to call Pow(z, NumericConstants<T>.Half), which coverts to polar coordinates
+        // One way to compute Sqrt(z) is just to call Pow(z, Scalar<T>.Half), which coverts to polar coordinates
         // (sqrt + atan), halves the phase, and reconverts to cartesian coordinates (cos + sin).
         // Not only is this more expensive than necessary, it also fails to preserve certain expected
         // symmetries, such as that the square root of a pure negative is a pure imaginary, and that the
@@ -731,8 +731,8 @@ public readonly struct Complex<T> :
                 return (new Complex<T>(T.PositiveInfinity, imaginaryCopy));
             }
 
-            realCopy *= NumericConstants<T>.Quarter;
-            imaginaryCopy *= NumericConstants<T>.Quarter;
+            realCopy *= Scalar<T>.Quarter;
+            imaginaryCopy *= Scalar<T>.Quarter;
             rescale = true;
         }
 
@@ -740,20 +740,20 @@ public readonly struct Complex<T> :
         T x, y;
         if (realCopy >= T.Zero)
         {
-            x = T.Sqrt((Hypot(realCopy, imaginaryCopy) + realCopy) * NumericConstants<T>.Half);
-            y = imaginaryCopy / (NumericConstants<T>.Two * x);
+            x = T.Sqrt((Hypot(realCopy, imaginaryCopy) + realCopy) * Scalar<T>.Half);
+            y = imaginaryCopy / (Scalar<T>.Two * x);
         }
         else
         {
-            y = T.Sqrt((Hypot(realCopy, imaginaryCopy) - realCopy) * NumericConstants<T>.Half);
+            y = T.Sqrt((Hypot(realCopy, imaginaryCopy) - realCopy) * Scalar<T>.Half);
             if (imaginaryCopy < T.Zero) y = -y;
-            x = imaginaryCopy / (NumericConstants<T>.Two * y);
+            x = imaginaryCopy / (Scalar<T>.Two * y);
         }
 
         if (rescale)
         {
-            x *= NumericConstants<T>.Two;
-            y *= NumericConstants<T>.Two;
+            x *= Scalar<T>.Two;
+            y *= Scalar<T>.Two;
         }
 
         return new Complex<T>(x, y);
