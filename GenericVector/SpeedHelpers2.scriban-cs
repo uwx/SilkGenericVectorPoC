@@ -1,0 +1,224 @@
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Runtime.Intrinsics;
+
+namespace GenericVector.Experimental;
+
+internal partial class SpeedHelpers2
+{
+{{~
+    vectorFunctions = [
+        { name: 'Add', args: 2, op: 'return left + right', scope: 'IAdditionOperators<T, T, T>', hasScalar: true, hasNumerics: true },
+        { name: 'Subtract', args: 2, op: 'return left - right', scope: 'ISubtractionOperators<T, T, T>', hasScalar: true, hasNumerics: true },
+        { name: 'Multiply', args: 2, op: 'return left * right', scope: 'IMultiplyOperators<T, T, T>', hasScalar: true, hasNumerics: true },
+        { name: 'Divide', args: 2, op: 'return left / right', scope: 'IDivisionOperators<T, T, T>', hasScalar: true, hasNumerics: true },
+        {
+            name: 'Remainder',
+            args: 2,
+            scope: 'IModulusOperators<T, T, T>',
+            opSingle: 'return left % right',
+            opVec: '
+            if (typeof(T) == typeof(float) || typeof(T) == typeof(double))
+            {
+                throw new NotSupportedException("Remainder of float or double doesn\'t make sense");
+            }
+            return left - (left / right * right);
+            ',
+            hasScalar: true
+        },
+        { name: 'BitwiseAnd', args: 2, op: 'return left & right', scope: 'IBitwiseOperators<T, T, T>' },
+        { name: 'BitwiseOr', args: 2, op: 'return left | right', scope: 'IBitwiseOperators<T, T, T>' },
+        { name: 'BitwiseXor', args: 2, op: 'return left ^ right', scope: 'IBitwiseOperators<T, T, T>' },
+        { name: 'BitwiseNot', args: 1, op: 'return ~value', scope: 'IBitwiseOperators<T, T, T>' },
+        { name: 'Negate', args: 1, op: 'return -value', scope: 'IUnaryNegationOperators<T, T>', hasNumerics: true },
+        { name: 'Abs', args: 1, op: 'return {TOrVector}.Abs(value)', hasNumerics: true },
+        { name: 'Clamp', args: 3, opSingle: 'return {TOrVector}.MinMagnitudeNumber({TOrVector}.MaxMagnitudeNumber(x, y), z)', op: 'return {TOrVector}.Min({TOrVector}.Max(x, y), z)', hasNumerics: true, hasScalar: true },
+        { name: 'Min', args: 2, opSingle: 'return {TOrVector}.MinMagnitudeNumber(left, right)', opVec: 'return {TOrVector}.Min(left, right)', hasNumerics: true, hasScalar: true },
+        { name: 'Max', args: 2, opSingle: 'return {TOrVector}.MinMagnitudeNumber(left, right)', opVec: 'return {TOrVector}.Max(left, right)', hasNumerics: true, hasScalar: true },
+    ]
+~}}
+
+{{~ for vecfun in vectorFunctions ~}}
+    {{~ if vecfun.args == 2 ~}}
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TVector {{ vecfun.name }}<TVector, T>(TVector left, TVector right)
+        where TVector : IVector<TVector, T>, IVectorInternal<TVector, T>
+        where T : INumberBase<T>{{if vecfun.scope}}, {{ vecfun.scope }}{{end}}
+    {
+        return Operate<TVector, T, Op{{ vecfun.name }}<T>>(left, right);
+    }
+    {{~ if vecfun.hasScalar ~}}
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TVector {{ vecfun.name }}<TVector, T>(TVector left, T right)
+        where TVector : IVector<TVector, T>, IVectorInternal<TVector, T>
+        where T : INumberBase<T>{{if vecfun.scope}}, {{ vecfun.scope }}{{end}}
+    {
+        return Operate<TVector, T, Op{{ vecfun.name }}<T>>(left, TVector.Create(right));
+    }
+    {{~ end ~}}
+
+    private struct Op{{ vecfun.name }}<T> : IBinaryOperator<T, T, T> where T : INumberBase<T>{{if vecfun.scope}}, {{ vecfun.scope }}{{end}}
+    {
+        {{~ if vecfun.hasNumerics ~}}
+        public static bool HasNumerics
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => true;
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 Invoke(Vector2 left, Vector2 right)
+        {
+            {{ (vecfun.opNumerics ?? vecfun.opVec ?? vecfun.op) | string.replace '{TOrVector}' 'Vector2' }};
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 Invoke(Vector3 left, Vector3 right)
+        {
+            {{ (vecfun.opNumerics ?? vecfun.opVec ?? vecfun.op) | string.replace '{TOrVector}' 'Vector3' }};
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector4 Invoke(Vector4 left, Vector4 right)
+        {
+            {{ (vecfun.opNumerics ?? vecfun.opVec ?? vecfun.op) | string.replace '{TOrVector}' 'Vector4' }};
+        }
+        {{~ end ~}}
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T Invoke(T left, T right)
+        {
+            {{ (vecfun.opSingle ?? vecfun.op) | string.replace '{TOrVector}' 'T' }};
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector128<T> Invoke(Vector128<T> left, Vector128<T> right)
+        {
+            {{ (vecfun.opVec ?? vecfun.op) | string.replace '{TOrVector}' 'Vector128' }};
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector256<T> Invoke(Vector256<T> left, Vector256<T> right)
+        {
+            {{ (vecfun.opVec ?? vecfun.op) | string.replace '{TOrVector}' 'Vector256' }};
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector512<T> Invoke(Vector512<T> left, Vector512<T> right)
+        {
+            {{ (vecfun.opVec ?? vecfun.op) | string.replace '{TOrVector}' 'Vector512' }};
+        }
+    }
+    {{~ else if vecfun.args == 3 ~}}
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TVector {{ vecfun.name }}<TVector, T>(TVector x, TVector y, TVector z)
+        where TVector : IVector<TVector, T>, IVectorInternal<TVector, T>
+        where T : INumberBase<T>{{if vecfun.scope}}, {{ vecfun.scope }}{{end}}
+    {
+        return Operate<TVector, T, Op{{ vecfun.name }}<T>>(x, y, z);
+    }
+    {{~ if vecfun.hasScalar ~}}
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TVector {{ vecfun.name }}<TVector, T>(TVector x, T y, T z)
+        where TVector : IVector<TVector, T>, IVectorInternal<TVector, T>
+        where T : INumberBase<T>{{if vecfun.scope}}, {{ vecfun.scope }}{{end}}
+    {
+        return Operate<TVector, T, Op{{ vecfun.name }}<T>>(x, TVector.Create(y), TVector.Create(z));
+    }
+    {{~ end ~}}
+
+    private struct Op{{ vecfun.name }}<T> : ITernaryOperator<T, T, T, T> where T : INumberBase<T>{{if vecfun.scope}}, {{ vecfun.scope }}{{end}}
+    {
+        {{~ if vecfun.hasNumerics ~}}
+        public static bool HasNumerics
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => true;
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 Invoke(Vector2 x, Vector2 y, Vector2 z)
+        {
+            {{ (vecfun.opNumerics ?? vecfun.opVec ?? vecfun.op) | string.replace '{TOrVector}' 'Vector2' }};
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 Invoke(Vector3 x, Vector3 y, Vector3 z)
+        {
+            {{ (vecfun.opNumerics ?? vecfun.opVec ?? vecfun.op) | string.replace '{TOrVector}' 'Vector3' }};
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector4 Invoke(Vector4 x, Vector4 y, Vector4 z)
+        {
+            {{ (vecfun.opNumerics ?? vecfun.opVec ?? vecfun.op) | string.replace '{TOrVector}' 'Vector4' }};
+        }
+        {{~ end ~}}
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T Invoke(T x, T y, T z)
+        {
+            {{ (vecfun.opSingle ?? vecfun.op) | string.replace '{TOrVector}' 'T' }};
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector128<T> Invoke(Vector128<T> x, Vector128<T> y, Vector128<T> z)
+        {
+            {{ (vecfun.opVec ?? vecfun.op) | string.replace '{TOrVector}' 'Vector128' }};
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector256<T> Invoke(Vector256<T> x, Vector256<T> y, Vector256<T> z)
+        {
+            {{ (vecfun.opVec ?? vecfun.op) | string.replace '{TOrVector}' 'Vector256' }};
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector512<T> Invoke(Vector512<T> x, Vector512<T> y, Vector512<T> z)
+        {
+            {{ (vecfun.opVec ?? vecfun.op) | string.replace '{TOrVector}' 'Vector512' }};
+        }
+    }
+    {{~ else if vecfun.args == 1 ~}}
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TVector {{ vecfun.name }}<TVector, T>(TVector value)
+        where TVector : IVector<TVector, T>, IVectorInternal<TVector, T>
+        where T : INumberBase<T>{{if vecfun.scope}}, {{ vecfun.scope }}{{end}}
+    {
+        return Operate<TVector, T, Op{{ vecfun.name }}<T>>(value);
+    }
+    private struct Op{{ vecfun.name }}<T> : IUnaryOperator<T, T> where T : INumberBase<T>{{if vecfun.scope}}, {{ vecfun.scope }}{{end}}
+    {
+        {{~ if vecfun.hasNumerics ~}}
+        public static bool HasNumerics
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => true;
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 Invoke(Vector2 value)
+        {
+            {{ (vecfun.opNumerics ?? vecfun.opVec ?? vecfun.op) | string.replace '{TOrVector}' 'Vector2' }};
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 Invoke(Vector3 value)
+        {
+            {{ (vecfun.opNumerics ?? vecfun.opVec ?? vecfun.op) | string.replace '{TOrVector}' 'Vector3' }};
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector4 Invoke(Vector4 value)
+        {
+            {{ (vecfun.opNumerics ?? vecfun.opVec ?? vecfun.op) | string.replace '{TOrVector}' 'Vector4' }};
+        }
+        {{~ end ~}}
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T Invoke(T value)
+        {
+            {{ (vecfun.opSingle ?? vecfun.op) | string.replace '{TOrVector}' 'T' }};
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector128<T> Invoke(Vector128<T> value)
+        {
+            {{ (vecfun.opVec ?? vecfun.op) | string.replace '{TOrVector}' 'Vector128' }};
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector256<T> Invoke(Vector256<T> value)
+        {
+            {{ (vecfun.opVec ?? vecfun.op) | string.replace '{TOrVector}' 'Vector256' }};
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector512<T> Invoke(Vector512<T> value)
+        {
+            {{ (vecfun.opVec ?? vecfun.op) | string.replace '{TOrVector}' 'Vector512' }};
+        }
+    }
+    {{~ end ~}}
+{{~ end ~}}
+
+}

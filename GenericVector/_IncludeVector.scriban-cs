@@ -1,0 +1,180 @@
+{{
+    max_numeric_dimensions = max_dimensions < 4 ? max_dimensions : 4
+
+    vecN = vec_n
+    dimensionIndex = vecN - 1
+
+    TypeName = $"Vector{vecN}D"
+    TypeNameT = TypeName + '<T>'
+    DocName = TypeName + '{T}'
+
+    xyzw = ["X", "Y", "Z", "W", "V"]
+    ComponentsLower = xyzw | array.each @string.downcase
+    Parameters = ComponentsLower | array.each do; ret $"T {$0}"; end
+    AmountName = "fuck"
+    case vecN
+        when 1
+            AmountName = "one"
+        when 2
+            AmountName = "two"
+        when 3
+            AmountName = "three"
+        when 4
+            AmountName = "four"
+        when 5
+            AmountName = "five"
+    end
+
+    func xyzwFormat(prefix = '', suffix = '', downcase = false)
+        ret 0..<max_dimensions | array.each do; (prefix + (downcase ? (xyzw[$0] | string.downcase) : xyzw[$0]) + suffix); end
+    end
+
+    func forEachDimension(sep = null, newline = true, endingNewline = false, dimensionLimit = null, dimensionOffset = null)
+        dimensionLimit = (dimensionLimit ?? vecN) - 1
+        dimensionOffset = dimensionOffset ?? 0
+        for x in dimensionOffset..dimensionLimit
+            c = xyzw[x]
+            cl = c | string.downcase
+            $$
+            if !for.last && sep != null
+                sep
+            end
+            if newline && (endingNewline || !for.last)
+                '\n'
+            end
+        end
+    end
+
+    func slice(value, indexStart = 0, indexEnd = null)
+        len = object.size value
+
+        indexEnd = indexEnd ?? len
+
+        # If indexStart >= str.length, an empty string is returned.
+        # If indexStart < 0, the index is counted from the end of the string. More formally, in this case, the substring starts at max(indexStart + str.length, 0).
+        # If indexStart is omitted, undefined, or cannot be converted to a number, it's treated as 0.
+        # If indexEnd is omitted, undefined, or cannot be converted to a number, or if indexEnd >= str.length, slice() extracts to the end of the string.
+        # If indexEnd < 0, the index is counted from the end of the string. More formally, in this case, the substring ends at max(indexEnd + str.length, 0).
+        # If indexEnd <= indexStart after normalizing negative values (i.e. indexEnd represents a character that's before indexStart), an empty string is returned.
+
+        if indexStart < 0
+            indexStart = max (indexStart + len) 0
+        end
+
+        if indexEnd < 0
+            indexEnd = max (indexEnd + len) 0
+        end
+
+        case object.typeof value
+            when 'string'
+                if indexStart >= len || indexEnd <= indexStart
+                    ret ''
+                end
+
+                ret value | string.slice indexStart (indexEnd - indexStart)
+            when 'boolean'
+                ret value
+            when 'number'
+                ret value
+            when 'array'
+                if indexStart >= len || indexEnd <= indexStart
+                    ret []
+                end
+
+                ret value | array.limit indexEnd | array.offset indexStart
+            when 'iterator'
+                if indexStart >= len || indexEnd <= indexStart
+                    ret []
+                end
+
+                ret value | array.limit indexEnd | array.offset indexStart
+            when 'object'
+                ret value
+            else
+                ret value
+        end
+    end
+
+    func vectorize(argNames...)
+        a = 'v0'
+        b = 'v1'
+        c = 'v2'
+        d = 'v3'
+        e = 'v4'
+        f = 'v5'
+        g = 'v6'
+        h = 'v7'
+        i = 'v8'
+        "// NOTE: COMPLETELY UNTESTED. MIGHT BE SLOW.\n"
+        "unsafe\n"
+        "{\n"
+        "    if (Vector64<T>.IsSupported && Vector64.IsHardwareAccelerated)\n"
+        "    {\n"
+        for argName in argNames
+            $"        Vector64<T> v{for.index} = default;\n"
+        end
+        "        \n"
+        for argName in argNames
+            $"        Unsafe.WriteUnaligned<{TypeNameT}>(ref Unsafe.As<Vector64<T>, byte>(ref v{for.index}), {argName});\n"
+        end
+        "        \n"
+        "        v0 = "
+        vector = 'Vector64'
+        $$
+        ";\n"
+        $"        return Unsafe.ReadUnaligned<{TypeNameT}>(ref Unsafe.As<Vector64<T>, byte>(ref v0));\n"
+        "    }\n"
+        "\n"
+        "    if (Vector128<T>.IsSupported && Vector128.IsHardwareAccelerated)\n"
+        "    {\n"
+        for argName in argNames
+            $"        Vector128<T> v{for.index} = default;\n"
+        end
+        "        \n"
+        for argName in argNames
+            $"        Unsafe.WriteUnaligned<{TypeNameT}>(ref Unsafe.As<Vector128<T>, byte>(ref v{for.index}), {argName});\n"
+        end
+        "        \n"
+        "        v0 = "
+        vector = 'Vector128'
+        $$
+        ";\n"
+        $"        return Unsafe.ReadUnaligned<{TypeNameT}>(ref Unsafe.As<Vector128<T>, byte>(ref v0));\n"
+        "    }\n"
+        "\n"
+        "    if (Vector256<T>.IsSupported && Vector256.IsHardwareAccelerated)\n"
+        "    {\n"
+        for argName in argNames
+            $"        Vector256<T> v{for.index} = default;\n"
+        end
+        "        \n"
+        for argName in argNames
+            $"        Unsafe.WriteUnaligned<{TypeNameT}>(ref Unsafe.As<Vector256<T>, byte>(ref v{for.index}), {argName});\n"
+        end
+        "        \n"
+        "        v0 = "
+        vector = 'Vector256'
+        $$
+        ";\n"
+        $"        return Unsafe.ReadUnaligned<{TypeNameT}>(ref Unsafe.As<Vector256<T>, byte>(ref v0));\n"
+        "    }\n"
+        "\n"
+        "    if (Vector512<T>.IsSupported && Vector512.IsHardwareAccelerated)\n"
+        "    {\n"
+        for argName in argNames
+            $"        Vector512<T> v{for.index} = default;\n"
+        end
+        "        \n"
+        for argName in argNames
+            $"        Unsafe.WriteUnaligned<{TypeNameT}>(ref Unsafe.As<Vector512<T>, byte>(ref v{for.index}), {argName});\n"
+        end
+        "        \n"
+        "        v0 = "
+        vector = 'Vector512'
+        $$
+        ";\n"
+        $"        return Unsafe.ReadUnaligned<{TypeNameT}>(ref Unsafe.As<Vector512<T>, byte>(ref v0));\n"
+        "    }\n"
+        "}\n"
+    end
+}}
