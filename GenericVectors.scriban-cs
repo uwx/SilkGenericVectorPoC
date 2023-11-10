@@ -11,7 +11,7 @@ using System.Text.Unicode;
 namespace GenericVector;
 
 {{~
-    include Helpers.scriban-cs
+    load_file '_IncludeVector.scriban-cs'
 ~}}
 
 // {{ TypeNameT }}
@@ -37,12 +37,12 @@ public readonly partial struct {{TypeNameT}} : IVector<{{TypeNameT}}, T>, IVecto
 
     {{~ for smallerVecN in min_dimensions..<vecN ~}}
     /// <summary>Creates a new <see cref="{{ DocName }}" /> object from the specified <see cref="Vector{{vecN}}D{T}" /> object {{ xyzw | array.offset dimensions2 | array.join ' and a ' }} component.</summary>
-    /// <param name="value">The vector to use for the {{ xyzw | array.limit dimensions2 | humanizeAnd }} components.</param>
+    /// <param name="value">The vector to use for the {{ xyzw | array.limit dimensions2 | humanize_and }} components.</param>
         {{~ for x in xyzw | slice smallerVecN vecN ~}}
     /// <param name="{{ x | string.downcase }}">The {{ x }} component.</param>
         {{~ end ~}}
-    public {{ TypeName }}(Vector{{smallerVecN}}D<T> value, {{ Parameters | slice smallerVecN vecN | array.join ', ' }}) : this(
-        {{- valueValue 'value.' | slice 0 smallerVecN | array.concat (xyzw | slice smallerVecN vecN | array.each @string.downcase) | array.join ', ' -}}
+    public {{ TypeName }}(Vector{{smallerVecN}}D<T> value, {{ Parameters | slice smallerVecN vecN | array.join ", " }}) : this(
+        {{- xyzwFormat "value." | slice 0 smallerVecN | array.concat (xyzw | slice smallerVecN vecN | array.each @string.downcase) | array.join ', ' -}}
     )
     {
     }
@@ -1001,7 +1001,7 @@ public static partial class {{ TypeName }}
     {
         {{ wrap vectorize 'value'; $"{vector}.Abs({a})"; end }}
 
-        return new({{ repeatCall 'T.Abs' 'value' }});
+        return new({{ wrap forEachDimension ', ' newline:false; $"T.Abs(value.{c})"; end }});
     }
 
     /// <summary>Restricts a vector between a minimum and a maximum value.</summary>
@@ -1188,7 +1188,7 @@ public static partial class {{ TypeName }}
     public static {{ TypeName }}<TReturn> Reflect<T, TReturn>({{ TypeNameT }} vector, {{ TypeNameT }} normal) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
     {
         var dot = Dot<T, TReturn>(vector, normal);
-        return vector.As<TReturn>() - (NumericConstants<TReturn>.Two * (dot * normal.As<TReturn>()));
+        return vector.As<TReturn>() - (Scalar<TReturn>.Two * (dot * normal.As<TReturn>()));
     }
 
     /// <summary>Returns a vector whose elements are the square root of each of a specified vector's elements.</summary>

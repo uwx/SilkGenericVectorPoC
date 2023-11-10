@@ -43,16 +43,16 @@ public readonly partial struct Vector4D<T> : IVector<Vector4D<T>, T>, IVectorAls
     }
 
     /// <summary>Creates a new <see cref="Vector4D{T}" /> object from the specified <see cref="Vector4D{T}" /> object X and a Y and a Z and a W and a V component.</summary>
-    /// <param name="value">The vector to use for the [,  and ] components.</param>
+    /// <param name="value">The vector to use for the Scriban.Runtime.ScriptRange components.</param>
     /// <param name="z">The Z component.</param>
     /// <param name="w">The W component.</param>
-    public Vector4D(Vector2D<T> value, T z, T w) : this(value.X, value.Y, z, w)
+    public Vector4D(Vector2D<T> value, T z, T w) : this(value.Xvalue.Yvalue.Zvalue.Wvalue.Vvalue.Xvalue.Yvalue.Zvalue.Wvalue.V, , z, w)
     {
     }
     /// <summary>Creates a new <see cref="Vector4D{T}" /> object from the specified <see cref="Vector4D{T}" /> object X and a Y and a Z and a W and a V component.</summary>
-    /// <param name="value">The vector to use for the [,  and ] components.</param>
+    /// <param name="value">The vector to use for the Scriban.Runtime.ScriptRange components.</param>
     /// <param name="w">The W component.</param>
-    public Vector4D(Vector3D<T> value, T w) : this(value.X, value.Y, value.Z, w)
+    public Vector4D(Vector3D<T> value, T w) : this(value.Xvalue.Yvalue.Zvalue.Wvalue.Vvalue.Xvalue.Yvalue.Zvalue.Wvalue.V, , , w)
     {
     }
 
@@ -490,8 +490,8 @@ unsafe
         Vector64<T> v0 = default;
         Vector64<T> v1 = default;
         
-        Unsafe.WriteUnaligned<Vector4D<T>>(ref Unsafe.As<Vector64<T>, byte>(ref v0), left);
-        Unsafe.WriteUnaligned<Vector4D<T>>(ref Unsafe.As<Vector64<T>, byte>(ref v1), right);
+        Unsafe.WriteUnaligned<Vector4D<T>>(ref Unsafe.As<Vector64<T>, byte>(ref v0), this);
+        Unsafe.WriteUnaligned<Vector4D<T>>(ref Unsafe.As<Vector64<T>, byte>(ref v1), other);
         
         v0 = v0.Equals(v1);
         return Unsafe.ReadUnaligned<Vector4D<T>>(ref Unsafe.As<Vector64<T>, byte>(ref v0));
@@ -502,8 +502,8 @@ unsafe
         Vector128<T> v0 = default;
         Vector128<T> v1 = default;
         
-        Unsafe.WriteUnaligned<Vector4D<T>>(ref Unsafe.As<Vector128<T>, byte>(ref v0), left);
-        Unsafe.WriteUnaligned<Vector4D<T>>(ref Unsafe.As<Vector128<T>, byte>(ref v1), right);
+        Unsafe.WriteUnaligned<Vector4D<T>>(ref Unsafe.As<Vector128<T>, byte>(ref v0), this);
+        Unsafe.WriteUnaligned<Vector4D<T>>(ref Unsafe.As<Vector128<T>, byte>(ref v1), other);
         
         v0 = v0.Equals(v1);
         return Unsafe.ReadUnaligned<Vector4D<T>>(ref Unsafe.As<Vector128<T>, byte>(ref v0));
@@ -514,8 +514,8 @@ unsafe
         Vector256<T> v0 = default;
         Vector256<T> v1 = default;
         
-        Unsafe.WriteUnaligned<Vector4D<T>>(ref Unsafe.As<Vector256<T>, byte>(ref v0), left);
-        Unsafe.WriteUnaligned<Vector4D<T>>(ref Unsafe.As<Vector256<T>, byte>(ref v1), right);
+        Unsafe.WriteUnaligned<Vector4D<T>>(ref Unsafe.As<Vector256<T>, byte>(ref v0), this);
+        Unsafe.WriteUnaligned<Vector4D<T>>(ref Unsafe.As<Vector256<T>, byte>(ref v1), other);
         
         v0 = v0.Equals(v1);
         return Unsafe.ReadUnaligned<Vector4D<T>>(ref Unsafe.As<Vector256<T>, byte>(ref v0));
@@ -526,8 +526,8 @@ unsafe
         Vector512<T> v0 = default;
         Vector512<T> v1 = default;
         
-        Unsafe.WriteUnaligned<Vector4D<T>>(ref Unsafe.As<Vector512<T>, byte>(ref v0), left);
-        Unsafe.WriteUnaligned<Vector4D<T>>(ref Unsafe.As<Vector512<T>, byte>(ref v1), right);
+        Unsafe.WriteUnaligned<Vector4D<T>>(ref Unsafe.As<Vector512<T>, byte>(ref v0), this);
+        Unsafe.WriteUnaligned<Vector4D<T>>(ref Unsafe.As<Vector512<T>, byte>(ref v1), other);
         
         v0 = v0.Equals(v1);
         return Unsafe.ReadUnaligned<Vector4D<T>>(ref Unsafe.As<Vector512<T>, byte>(ref v0));
@@ -1622,7 +1622,7 @@ public static partial class Vector4D
     public static Vector4D<TReturn> Reflect<T, TReturn>(Vector4D<T> vector, Vector4D<T> normal) where T : INumberBase<T> where TReturn : INumberBase<TReturn>
     {
         var dot = Dot<T, TReturn>(vector, normal);
-        return vector.As<TReturn>() - (NumericConstants<TReturn>.Two * (dot * normal.As<TReturn>()));
+        return vector.As<TReturn>() - (Scalar<TReturn>.Two * (dot * normal.As<TReturn>()));
     }
 
     /// <summary>Returns a vector whose elements are the square root of each of a specified vector's elements.</summary>

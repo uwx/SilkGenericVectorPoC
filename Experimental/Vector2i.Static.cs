@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
 
 namespace GenericVector.Experimental;
 
@@ -85,7 +86,7 @@ public static class Vector2i
     
     #endregion
 
-    #region Basic
+    #region Operator Shortcuts
 
     /// <summary>Returns a new vector whose values are the product of each pair of elements in two specified vectors.</summary>
     /// <param name="left">The first vector.</param>
@@ -176,7 +177,7 @@ public static class Vector2i
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2i<TScalar> Abs<TScalar>(Vector2i<TScalar> value) where TScalar : IBinaryInteger<TScalar>
     {
-        return new(TScalar.Abs(value.X), TScalar.Abs(value.Y));
+        return SpeedHelpers2.Abs<Vector2i<TScalar>, TScalar>(value);
     }
 
     /// <summary>Restricts a vector between a minimum and a maximum value.</summary>
@@ -188,7 +189,7 @@ public static class Vector2i
     public static Vector2i<TScalar> Clamp<TScalar>(Vector2i<TScalar> value1, Vector2i<TScalar> min, Vector2i<TScalar> max) where TScalar : IBinaryInteger<TScalar>
     {
         // We must follow HLSL behavior in the case user specified min value is bigger than max value.
-        return Min(Max(value1, min), max);
+        return SpeedHelpers2.Clamp<Vector2i<TScalar>, TScalar>(value1, min, max);
     }
 
     /// <summary>Returns the Euclidean distance squared between two specified points.</summary>
@@ -198,8 +199,7 @@ public static class Vector2i
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TScalar DistanceSquared<TScalar>(Vector2i<TScalar> value1, Vector2i<TScalar> value2) where TScalar : IBinaryInteger<TScalar>
     {
-        var difference = value1 - value2;
-        return Dot(difference, difference);
+        return SpeedHelpers2.DistanceSquared<Vector2i<TScalar>, TScalar>(value1, value2);
     }
 
     /// <summary>Returns the dot product of two vectors.</summary>
@@ -209,21 +209,7 @@ public static class Vector2i
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TScalar Dot<TScalar>(Vector2i<TScalar> vector1, Vector2i<TScalar> vector2) where TScalar : IBinaryInteger<TScalar>
     {
-        return
-            vector1.X * vector2.X +
-            vector1.Y * vector2.Y;
-    }
-
-    /// <summary>Returns the dot product of two vectors.</summary>
-    /// <param name="vector1">The first vector.</param>
-    /// <param name="vector2">The second vector.</param>
-    /// <returns>The dot product.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TReturn Dot<TScalar, TReturn>(Vector2i<TScalar> vector1, Vector2i<TScalar> vector2) where TScalar : IBinaryInteger<TScalar> where TReturn : INumberBase<TReturn>
-    {
-        return
-            TReturn.CreateTruncating(vector1.X) * TReturn.CreateTruncating(vector2.X) +
-            TReturn.CreateTruncating(vector1.Y) * TReturn.CreateTruncating(vector2.Y);
+        return SpeedHelpers2.Dot<Vector2i<TScalar>, TScalar>(vector1, vector2);
     }
 
     /// <summary>Returns a vector whose elements are the maximum of each of the pairs of elements in two specified vectors.</summary>
@@ -233,10 +219,7 @@ public static class Vector2i
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2i<TScalar> Max<TScalar>(Vector2i<TScalar> value1, Vector2i<TScalar> value2) where TScalar : IBinaryInteger<TScalar>
     {
-        return new Vector2i<TScalar>(
-            TScalar.MaxMagnitudeNumber(value1.X, value2.X), 
-            TScalar.MaxMagnitudeNumber(value1.Y, value2.Y)
-        );
+        return SpeedHelpers2.Max<Vector2i<TScalar>, TScalar>(value1, value2);
     }
 
     /// <summary>Returns a vector whose elements are the minimum of each of the pairs of elements in two specified vectors.</summary>
@@ -246,10 +229,7 @@ public static class Vector2i
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2i<TScalar> Min<TScalar>(Vector2i<TScalar> value1, Vector2i<TScalar> value2) where TScalar : IBinaryInteger<TScalar>
     {
-        return new Vector2i<TScalar>(
-        TScalar.MinMagnitudeNumber(value1.X, value2.X), 
-        TScalar.MinMagnitudeNumber(value1.Y, value2.Y)
-        );
+        return SpeedHelpers2.Min<Vector2i<TScalar>, TScalar>(value1, value2);
     }
 
     // CANNOT BE DONE
@@ -322,19 +302,13 @@ public static class Vector2i
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2i<TScalar> Remainder<TScalar>(this Vector2i<TScalar> left, Vector2i<TScalar> right) where TScalar : IBinaryInteger<TScalar>, IModulusOperators<TScalar, TScalar, TScalar>
     {
-        return new Vector2i<TScalar>(
-            left.X % right.X,
-            left.Y % right.Y
-        );
+        return SpeedHelpers2.Remainder<Vector2i<TScalar>, TScalar>(left, right);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2i<TScalar> Remainder<TScalar>(this Vector2i<TScalar> left, TScalar right) where TScalar : IBinaryInteger<TScalar>, IModulusOperators<TScalar, TScalar, TScalar>
     {
-        return new Vector2i<TScalar>(
-            left.X % right,
-            left.Y % right
-        );
+        return SpeedHelpers2.Remainder<Vector2i<TScalar>, TScalar>(left, right);
     }
     #endregion
 
@@ -347,7 +321,7 @@ public static class Vector2i
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TScalar LengthSquared<TScalar>(this Vector2i<TScalar> vec) where TScalar : IBinaryInteger<TScalar>
     {
-        return Dot<TScalar>(vec, vec);
+        return SpeedHelpers2.LengthSquared<Vector2i<TScalar>, TScalar>(vec);
     }
     #endregion
 
@@ -356,6 +330,11 @@ public static class Vector2i
     public static Vector2i<TScalar> CopySign<TScalar>(Vector2i<TScalar> value, TScalar sign) where TScalar : IBinaryInteger<TScalar> => new(TScalar.CopySign(value.X, sign), TScalar.CopySign(value.Y, sign));
     public static Vector2i<TScalar> MaxNumber<TScalar>(Vector2i<TScalar> x, Vector2i<TScalar> y) where TScalar : IBinaryInteger<TScalar> => new(TScalar.MaxNumber(x.X, y.X), TScalar.MaxNumber(x.Y, y.Y));
     public static Vector2i<TScalar> MinNumber<TScalar>(Vector2i<TScalar> x, Vector2i<TScalar> y) where TScalar : IBinaryInteger<TScalar> => new(TScalar.MinNumber(x.X, y.X), TScalar.MinNumber(x.Y, y.Y));
+    public static Vector2i<TScalar> Sign<TScalar>(Vector2i<TScalar> value) where TScalar : IBinaryInteger<TScalar> => new(TScalar.CreateChecked(TScalar.Sign(value.X)), TScalar.CreateChecked(TScalar.Sign(value.Y)));
+    
+    // IBinaryInteger<TScalar>
+    public static Vector2i<TScalar> Log2<TScalar>(Vector2i<TScalar> value) where TScalar : IBinaryInteger<TScalar> => new(TScalar.Log2(value.X), TScalar.Log2(value.Y));
+    public static Vector2i<TScalar> PopCount<TScalar>(Vector2i<TScalar> value) where TScalar : IBinaryInteger<TScalar> => new(TScalar.PopCount(value.X), TScalar.PopCount(value.Y));
 }
 
 // IVector<Vector2i<TScalar>, TScalar>

@@ -1,12 +1,16 @@
 ﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using System.Text.Unicode;
 
 namespace GenericVector.Experimental;
 
 public readonly partial record struct Vector2i<TScalar> :
+    IVectorInternal<Vector2i<TScalar>, TScalar>,
     IBinaryIntegerVector<Vector2i<TScalar>, TScalar>,
     IVector2<Vector2i<TScalar>, TScalar>
     where TScalar : IBinaryInteger<TScalar>
@@ -57,7 +61,7 @@ public readonly partial record struct Vector2i<TScalar> :
     {
         Unsafe.SkipInit(out this);
 
-        ArgumentOutOfRangeException.ThrowIfLessThan(values.Length, Count, nameof(values));
+        ArgumentOutOfRangeException.ThrowIfLessThan(values.Length, ElementCount, nameof(values));
 
         this = Unsafe.ReadUnaligned<Vector2i<TScalar>>(ref Unsafe.As<TScalar, byte>(ref MemoryMarshal.GetReference(values)));
     }
@@ -68,9 +72,9 @@ public readonly partial record struct Vector2i<TScalar> :
     public static Vector2i<TScalar> operator /(Vector2i<TScalar> left, Vector2i<TScalar> right) => SpeedHelpers2.Divide<Vector2i<TScalar>, TScalar>(left, right);
     public static Vector2i<TScalar> operator %(Vector2i<TScalar> left, Vector2i<TScalar> right) => SpeedHelpers2.Remainder<Vector2i<TScalar>, TScalar>(left, right);
 
-    public static Vector2i<TScalar> operator *(Vector2i<TScalar> left, TScalar right) => SpeedHelpers2.Multiply<Vector2i<TScalar>, TScalar>(left, right); 
-    public static Vector2i<TScalar> operator /(Vector2i<TScalar> left, TScalar right) => SpeedHelpers2.Divide<Vector2i<TScalar>, TScalar>(left, right);
-    public static Vector2i<TScalar> operator %(Vector2i<TScalar> left, TScalar right) => SpeedHelpers2.Remainder<Vector2i<TScalar>, TScalar>(left, right);
+    public static Vector2i<TScalar> operator *(Vector2i<TScalar> left, TScalar right) => SpeedHelpers2.Multiply(left, right); 
+    public static Vector2i<TScalar> operator /(Vector2i<TScalar> left, TScalar right) => SpeedHelpers2.Divide(left, right);
+    public static Vector2i<TScalar> operator %(Vector2i<TScalar> left, TScalar right) => SpeedHelpers2.Remainder(left, right);
     
     public static Vector2i<TScalar> operator *(TScalar left, Vector2i<TScalar> right) => right * left;
 
@@ -87,10 +91,103 @@ public readonly partial record struct Vector2i<TScalar> :
 
     public override string ToString() => ToString("G", null);
     public string ToString(string? format) => ToString(format, null);
-    public string ToString(string? format, IFormatProvider? formatProvider) => ;
-    
-    public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider) => ;
-    public bool TryFormat(Span<byte> utf8Destination, out int bytesWritten, ReadOnlySpan<char> format, IFormatProvider? provider) => ;
+
+    public string ToString(string? format, IFormatProvider? formatProvider)
+    {
+        var separator = NumberFormatInfo.GetInstance(formatProvider).NumberGroupSeparator;
+
+        Span<char> initialBuffer = stackalloc char[Math.Min((2 + (ElementCount - 1) + (separator.Length * (ElementCount - 1)) + (ElementCount * 2)), 256)];
+
+        // We can't use an interpolated string here because it won't allow us to pass `format`
+        var handler = new DefaultInterpolatedStringHandler(
+            4 + (separator.Length * 2),
+            ElementCount,
+            formatProvider,
+            initialBuffer
+        );
+
+        handler.AppendLiteral("<");
+        handler.AppendFormatted(X, format);
+        handler.AppendLiteral(separator);
+        handler.AppendLiteral(" ");
+        handler.AppendFormatted(Y, format);
+        handler.AppendLiteral(">");
+
+        return handler.ToStringAndClear();
+    };
+
+    public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+    {
+        // Possible fast path for failure case:
+        // if (destination.Length < 4) return false;
+
+        var separator = NumberFormatInfo.GetInstance(provider).NumberGroupSeparator;
+
+        // We can't use an interpolated string here because it won't allow us to pass `format`
+        var handler = new MemoryExtensions.TryWriteInterpolatedStringHandler(
+            4 + (separator.Length * 2),
+            Count,
+            destination,
+            provider,
+            out var shouldAppend
+        );
+        if (!shouldAppend)
+        {
+            charsWritten = 0;
+            return false;
+        }
+
+        // Annoyingly we need to turn the span into a string for the string handler
+        string? formatString = format.Length > 0 ? new string(format) : null;
+
+        _ =
+            handler.AppendLiteral("<") &&
+            handler.AppendFormatted(X, formatString) &&
+            handler.AppendLiteral(separator) &&
+            handler.AppendLiteral(" ") &&
+            handler.AppendFormatted(Y, formatString) &&
+            handler.AppendLiteral(">");
+
+        return destination.TryWrite(ref handler, out charsWritten);
+    }
+
+    public bool TryFormat(Span<byte> utf8Destination, out int bytesWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+    {
+        // Possible fast path for failure case:
+        // if (destination.Length < 4) return false;
+
+        var separator = NumberFormatInfo.GetInstance(provider).NumberGroupSeparator;
+
+        // We can't use an interpolated string here because it won't allow us to pass `format`
+        var handler = new Utf8.TryWriteInterpolatedStringHandler(
+            4 + (separator.Length * 2),
+            ElementCount,
+            utf8Destination,
+            provider,
+            out var shouldAppend
+        );
+        if (!shouldAppend)
+        {
+            bytesWritten = 0;
+            return false;
+        }
+
+        // Annoyingly we need to turn the span into a string for the string handler
+        string? formatString = format.Length > 0 ? new string(format) : null;
+        
+        formatString.AsSpan()
+
+        // JIT will automagically convert literals to utf8
+        _ =
+            handler.AppendLiteral("<") &&
+            handler.AppendFormatted(X, formatString) &&
+            handler.AppendLiteral(separator) &&
+            handler.AppendLiteral(" ") &&
+            handler.AppendFormatted(Y, formatString) &&
+            handler.AppendLiteral(">");
+
+        return Utf8.TryWrite(utf8Destination, ref handler, out bytesWritten);
+    };
 
     public static Vector2i<TScalar> Parse(string s, IFormatProvider? provider) => ;
     public static Vector2i<TScalar> Parse(ReadOnlySpan<char> s, IFormatProvider? provider) => ;
@@ -108,9 +205,12 @@ public readonly partial record struct Vector2i<TScalar> :
     IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<TScalar>)this).GetEnumerator();
 
     public bool Equals(Vector2i<TScalar> other) => SpeedHelpers2.Equal<Vector2i<TScalar>, TScalar>(this, other);
+
+    static Vector2i<TScalar> IVectorInternal<Vector2i<TScalar>, TScalar>.CreateInternal(TScalar x, TScalar y, TScalar z, TScalar w, TScalar v) => new(x, y);
+
     public override int GetHashCode() => HashCode.Combine(X, Y);
 
-    TScalar IVector<Vector2i<TScalar>, TScalar>.LengthSquared() => ;
+    TScalar IVector<Vector2i<TScalar>, TScalar>.LengthSquared() => Vector2i.LengthSquared(this);
     Vector2i<TScalar> IVectorEquatable<Vector2i<TScalar>, TScalar>.ScalarsEqual(Vector2i<TScalar> other) => SpeedHelpers2.EqualIntoVector<Vector2i<TScalar>, TScalar>(this, other);
 
     static ReadOnlySpan<TScalar> IVector<Vector2i<TScalar>, TScalar>.AsSpan(Vector2i<TScalar> vec) => vec.AsSpan();
@@ -134,230 +234,95 @@ public readonly partial record struct Vector2i<TScalar> :
 
     static bool IVector<Vector2i<TScalar>, TScalar>.TryConvertFromChecked<TOther, TOtherScalar>(TOther value, out Vector2i<TScalar> result)
     {
-        if (typeof(TOther) == typeof(Vector2i<TScalar>))
-        {
-            result = (Vector2i<TScalar>)(object)value;
-            return true;
-        }
-        
         if (TOther.Count < ElementCount)
         {
             result = default;
             return false;
         }
-        
-        // Fast-path builtin convertible scalar types
-        if ((
-            typeof(TOtherScalar) == typeof(NFloat) ||
-            typeof(TOtherScalar) == typeof(BigInteger) ||
-            typeof(TOtherScalar) == typeof(Complex) ||            
-            typeof(TOtherScalar) == typeof(byte) ||
-            typeof(TOtherScalar) == typeof(char) ||
-            typeof(TOtherScalar) == typeof(decimal) ||
-            typeof(TOtherScalar) == typeof(ushort) ||
-            typeof(TOtherScalar) == typeof(uint) ||
-            typeof(TOtherScalar) == typeof(ulong) ||
-            typeof(TOtherScalar) == typeof(nuint) ||
-            typeof(TOtherScalar) == typeof(double) ||
-            typeof(TOtherScalar) == typeof(Half) ||
-            typeof(TOtherScalar) == typeof(short) ||
-            typeof(TOtherScalar) == typeof(int) ||
-            typeof(TOtherScalar) == typeof(long) ||
-            typeof(TOtherScalar) == typeof(Int128) ||
-            typeof(TOtherScalar) == typeof(nint) ||
-            typeof(TOtherScalar) == typeof(sbyte) ||
-            typeof(TOtherScalar) == typeof(float) ||
-            typeof(TOtherScalar) == typeof(UInt128)
-        ) && (
-            typeof(TScalar) == typeof(NFloat) ||
-            typeof(TScalar) == typeof(BigInteger) ||
-            typeof(TScalar) == typeof(Complex) ||            
-            typeof(TScalar) == typeof(byte) ||
-            typeof(TScalar) == typeof(char) ||
-            typeof(TScalar) == typeof(decimal) ||
-            typeof(TScalar) == typeof(ushort) ||
-            typeof(TScalar) == typeof(uint) ||
-            typeof(TScalar) == typeof(ulong) ||
-            typeof(TScalar) == typeof(nuint) ||
-            typeof(TScalar) == typeof(double) ||
-            typeof(TScalar) == typeof(Half) ||
-            typeof(TScalar) == typeof(short) ||
-            typeof(TScalar) == typeof(int) ||
-            typeof(TScalar) == typeof(long) ||
-            typeof(TScalar) == typeof(Int128) ||
-            typeof(TScalar) == typeof(nint) ||
-            typeof(TScalar) == typeof(sbyte) ||
-            typeof(TScalar) == typeof(float) ||
-            typeof(TScalar) == typeof(UInt128)
-        ))
-        {
-            result = new Vector2i<TScalar>(TScalar.CreateChecked(value[0]), TScalar.CreateChecked(value[1]));
 
+        // For Silk.NET.Maths-provided vectors, where the scalars are the exact same type, and the size is at least as
+        // large as the vector type being converted to, we can safely do a bitcast.
+        if (value is IVectorInternal && typeof(TScalar) == typeof(TOtherScalar))
+        {
+            result = Unsafe.As<TOther, Vector2i<TScalar>>(ref value);
             return true;
         }
 
-        try
-        {
-            result = new Vector2i<TScalar>(TScalar.CreateChecked(value[0]), TScalar.CreateChecked(value[1]));
-            return true;
-        }
-        catch (NotSupportedException)
+        if (!ShamelessExploit.TryConvertChecked<TOtherScalar, TScalar>(value[0], out var x) ||
+            !ShamelessExploit.TryConvertChecked<TOtherScalar, TScalar>(value[1], out var y))
         {
             result = default;
             return false;
         }
+        
+        result = new Vector2i<TScalar>(x, y);
+        return true;
     }
     static bool IVector<Vector2i<TScalar>, TScalar>.TryConvertFromSaturating<TOther, TOtherScalar>(TOther value, out Vector2i<TScalar> result)
     {
-        if (typeof(TOther) == typeof(Vector2i<TScalar>))
-        {
-            result = (Vector2i<TScalar>)(object)value;
-            return true;
-        }
-
         if (TOther.Count < ElementCount)
         {
             result = default;
             return false;
         }
-        
-        // Fast-path builtin convertible scalar types
-        if ((
-            typeof(TOtherScalar) == typeof(NFloat) ||
-            typeof(TOtherScalar) == typeof(BigInteger) ||
-            typeof(TOtherScalar) == typeof(Complex) ||            
-            typeof(TOtherScalar) == typeof(byte) ||
-            typeof(TOtherScalar) == typeof(char) ||
-            typeof(TOtherScalar) == typeof(decimal) ||
-            typeof(TOtherScalar) == typeof(ushort) ||
-            typeof(TOtherScalar) == typeof(uint) ||
-            typeof(TOtherScalar) == typeof(ulong) ||
-            typeof(TOtherScalar) == typeof(nuint) ||
-            typeof(TOtherScalar) == typeof(double) ||
-            typeof(TOtherScalar) == typeof(Half) ||
-            typeof(TOtherScalar) == typeof(short) ||
-            typeof(TOtherScalar) == typeof(int) ||
-            typeof(TOtherScalar) == typeof(long) ||
-            typeof(TOtherScalar) == typeof(Int128) ||
-            typeof(TOtherScalar) == typeof(nint) ||
-            typeof(TOtherScalar) == typeof(sbyte) ||
-            typeof(TOtherScalar) == typeof(float) ||
-            typeof(TOtherScalar) == typeof(UInt128)
-        ) && (
-            typeof(TScalar) == typeof(NFloat) ||
-            typeof(TScalar) == typeof(BigInteger) ||
-            typeof(TScalar) == typeof(Complex) ||            
-            typeof(TScalar) == typeof(byte) ||
-            typeof(TScalar) == typeof(char) ||
-            typeof(TScalar) == typeof(decimal) ||
-            typeof(TScalar) == typeof(ushort) ||
-            typeof(TScalar) == typeof(uint) ||
-            typeof(TScalar) == typeof(ulong) ||
-            typeof(TScalar) == typeof(nuint) ||
-            typeof(TScalar) == typeof(double) ||
-            typeof(TScalar) == typeof(Half) ||
-            typeof(TScalar) == typeof(short) ||
-            typeof(TScalar) == typeof(int) ||
-            typeof(TScalar) == typeof(long) ||
-            typeof(TScalar) == typeof(Int128) ||
-            typeof(TScalar) == typeof(nint) ||
-            typeof(TScalar) == typeof(sbyte) ||
-            typeof(TScalar) == typeof(float) ||
-            typeof(TScalar) == typeof(UInt128)
-        ))
-        {
-            result = new Vector2i<TScalar>(TScalar.CreateSaturating(value[0]), TScalar.CreateSaturating(value[1]));
 
+        // For Silk.NET.Maths-provided vectors, where the scalars are the exact same type, and the size is at least as
+        // large as the vector type being converted to, we can safely do a bitcast.
+        if (value is IVectorInternal && typeof(TScalar) == typeof(TOtherScalar))
+        {
+            result = Unsafe.As<TOther, Vector2i<TScalar>>(ref value);
             return true;
         }
 
-        try
-        {
-            result = new Vector2i<TScalar>(TScalar.CreateSaturating(value[0]), TScalar.CreateSaturating(value[1]));
-            return true;
-        }
-        catch (NotSupportedException)
+        if (!ShamelessExploit.TryConvertSaturating<TOtherScalar, TScalar>(value[0], out var x) ||
+            !ShamelessExploit.TryConvertSaturating<TOtherScalar, TScalar>(value[1], out var y))
         {
             result = default;
             return false;
         }
+        
+        result = new Vector2i<TScalar>(x, y);
+        return true;
     }
     static bool IVector<Vector2i<TScalar>, TScalar>.TryConvertFromTruncating<TOther, TOtherScalar>(TOther value, out Vector2i<TScalar> result)
     {
-        if (typeof(TOther) == typeof(Vector2i<TScalar>))
-        {
-            result = (Vector2i<TScalar>)(object)value;
-            return true;
-        }
-
         if (TOther.Count < ElementCount)
         {
             result = default;
             return false;
         }
-        
-        // Fast-path builtin convertible scalar types
-        if ((
-            typeof(TOtherScalar) == typeof(NFloat) ||
-            typeof(TOtherScalar) == typeof(BigInteger) ||
-            typeof(TOtherScalar) == typeof(Complex) ||            
-            typeof(TOtherScalar) == typeof(byte) ||
-            typeof(TOtherScalar) == typeof(char) ||
-            typeof(TOtherScalar) == typeof(decimal) ||
-            typeof(TOtherScalar) == typeof(ushort) ||
-            typeof(TOtherScalar) == typeof(uint) ||
-            typeof(TOtherScalar) == typeof(ulong) ||
-            typeof(TOtherScalar) == typeof(nuint) ||
-            typeof(TOtherScalar) == typeof(double) ||
-            typeof(TOtherScalar) == typeof(Half) ||
-            typeof(TOtherScalar) == typeof(short) ||
-            typeof(TOtherScalar) == typeof(int) ||
-            typeof(TOtherScalar) == typeof(long) ||
-            typeof(TOtherScalar) == typeof(Int128) ||
-            typeof(TOtherScalar) == typeof(nint) ||
-            typeof(TOtherScalar) == typeof(sbyte) ||
-            typeof(TOtherScalar) == typeof(float) ||
-            typeof(TOtherScalar) == typeof(UInt128)
-        ) && (
-            typeof(TScalar) == typeof(NFloat) ||
-            typeof(TScalar) == typeof(BigInteger) ||
-            typeof(TScalar) == typeof(Complex) ||            
-            typeof(TScalar) == typeof(byte) ||
-            typeof(TScalar) == typeof(char) ||
-            typeof(TScalar) == typeof(decimal) ||
-            typeof(TScalar) == typeof(ushort) ||
-            typeof(TScalar) == typeof(uint) ||
-            typeof(TScalar) == typeof(ulong) ||
-            typeof(TScalar) == typeof(nuint) ||
-            typeof(TScalar) == typeof(double) ||
-            typeof(TScalar) == typeof(Half) ||
-            typeof(TScalar) == typeof(short) ||
-            typeof(TScalar) == typeof(int) ||
-            typeof(TScalar) == typeof(long) ||
-            typeof(TScalar) == typeof(Int128) ||
-            typeof(TScalar) == typeof(nint) ||
-            typeof(TScalar) == typeof(sbyte) ||
-            typeof(TScalar) == typeof(float) ||
-            typeof(TScalar) == typeof(UInt128)
-        ))
-        {
-            result = new Vector2i<TScalar>(TScalar.CreateTruncating(value[0]), TScalar.CreateTruncating(value[1]));
 
+        // For Silk.NET.Maths-provided vectors, where the scalars are the exact same type, and the size is at least as
+        // large as the vector type being converted to, we can safely do a bitcast.
+        if (value is IVectorInternal && typeof(TScalar) == typeof(TOtherScalar))
+        {
+            result = Unsafe.As<TOther, Vector2i<TScalar>>(ref value);
             return true;
         }
 
-        try
-        {
-            result = new Vector2i<TScalar>(TScalar.CreateTruncating(value[0]), TScalar.CreateTruncating(value[1]));
-            return true;
-        }
-        catch (NotSupportedException)
+        if (!ShamelessExploit.TryConvertTruncating<TOtherScalar, TScalar>(value[0], out var x) ||
+            !ShamelessExploit.TryConvertTruncating<TOtherScalar, TScalar>(value[1], out var y))
         {
             result = default;
             return false;
         }
+        
+        result = new Vector2i<TScalar>(x, y);
+        return true;
     }
-    static bool IVector<Vector2i<TScalar>, TScalar>.TryConvertToChecked<TOther, TOtherScalar>(Vector2i<TScalar> value, out TOther result)
+    static bool IVector<Vector2i<TScalar>, TScalar>.TryConvertToChecked<TOther, TOtherScalar>(Vector2i<TScalar> value, [MaybeNullWhen(false)] out TOther result)
+    {
+        if (!ShamelessExploit.TryConvertTruncating<TScalar, TOtherScalar>(value.X, out var x) ||
+            !ShamelessExploit.TryConvertTruncating<TScalar, TOtherScalar>(value.Y, out var y))
+        {
+            result = default;
+            return false;
+        }
+
+        result = default;
+        return false;
+    }
+    static bool IVector<Vector2i<TScalar>, TScalar>.TryConvertToSaturating<TOther, TOtherScalar>(Vector2i<TScalar> value, [MaybeNullWhen(false)] out TOther result)
     {
         if (typeof(TOther) == typeof(Vector2i<TScalar>))
         {
@@ -368,18 +333,7 @@ public readonly partial record struct Vector2i<TScalar> :
         result = default;
         return false;
     }
-    static bool IVector<Vector2i<TScalar>, TScalar>.TryConvertToSaturating<TOther, TOtherScalar>(Vector2i<TScalar> value, out TOther result)
-    {
-        if (typeof(TOther) == typeof(Vector2i<TScalar>))
-        {
-            result = (TOther)(object)value;
-            return true;
-        }
-
-        result = default;
-        return false;
-    }
-    static bool IVector<Vector2i<TScalar>, TScalar>.TryConvertToTruncating<TOther, TOtherScalar>(Vector2i<TScalar> value, out TOther result)
+    static bool IVector<Vector2i<TScalar>, TScalar>.TryConvertToTruncating<TOther, TOtherScalar>(Vector2i<TScalar> value, [MaybeNullWhen(false)] out TOther result)
     {
         if (typeof(TOther) == typeof(Vector2i<TScalar>))
         {
@@ -397,16 +351,82 @@ public readonly partial record struct Vector2i<TScalar> :
 
     #region Int-specific code
 
-    static bool IBinaryIntegerVector<Vector2i<TScalar>, TScalar>.TryReadBigEndian(ReadOnlySpan<byte> source, bool isUnsigned, out Vector2i<TScalar> value) => ;
-    static bool IBinaryIntegerVector<Vector2i<TScalar>, TScalar>.TryReadLittleEndian(ReadOnlySpan<byte> source, bool isUnsigned, out Vector2i<TScalar> value) => ;
-    bool IBinaryIntegerVector<Vector2i<TScalar>, TScalar>.TryWriteBigEndian(Span<byte> destination, out int bytesWritten) => ;
-    bool IBinaryIntegerVector<Vector2i<TScalar>, TScalar>.TryWriteLittleEndian(Span<byte> destination, out int bytesWritten) => ;
+    static bool IBinaryIntegerVector<Vector2i<TScalar>, TScalar>.TryReadBigEndian(ReadOnlySpan<byte> source, bool isUnsigned, out Vector2i<TScalar> value)
+    {
+        if (!TScalar.TryReadBigEndian(source, isUnsigned, out var x)) goto Failed;
+        source = source[x.GetByteCount()..];
+        
+        if (!TScalar.TryReadBigEndian(source, isUnsigned, out var y)) goto Failed;
+        // source = source[x.GetByteCount()..];
+
+        value = new(x, y);
+        return true;
+        
+        Failed:
+        value = default;
+        return false;
+    }
+    static bool IBinaryIntegerVector<Vector2i<TScalar>, TScalar>.TryReadLittleEndian(ReadOnlySpan<byte> source, bool isUnsigned, out Vector2i<TScalar> value)
+    {
+        if (!TScalar.TryReadLittleEndian(source, isUnsigned, out var x)) goto Failed;
+        source = source[x.GetByteCount()..];
+        
+        if (!TScalar.TryReadLittleEndian(source, isUnsigned, out var y)) goto Failed;
+        // source = source[y.GetByteCount()..];
+
+        value = new(x, y);
+        return true;
+        
+        Failed:
+        value = default;
+        return false;
+    }
+    bool IBinaryIntegerVector<Vector2i<TScalar>, TScalar>.TryWriteBigEndian(Span<byte> destination, out int bytesWritten)
+    {
+        bytesWritten = 0;
+        
+        int b;
+
+        if (!X.TryWriteBigEndian(destination, out b)) goto Failed;
+        bytesWritten += b;
+        destination = destination[b..];
+
+        if (!Y.TryWriteBigEndian(destination, out b)) goto Failed;
+        bytesWritten += b;
+        // destination = destination[b..];
+
+        return true;
+        
+        Failed:
+        bytesWritten += b;
+        return false;
+    }
+    bool IBinaryIntegerVector<Vector2i<TScalar>, TScalar>.TryWriteLittleEndian(Span<byte> destination, out int bytesWritten)
+    {
+        bytesWritten = 0;
+        
+        int b;
+
+        if (!X.TryWriteLittleEndian(destination, out b)) goto Failed;
+        bytesWritten += b;
+        destination = destination[b..];
+
+        if (!Y.TryWriteLittleEndian(destination, out b)) goto Failed;
+        bytesWritten += b;
+        // destination = destination[b..];
+
+        return true;
+        
+        Failed:
+        bytesWritten += b;
+        return false;
+    }
 
     static Vector2i<TScalar> INumberVector<Vector2i<TScalar>, TScalar>.CopySign(Vector2i<TScalar> value, Vector2i<TScalar> sign) => Vector2i.CopySign(value, sign);
     static Vector2i<TScalar> INumberVector<Vector2i<TScalar>, TScalar>.CopySign(Vector2i<TScalar> value, TScalar sign) => Vector2i.CopySign(value, sign);
     static Vector2i<TScalar> INumberVector<Vector2i<TScalar>, TScalar>.Sign(Vector2i<TScalar> value) => Vector2i.Sign(value);
-    static Vector2i<TScalar> IBinaryNumberVector<Vector2i<TScalar>, TScalar>.Log2(Vector2i<TScalar> value) => Vector2.Log2(value);
-    static Vector2i<TScalar> IBinaryIntegerVector<Vector2i<TScalar>, TScalar>.PopCount(Vector2i<TScalar> value) => Vector2.PopCount(value);
+    static Vector2i<TScalar> IBinaryNumberVector<Vector2i<TScalar>, TScalar>.Log2(Vector2i<TScalar> value) => Vector2i.Log2(value);
+    static Vector2i<TScalar> IBinaryIntegerVector<Vector2i<TScalar>, TScalar>.PopCount(Vector2i<TScalar> value) => Vector2i.PopCount(value);
 
     #endregion
 
