@@ -1,0 +1,204 @@
+{{~
+load_file '_IncludeVector.scriban-cs'
+~}}
+
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
+
+namespace GenericVector.Experimental;
+
+public static class {{ Vector }}
+{
+    {{~ ScalarConstraint = 'IBinaryFloatingPointIeee754<TScalar>' ~}}
+
+    {{ include 'Vector_n_shared_static.scriban-cs' }}
+
+    // IBinaryInteger<TScalar>
+    public static {{ VectorT }} Log2<TScalar>({{ VectorT }} value) where TScalar : IBinaryInteger<TScalar> => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Log2(value.{c})"; end }});
+    public static {{ VectorT }} PopCount<TScalar>({{ VectorT }} value) where TScalar : IBinaryInteger<TScalar> => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.PopCount(value.{c})"; end }});
+
+    // Float-specific stuff
+    /// <summary>Returns the length of this vector object.</summary>
+    /// <returns>The vector's length.</returns>
+    /// <altmember cref="LengthSquared{TScalar}"/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TScalar Length<TScalar>(this Vector2f<TScalar> vec) where TScalar : IBinaryFloatingPointIeee754<TScalar>
+    {
+        var lengthSquared = vec.LengthSquared();
+        return TScalar.Sqrt(lengthSquared);
+    }
+
+    /// <summary>Computes the Euclidean distance between the two given points.</summary>
+    /// <param name="value1">The first point.</param>
+    /// <param name="value2">The second point.</param>
+    /// <returns>The distance.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TScalar Distance<TScalar>(Vector2f<TScalar> value1, Vector2f<TScalar> value2) where TScalar : IBinaryFloatingPointIeee754<TScalar>
+    {
+        var distanceSquared = DistanceSquared(value1, value2);
+        return TScalar.Sqrt(distanceSquared);
+    }
+
+    /// <summary>Performs a linear interpolation between two vectors based on the given weighting.</summary>
+    /// <param name="value1">The first vector.</param>
+    /// <param name="value2">The second vector.</param>
+    /// <param name="amount">A value between 0 and 1 that indicates the weight of <paramref name="value2" />.</param>
+    /// <returns>The interpolated vector.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2f<TScalar> Lerp<TScalar>(Vector2f<TScalar> value1, Vector2f<TScalar> value2, TScalar amount) where TScalar : IBinaryFloatingPointIeee754<TScalar>
+    {
+        return (value1 * (TScalar.One - amount)) + (value2 * amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector2f<TScalar> LerpUnchecked<TScalar>(Vector2f<TScalar> value1, Vector2f<TScalar> value2, TScalar amount) where TScalar : IBinaryFloatingPointIeee754<TScalar>
+    {
+        return (value1 * (TScalar.One - amount)) + (value2 * amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2f<TScalar> LerpClamped<TScalar>(Vector2f<TScalar> value1, Vector2f<TScalar> value2, TScalar amount) where TScalar : IBinaryFloatingPointIeee754<TScalar>
+    {
+        amount = TScalar.Clamp(amount, TScalar.Zero, TScalar.One);
+        return Lerp(value1, value2, amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector2f<TScalar> LerpClampedUnchecked<TScalar>(Vector2f<TScalar> value1, Vector2f<TScalar> value2, TScalar amount) where TScalar : IBinaryFloatingPointIeee754<TScalar>
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static TScalar ClampT(TScalar value, TScalar min, TScalar max)
+        {
+            return TScalar.MaxMagnitude(TScalar.MaxMagnitude(value, min), max);
+        }
+
+        amount = ClampT(amount, TScalar.Zero, TScalar.One);
+        return LerpUnchecked(value1, value2, amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2f<TScalar> Lerp<TScalar>(Vector2f<TScalar> value1, Vector2f<TScalar> value2, Vector2f<TScalar> amount) where TScalar : IBinaryFloatingPointIeee754<TScalar>
+    {
+        return (value1 * (Vector2f<TScalar>.One - amount)) + (value2 * amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector2f<TScalar> LerpUnchecked<TScalar>(Vector2f<TScalar> value1, Vector2f<TScalar> value2, Vector2f<TScalar> amount) where TScalar : IBinaryFloatingPointIeee754<TScalar>
+    {
+        return (value1 * (Vector2f<TScalar>.One - amount)) + (value2 * amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2f<TScalar> LerpClamped<TScalar>(Vector2f<TScalar> value1, Vector2f<TScalar> value2, Vector2f<TScalar> amount) where TScalar : IBinaryFloatingPointIeee754<TScalar>
+    {
+        amount = Clamp(amount, Vector2f<TScalar>.Zero, Vector2f<TScalar>.One);
+        return Lerp(value1, value2, amount);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector2f<TScalar> LerpClampedUnchecked<TScalar>(Vector2f<TScalar> value1, Vector2f<TScalar> value2, Vector2f<TScalar> amount) where TScalar : IBinaryFloatingPointIeee754<TScalar>
+    {
+        amount = Clamp(amount, Vector2f<TScalar>.Zero, Vector2f<TScalar>.One);
+        return LerpUnchecked(value1, value2, amount);
+    }
+
+    /// <summary>Returns a vector with the same direction as the specified vector, but with a length of one.</summary>
+    /// <param name="value">The vector to normalize.</param>
+    /// <returns>The normalized vector.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2f<TScalar> Normalize<TScalar>(Vector2f<TScalar> value) where TScalar : IBinaryFloatingPointIeee754<TScalar>
+    {
+        return value / value.Length();
+    }
+
+    /// <summary>Returns the reflection of a vector off a surface that has the specified normal.</summary>
+    /// <param name="vector">The source vector.</param>
+    /// <param name="normal">The normal of the surface being reflected off.</param>
+    /// <returns>The reflected vector.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2f<TScalar> Reflect<TScalar>(Vector2f<TScalar> vector, Vector2f<TScalar> normal) where TScalar : IBinaryFloatingPointIeee754<TScalar>
+    {
+        var dot = Dot(vector, normal);
+        return vector - (Scalar<TScalar>.Two * (dot * normal));
+    }
+
+    /// <summary>Returns a vector whose elements are the square root of each of a specified vector's elements.</summary>
+    /// <param name="value">A vector.</param>
+    /// <returns>The square root vector.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2f<TScalar> Sqrt<TScalar>(Vector2f<TScalar> value) where TScalar : IBinaryFloatingPointIeee754<TScalar>
+    {
+        return new Vector2f<TScalar>(
+            TScalar.Sqrt(value.X),
+            TScalar.Sqrt(value.Y)
+        );
+    }
+
+    // Even more float-specific stuff
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Acosh(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Acosh(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Asinh(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Asinh(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Atanh(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Atanh(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Cosh(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Cosh(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Sinh(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Sinh(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Tanh(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Tanh(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Acos(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Acos(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.AcosPi(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.AcosPi(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Asin(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Asin(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.AsinPi(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.AsinPi(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Atan(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Atan(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.AtanPi(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.AtanPi(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Cos(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Cos(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.CosPi(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.CosPi(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.DegreesToRadians(Vector2f<TScalar> degrees) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.DegreesToRadians(degrees.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.RadiansToDegrees(Vector2f<TScalar> radians) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.RadiansToDegrees(radians.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Sin(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Sin(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.SinPi(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.SinPi(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Tan(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Tan(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.TanPi(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.TanPi(x.{c})"; end }});
+    static (Vector2f<TScalar> Sin, Vector2f<TScalar> Cos) IFloatingPointVector<Vector2f<TScalar>, TScalar>.SinCos(Vector2f<TScalar> x) => (
+        new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Sin(x.{c})"; end }}),
+        new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Cos(x.{c})"; end }})
+    );
+    static (Vector2f<TScalar> SinPi, Vector2f<TScalar> CosPi) IFloatingPointVector<Vector2f<TScalar>, TScalar>.SinCosPi(Vector2f<TScalar> x) => (
+        new({{ wrap forEachDimension ', ' newline:false; $"TScalar.SinPi(x.{c})"; end }}),
+        new({{ wrap forEachDimension ', ' newline:false; $"TScalar.CosPi(x.{c})"; end }})
+    );
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Log(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Log(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Log(Vector2f<TScalar> x, Vector2f<TScalar> newBase) => Vector2f.Log(x, newBase);
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Log(Vector2f<TScalar> x, TScalar newBase) => Vector2f.Log(x, newBase);
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.LogP1(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.LogP1(x.{c})"; end }})
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Log2(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Log2(x.{c})"; end }})
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Log2P1(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Log2P1(x.{c})"; end }})
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Log10(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Log10(x.{c})"; end }})
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Log10P1(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Log10P1(x.{c})"; end }})
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Exp(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Exp(x.{c})"; end }})
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.ExpM1(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.ExpM1(x.{c})"; end }})
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Exp2(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Exp2(x.{c})"; end }})
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Exp2M1(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Exp2M1(x.{c})"; end }})
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Exp10(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Exp10(x.{c})"; end }})
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Exp10M1(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Exp10M1(x.{c})"; end }})
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Pow(Vector2f<TScalar> x, Vector2f<TScalar> y) => Vector2f.Pow(x, y);
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Pow(Vector2f<TScalar> x, TScalar y) => Vector2f.Pow(x, y);
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Cbrt(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Cbrt(x.{c})"; end }})
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Hypot(Vector2f<TScalar> x, Vector2f<TScalar> y) => Vector2f.Hypot(x, y);
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Hypot(Vector2f<TScalar> x, TScalar y) => Vector2f.Hypot(x, y);
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.RootN(Vector2f<TScalar> x, int n) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.RootN(x.{c}, n)"; end }})
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Round(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Round(x.{c})"; end }})
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Round(Vector2f<TScalar> x, int digits) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Round(x.{c}, digits)"; end }})
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Round(Vector2f<TScalar> x, MidpointRounding mode) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Round(x.{c}, mode)"; end }})
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Round(Vector2f<TScalar> x, int digits, MidpointRounding mode) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Round(x.{c}, digits, mode)"; end }})
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Truncate(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Truncate(x.{c})"; end }})
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Atan2(Vector2f<TScalar> x, Vector2f<TScalar> y) => Vector2f.Atan2(x, y);
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Atan2Pi(Vector2f<TScalar> x, Vector2f<TScalar> y) => Vector2f.Atan2Pi(x, y);
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Atan2(Vector2f<TScalar> x, TScalar y) => Vector2f.Atan2(x, y);
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.Atan2Pi(Vector2f<TScalar> x, TScalar y) => Vector2f.Atan2Pi(x, y);
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.BitDecrement(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.BitDecrement(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.BitIncrement(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.BitIncrement(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.FusedMultiplyAdd(Vector2f<TScalar> left, Vector2f<TScalar> right, Vector2f<TScalar> addend) => Vector2f.FusedMultiplyAdd(left, right, addend);
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.ReciprocalEstimate(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.ReciprocalEstimate(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.ReciprocalSqrtEstimate(Vector2f<TScalar> x) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.ReciprocalSqrtEstimate(x.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.ScaleB(Vector2f<TScalar> x, Vector2D<int> n) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.ScaleB(x.{c}, n.{c})"; end }});
+    static Vector2f<TScalar> IFloatingPointVector<Vector2f<TScalar>, TScalar>.ScaleB(Vector2f<TScalar> x, int n) => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.ScaleB(x.{c}, n)"; end }});
+}

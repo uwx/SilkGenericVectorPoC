@@ -1,0 +1,99 @@
+{{~
+load_file '_IncludeVector.scriban-cs'
+~}}
+
+using System.Buffers;
+using System.Collections;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Text.Unicode;
+
+namespace GenericVector.Experimental;
+
+public readonly partial record struct {{ VectorT }} :
+    IVectorInternal<{{ VectorT }}, TScalar>,
+    IBinaryIntegerVector<{{ VectorT }}, TScalar>,
+    IVector{{ element_count }}<{{ VectorT }}, TScalar>
+    where TScalar : IBinaryInteger<TScalar>
+{
+    {{ include 'Vector_n_shared.scriban-cs' }}
+
+    #region Int-specific code
+
+    static bool IBinaryIntegerVector<{{ VectorT }}, TScalar>.TryReadBigEndian(ReadOnlySpan<byte> source, bool isUnsigned, out {{ VectorT }} value)
+    {
+        {{~ for x in 0..<element_count ~}}
+        if (!TScalar.TryReadBigEndian(source, isUnsigned, out var {{ xyzw_lower[x] }})) goto Failed;
+        {{ if !for.last -}} source = source[{{ xyzw_lower[x] }}.GetByteCount()..]; {{- end }}
+        {{~ end ~}}
+
+        value = new({{ wrap forEachDimension ', ' newline:false; cl; end }});
+        return true;
+
+        Failed:
+        value = default;
+        return false;
+    }
+    static bool IBinaryIntegerVector<{{ VectorT }}, TScalar>.TryReadLittleEndian(ReadOnlySpan<byte> source, bool isUnsigned, out {{ VectorT }} value)
+    {
+        {{~ for x in 0..<element_count ~}}
+        if (!TScalar.TryReadLittleEndian(source, isUnsigned, out var {{ xyzw_lower[x] }})) goto Failed;
+        {{ if !for.last -}} source = source[{{ xyzw_lower[x] }}.GetByteCount()..]; {{- end }}
+        {{~ end ~}}
+        value = new({{ wrap forEachDimension ', ' newline:false; cl; end }});
+        return true;
+
+        Failed:
+        value = default;
+        return false;
+    }
+    bool IBinaryIntegerVector<{{ VectorT }}, TScalar>.TryWriteBigEndian(Span<byte> destination, out int bytesWritten)
+    {
+        bytesWritten = 0;
+
+        int b;
+
+        {{~ for x in 0..<element_count ~}}
+        if (!{{xyzw[x]}}.TryWriteBigEndian(destination, out b)) goto Failed;
+        bytesWritten += b;
+        {{ if !for.last -}} destination = destination[b..]; {{- end }}
+        {{~ end ~}}
+
+        return true;
+
+        Failed:
+        bytesWritten += b;
+        return false;
+    }
+    bool IBinaryIntegerVector<{{ VectorT }}, TScalar>.TryWriteLittleEndian(Span<byte> destination, out int bytesWritten)
+    {
+        bytesWritten = 0;
+
+        int b;
+
+        {{~ for x in 0..<element_count ~}}
+        if (!{{xyzw[x]}}.TryWriteLittleEndian(destination, out b)) goto Failed;
+        bytesWritten += b;
+        {{ if !for.last -}} destination = destination[b..]; {{- end }}
+        {{~ end ~}}
+
+        return true;
+
+        Failed:
+        bytesWritten += b;
+        return false;
+    }
+
+    static {{ VectorT }} INumberVector<{{ VectorT }}, TScalar>.CopySign({{ VectorT }} value, {{ VectorT }} sign) => {{ Vector }}.CopySign(value, sign);
+    static {{ VectorT }} INumberVector<{{ VectorT }}, TScalar>.CopySign({{ VectorT }} value, TScalar sign) => {{ Vector }}.CopySign(value, sign);
+    static {{ VectorT }} INumberVector<{{ VectorT }}, TScalar>.Sign({{ VectorT }} value) => {{ Vector }}.Sign(value);
+    static {{ VectorT }} IBinaryNumberVector<{{ VectorT }}, TScalar>.Log2({{ VectorT }} value) => {{ Vector }}.Log2(value);
+    static {{ VectorT }} IBinaryIntegerVector<{{ VectorT }}, TScalar>.PopCount({{ VectorT }} value) => {{ Vector }}.PopCount(value);
+
+    #endregion
+}

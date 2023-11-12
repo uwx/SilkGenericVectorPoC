@@ -83,47 +83,47 @@ func valueValue(prefix, downcase = false)
     ret arr
 end
 
-func humanizeAnd(items)
-    if items.size == 1
-        ret items[0]
-    end
+#func humanizeAnd(items)
+#    if items.size == 1
+#        ret items[0]
+#    end
+#
+#    itemsRest = items | array.limit (items.size - 1)
+#    itemLast = items[items.size - 1]
+#    ret $"{itemsRest | array.join ', '} and {itemLast}"
+#end
 
-    itemsRest = items | array.limit (items.size - 1)
-    itemLast = items[items.size - 1]
-    ret $"{itemsRest | array.join ', '} and {itemLast}"
-end
+#func operation(x, left, op, right, connector)
+#    s = $"({left}.{xyzw[x]} {op} {right}.{xyzw[x]})"
+#    if x < vecN - 1
+#        s += connector
+#    end
+#    ret s
+#end
+#
+#func complexOperation(x, left1, left2, op, right1, right2, connector)
+#    s = $"({left1}{xyzw[x]}{left2} {op} {right1}{xyzw[x]}{right2})"
+#    if x < vecN - 1
+#        s += connector
+#    end
+#    ret s
+#end
 
-func operation(x, left, op, right, connector)
-    s = $"({left}.{xyzw[x]} {op} {right}.{xyzw[x]})"
-    if x < vecN - 1
-        s += connector
-    end
-    ret s
-end
-
-func complexOperation(x, left1, left2, op, right1, right2, connector)
-    s = $"({left1}{xyzw[x]}{left2} {op} {right1}{xyzw[x]}{right2})"
-    if x < vecN - 1
-        s += connector
-    end
-    ret s
-end
-
-func repeatCall(method, parameter, x = null, sep = ', ', startOffset = 0)
-    list = []
-    for x in startOffset..<(x ?? vecN)
-        list = list | array.add $"{method}({parameter}.{xyzw[x]})"
-    end
-    ret list | array.join sep
-end
-
-func repeatCall2(method, parameter, parameter2, x = null, sep = ', ', startOffset = 0)
-    list = []
-    for x in 0..<(x ?? vecN)
-        list = list | array.add $"{method}({parameter}.{xyzw[x]}, {parameter2}.{xyzw[x]})"
-    end
-    ret list | array.join sep
-end
+#func repeatCall(method, parameter, x = null, sep = ', ', startOffset = 0)
+#    list = []
+#    for x in startOffset..<(x ?? vecN)
+#        list = list | array.add $"{method}({parameter}.{xyzw[x]})"
+#    end
+#    ret list | array.join sep
+#end
+#
+#func repeatCall2(method, parameter, parameter2, x = null, sep = ', ', startOffset = 0)
+#    list = []
+#    for x in 0..<(x ?? vecN)
+#        list = list | array.add $"{method}({parameter}.{xyzw[x]}, {parameter2}.{xyzw[x]})"
+#    end
+#    ret list | array.join sep
+#end
 
 func forEachDimension(sep = null, newline = true, endingNewline = false, dimensionLimit = null, dimensionOffset = null)
     dimensionLimit = (dimensionLimit ?? vecN) - 1
@@ -141,86 +141,4 @@ func forEachDimension(sep = null, newline = true, endingNewline = false, dimensi
     end
 end
 
-func vectorize(argNames...)
-    a = 'v0'
-    b = 'v1'
-    c = 'v2'
-    d = 'v3'
-    e = 'v4'
-    f = 'v5'
-    g = 'v6'
-    h = 'v7'
-    i = 'v8'
-    "// NOTE: COMPLETELY UNTESTED. MIGHT BE SLOW.\n"
-    "unsafe\n"
-    "{\n"
-    "    if (Vector64<T>.IsSupported && Vector64.IsHardwareAccelerated)\n"
-    "    {\n"
-    for argName in argNames
-        $"        Vector64<T> v{for.index} = default;\n"
-    end
-    "        \n"
-    for argName in argNames
-        $"        Unsafe.WriteUnaligned<{TypeNameT}>(ref Unsafe.As<Vector64<T>, byte>(ref v{for.index}), {argName});\n"
-    end
-    "        \n"
-    "        v0 = "
-    vector = 'Vector64'
-    $$
-    ";\n"
-    $"        return Unsafe.ReadUnaligned<{TypeNameT}>(ref Unsafe.As<Vector64<T>, byte>(ref v0));\n"
-    "    }\n"
-    "\n"
-    "    if (Vector128<T>.IsSupported && Vector128.IsHardwareAccelerated)\n"
-    "    {\n"
-    for argName in argNames
-        $"        Vector128<T> v{for.index} = default;\n"
-    end
-    "        \n"
-    for argName in argNames
-        $"        Unsafe.WriteUnaligned<{TypeNameT}>(ref Unsafe.As<Vector128<T>, byte>(ref v{for.index}), {argName});\n"
-    end
-    "        \n"
-    "        v0 = "
-    vector = 'Vector128'
-    $$
-    ";\n"
-    $"        return Unsafe.ReadUnaligned<{TypeNameT}>(ref Unsafe.As<Vector128<T>, byte>(ref v0));\n"
-    "    }\n"
-    "\n"
-    "    if (Vector256<T>.IsSupported && Vector256.IsHardwareAccelerated)\n"
-    "    {\n"
-    for argName in argNames
-        $"        Vector256<T> v{for.index} = default;\n"
-    end
-    "        \n"
-    for argName in argNames
-        $"        Unsafe.WriteUnaligned<{TypeNameT}>(ref Unsafe.As<Vector256<T>, byte>(ref v{for.index}), {argName});\n"
-    end
-    "        \n"
-    "        v0 = "
-    vector = 'Vector256'
-    $$
-    ";\n"
-    $"        return Unsafe.ReadUnaligned<{TypeNameT}>(ref Unsafe.As<Vector256<T>, byte>(ref v0));\n"
-    "    }\n"
-    "\n"
-    "    if (Vector512<T>.IsSupported && Vector512.IsHardwareAccelerated)\n"
-    "    {\n"
-    for argName in argNames
-        $"        Vector512<T> v{for.index} = default;\n"
-    end
-    "        \n"
-    for argName in argNames
-        $"        Unsafe.WriteUnaligned<{TypeNameT}>(ref Unsafe.As<Vector512<T>, byte>(ref v{for.index}), {argName});\n"
-    end
-    "        \n"
-    "        v0 = "
-    vector = 'Vector512'
-    $$
-    ";\n"
-    $"        return Unsafe.ReadUnaligned<{TypeNameT}>(ref Unsafe.As<Vector512<T>, byte>(ref v0));\n"
-    "    }\n"
-    "}\n"
-end
 }}

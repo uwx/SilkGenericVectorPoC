@@ -708,22 +708,8 @@ public interface IFloatingPointVector<TVector, TScalar> :
     static abstract TVector ReciprocalSqrtEstimate(TVector x);
 
     // IFloatingPointIeee754<TVector>
-    static virtual TNewVector ILogB<TNewVector>(TVector x) where TNewVector : IVector<TNewVector, int> => TVector.ILogB<TNewVector, int>(x);
-    static abstract TNewVector ILogB<TNewVector, TInt>(TVector x) where TNewVector : IVector<TNewVector, TInt> where TInt : IBinaryInteger<TInt>;
     static abstract TVector ScaleB(TVector x, Vector2D<int> n);
     static abstract TVector ScaleB(TVector x, int n);
-    static virtual TNewVector RoundToInt<TNewVector>(TVector vector) where TNewVector : IVector<TNewVector, int> => TVector.RoundToInt<TNewVector, int>(vector);
-    static virtual TNewVector FloorToInt<TNewVector>(TVector vector) where TNewVector : IVector<TNewVector, int> => TVector.RoundToInt<TNewVector, int>(vector);
-    static virtual TNewVector CeilingToInt<TNewVector>(TVector vector) where TNewVector : IVector<TNewVector, int> => TVector.RoundToInt<TNewVector, int>(vector);
-    static abstract TNewVector RoundToInt<TNewVector, TInt>(TVector vector)
-        where TNewVector : IVector<TNewVector, TInt>
-        where TInt : IBinaryInteger<TInt>;
-    static abstract TNewVector FloorToInt<TNewVector, TInt>(TVector vector)
-        where TNewVector : IVector<TNewVector, TInt>
-        where TInt : IBinaryInteger<TInt>;
-    static abstract TNewVector CeilingToInt<TNewVector, TInt>(TVector vector)
-        where TNewVector : IVector<TNewVector, TInt>
-        where TInt : IBinaryInteger<TInt>;
 
     static virtual Vector64<TScalar> AsVector64(TVector self) => Vector64.Create(TVector.AsSpan(self));
     static virtual Vector128<TScalar> AsVector128(TVector self) => Vector128.Create(TVector.AsSpan(self));

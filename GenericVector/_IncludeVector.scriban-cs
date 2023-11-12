@@ -1,36 +1,47 @@
 {{
+    # inputs
+    # element_count = the number of components in the vector being generated
+    # min_dimensions = the minimum dimension of vector that will be generated at all in this or other vectors
+    # max_dimensions = the maximum dimension of vector that will be generated at all in this or other vectors
+
+    # convenience for array indexing
+    dimension_idx = element_count - 1
+
+    # max dimension between this and the System.Numerics supported ones
     max_numeric_dimensions = max_dimensions < 4 ? max_dimensions : 4
 
-    vecN = vec_n
-    dimensionIndex = vecN - 1
-
-    TypeName = $"Vector{vecN}D"
-    TypeNameT = TypeName + '<T>'
-    DocName = TypeName + '{T}'
+    # string helpers
+    Vector = $"Vector{element_count}i"
+    VectorT = Vector + '<TScalar>'
+    VectorXml = Vector + '{TScalar}'
 
     xyzw = ["X", "Y", "Z", "W", "V"]
-    ComponentsLower = xyzw | array.each @string.downcase
-    Parameters = ComponentsLower | array.each do; ret $"T {$0}"; end
-    AmountName = "fuck"
-    case vecN
+    xyzw_lower = xyzw | array.each @string.downcase
+    parameters = xyzw_lower | array.each do; ret $"TScalar {$0}"; end
+
+    amount_name = "fuck"
+    case element_count
         when 1
-            AmountName = "one"
+            amount_name = "one"
         when 2
-            AmountName = "two"
+            amount_name = "two"
         when 3
-            AmountName = "three"
+            amount_name = "three"
         when 4
-            AmountName = "four"
+            amount_name = "four"
         when 5
-            AmountName = "five"
+            amount_name = "five"
     end
 
+    # takes all dimensions and returns an array with each entry having a prefix, suffix and downcased if desired
     func xyzwFormat(prefix = '', suffix = '', downcase = false)
         ret 0..<max_dimensions | array.each do; (prefix + (downcase ? (xyzw[$0] | string.downcase) : xyzw[$0]) + suffix); end
     end
 
+    # use wrap
+    # local variables are c and cl
     func forEachDimension(sep = null, newline = true, endingNewline = false, dimensionLimit = null, dimensionOffset = null)
-        dimensionLimit = (dimensionLimit ?? vecN) - 1
+        dimensionLimit = (dimensionLimit ?? element_count) - 1
         dimensionOffset = dimensionOffset ?? 0
         for x in dimensionOffset..dimensionLimit
             c = xyzw[x]
@@ -45,6 +56,7 @@
         end
     end
 
+    # like slicing in js
     func slice(value, indexStart = 0, indexEnd = null)
         len = object.size value
 
@@ -93,88 +105,5 @@
             else
                 ret value
         end
-    end
-
-    func vectorize(argNames...)
-        a = 'v0'
-        b = 'v1'
-        c = 'v2'
-        d = 'v3'
-        e = 'v4'
-        f = 'v5'
-        g = 'v6'
-        h = 'v7'
-        i = 'v8'
-        "// NOTE: COMPLETELY UNTESTED. MIGHT BE SLOW.\n"
-        "unsafe\n"
-        "{\n"
-        "    if (Vector64<T>.IsSupported && Vector64.IsHardwareAccelerated)\n"
-        "    {\n"
-        for argName in argNames
-            $"        Vector64<T> v{for.index} = default;\n"
-        end
-        "        \n"
-        for argName in argNames
-            $"        Unsafe.WriteUnaligned<{TypeNameT}>(ref Unsafe.As<Vector64<T>, byte>(ref v{for.index}), {argName});\n"
-        end
-        "        \n"
-        "        v0 = "
-        vector = 'Vector64'
-        $$
-        ";\n"
-        $"        return Unsafe.ReadUnaligned<{TypeNameT}>(ref Unsafe.As<Vector64<T>, byte>(ref v0));\n"
-        "    }\n"
-        "\n"
-        "    if (Vector128<T>.IsSupported && Vector128.IsHardwareAccelerated)\n"
-        "    {\n"
-        for argName in argNames
-            $"        Vector128<T> v{for.index} = default;\n"
-        end
-        "        \n"
-        for argName in argNames
-            $"        Unsafe.WriteUnaligned<{TypeNameT}>(ref Unsafe.As<Vector128<T>, byte>(ref v{for.index}), {argName});\n"
-        end
-        "        \n"
-        "        v0 = "
-        vector = 'Vector128'
-        $$
-        ";\n"
-        $"        return Unsafe.ReadUnaligned<{TypeNameT}>(ref Unsafe.As<Vector128<T>, byte>(ref v0));\n"
-        "    }\n"
-        "\n"
-        "    if (Vector256<T>.IsSupported && Vector256.IsHardwareAccelerated)\n"
-        "    {\n"
-        for argName in argNames
-            $"        Vector256<T> v{for.index} = default;\n"
-        end
-        "        \n"
-        for argName in argNames
-            $"        Unsafe.WriteUnaligned<{TypeNameT}>(ref Unsafe.As<Vector256<T>, byte>(ref v{for.index}), {argName});\n"
-        end
-        "        \n"
-        "        v0 = "
-        vector = 'Vector256'
-        $$
-        ";\n"
-        $"        return Unsafe.ReadUnaligned<{TypeNameT}>(ref Unsafe.As<Vector256<T>, byte>(ref v0));\n"
-        "    }\n"
-        "\n"
-        "    if (Vector512<T>.IsSupported && Vector512.IsHardwareAccelerated)\n"
-        "    {\n"
-        for argName in argNames
-            $"        Vector512<T> v{for.index} = default;\n"
-        end
-        "        \n"
-        for argName in argNames
-            $"        Unsafe.WriteUnaligned<{TypeNameT}>(ref Unsafe.As<Vector512<T>, byte>(ref v{for.index}), {argName});\n"
-        end
-        "        \n"
-        "        v0 = "
-        vector = 'Vector512'
-        $$
-        ";\n"
-        $"        return Unsafe.ReadUnaligned<{TypeNameT}>(ref Unsafe.As<Vector512<T>, byte>(ref v0));\n"
-        "    }\n"
-        "}\n"
     end
 }}

@@ -1,0 +1,324 @@
+#region CopyTo
+/// <summary>Copies the elements of the vector to a specified array.</summary>
+/// <param name="self">The vector to be copied.</param>
+/// <param name="array">The destination array.</param>
+/// <remarks><paramref name="array" /> must have at least two elements. The method copies the vector's elements starting at index 0.</remarks>
+/// <exception cref="NullReferenceException"><paramref name="array" /> is <see langword="null" />.</exception>
+/// <exception cref="ArgumentException">The number of elements in the current instance is greater than in the array.</exception>
+/// <exception cref="RankException"><paramref name="array" /> is multidimensional.</exception>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static void CopyTo<TScalar>(in this {{ VectorT }} self, TScalar[] array) where TScalar : {{ ScalarConstraint }}
+{
+    // We explicitly don't check for `null` because historically this has thrown `NullReferenceException` for perf reasons
+
+    ArgumentOutOfRangeException.ThrowIfLessThan(array.Length, {{ VectorT }}.ElementCount, nameof(array));
+
+    Unsafe.WriteUnaligned(ref Unsafe.As<TScalar, byte>(ref array[0]), self);
+}
+
+/// <summary>Copies the elements of the vector to a specified array starting at a specified index position.</summary>
+/// <param name="self">The vector to be copied.</param>
+/// <param name="array">The destination array.</param>
+/// <param name="index">The index at which to copy the first element of the vector.</param>
+/// <remarks><paramref name="array" /> must have a sufficient number of elements to accommodate the two vector elements. In other words, elements <paramref name="index" /> through <paramref name="index" /> + 2 must already exist in <paramref name="array" />.</remarks>
+/// <exception cref="NullReferenceException"><paramref name="array" /> is <see langword="null" />.</exception>
+/// <exception cref="ArgumentException">The number of elements in the current instance is greater than in the array.</exception>
+/// <exception cref="ArgumentOutOfRangeException"><paramref name="index" /> is less than zero.
+/// -or-
+/// <paramref name="index" /> is greater than or equal to the array length.</exception>
+/// <exception cref="RankException"><paramref name="array" /> is multidimensional.</exception>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static void CopyTo<TScalar>(in this {{ VectorT }} self, TScalar[] array, int index) where TScalar : {{ ScalarConstraint }}
+{
+    // We explicitly don't check for `null` because historically this has thrown `NullReferenceException` for perf reasons
+
+    ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual((uint)index, (uint)array.Length);
+    ArgumentOutOfRangeException.ThrowIfLessThan((array.Length - index), {{ VectorT }}.ElementCount);
+
+    Unsafe.WriteUnaligned(ref Unsafe.As<TScalar, byte>(ref array[index]), self);
+}
+
+/// <summary>Copies the vector to the given <see cref="Span{TScalar}" />. The length of the destination span must be at least 2.</summary>
+/// <param name="self">The vector to be copied.</param>
+/// <param name="destination">The destination span which the values are copied into.</param>
+/// <exception cref="ArgumentException">If number of elements in source vector is greater than those available in destination span.</exception>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static void CopyTo<TScalar>(in this {{ VectorT }} self, Span<TScalar> destination) where TScalar : {{ ScalarConstraint }}
+{
+    ArgumentOutOfRangeException.ThrowIfLessThan(destination.Length, {{ VectorT }}.ElementCount, nameof(destination));
+
+    Unsafe.WriteUnaligned(ref Unsafe.As<TScalar, byte>(ref MemoryMarshal.GetReference(destination)), self);
+}
+
+/// <summary>Attempts to copy the vector to the given <see cref="Span{Single}" />. The length of the destination span must be at least 2.</summary>
+/// <param name="self">The vector to be copied.</param>
+/// <param name="destination">The destination span which the values are copied into.</param>
+/// <returns><see langword="true" /> if the source vector was successfully copied to <paramref name="destination" />. <see langword="false" /> if <paramref name="destination" /> is not large enough to hold the source vector.</returns>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static bool TryCopyTo<TScalar>(in this {{ VectorT }} self, Span<TScalar> destination) where TScalar : {{ ScalarConstraint }}
+{
+    if (destination.Length < {{ VectorT }}.ElementCount)
+    {
+        return false;
+    }
+
+    Unsafe.WriteUnaligned(ref Unsafe.As<TScalar, byte>(ref MemoryMarshal.GetReference(destination)), self);
+    return true;
+}
+#endregion
+
+#region Extension
+
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static ReadOnlySpan<TScalar> AsSpan<TScalar>(this {{ VectorT }} vec) where TScalar : {{ ScalarConstraint }}
+{
+    return MemoryMarshal.CreateReadOnlySpan(ref Unsafe.As<{{ VectorT }}, TScalar>(ref Unsafe.AsRef(in vec)), {{ VectorT }}.ElementCount);
+}
+
+#endregion
+
+#region Operator Shortcuts
+
+/// <summary>Returns a new vector whose values are the product of each pair of elements in two specified vectors.</summary>
+/// <param name="left">The first vector.</param>
+/// <param name="right">The second vector.</param>
+/// <returns>The element-wise product vector.</returns>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static {{ VectorT }} Multiply<TScalar>({{ VectorT }} left, {{ VectorT }} right) where TScalar : {{ ScalarConstraint }}
+{
+    return left * right;
+}
+
+/// <summary>Multiplies a vector by a specified scalar.</summary>
+/// <param name="left">The vector to multiply.</param>
+/// <param name="right">The scalar value.</param>
+/// <returns>The scaled vector.</returns>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static {{ VectorT }} Multiply<TScalar>({{ VectorT }} left, TScalar right) where TScalar : {{ ScalarConstraint }}
+{
+    return left * right;
+}
+
+/// <summary>Multiplies a scalar value by a specified vector.</summary>
+/// <param name="left">The scaled value.</param>
+/// <param name="right">The vector.</param>
+/// <returns>The scaled vector.</returns>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static {{ VectorT }} Multiply<TScalar>(TScalar left, {{ VectorT }} right) where TScalar : {{ ScalarConstraint }}
+{
+    return left * right;
+}
+
+/// <summary>Negates a specified vector.</summary>
+/// <param name="value">The vector to negate.</param>
+/// <returns>The negated vector.</returns>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static {{ VectorT }} Negate<TScalar>({{ VectorT }} value) where TScalar : {{ ScalarConstraint }}
+{
+    return -value;
+}
+
+/// <summary>Subtracts the second vector from the first.</summary>
+/// <param name="left">The first vector.</param>
+/// <param name="right">The second vector.</param>
+/// <returns>The difference vector.</returns>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static {{ VectorT }} Subtract<TScalar>({{ VectorT }} left, {{ VectorT }} right) where TScalar : {{ ScalarConstraint }}
+{
+    return left - right;
+}
+
+/// <summary>Adds two vectors together.</summary>
+/// <param name="left">The first vector to add.</param>
+/// <param name="right">The second vector to add.</param>
+/// <returns>The summed vector.</returns>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static {{ VectorT }} Add<TScalar>({{ VectorT }} left, {{ VectorT }} right) where TScalar : {{ ScalarConstraint }}
+{
+    return left + right;
+}
+
+/// <summary>Divides the first vector by the second.</summary>
+/// <param name="left">The first vector.</param>
+/// <param name="right">The second vector.</param>
+/// <returns>The vector resulting from the division.</returns>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static {{ VectorT }} Divide<TScalar>({{ VectorT }} left, {{ VectorT }} right) where TScalar : {{ ScalarConstraint }}
+{
+    return left / right;
+}
+
+/// <summary>Divides the specified vector by a specified scalar value.</summary>
+/// <param name="left">The vector.</param>
+/// <param name="divisor">The scalar value.</param>
+/// <returns>The vector that results from the division.</returns>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static {{ VectorT }} Divide<TScalar>({{ VectorT }} left, TScalar divisor) where TScalar : {{ ScalarConstraint }}
+{
+    return left / divisor;
+}
+
+#endregion
+
+#region Other
+
+/// <summary>Returns a vector whose elements are the absolute values of each of the specified vector's elements.</summary>
+/// <param name="value">A vector.</param>
+/// <returns>The absolute value vector.</returns>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static {{ VectorT }} Abs<TScalar>({{ VectorT }} value) where TScalar : {{ ScalarConstraint }}
+{
+    return SpeedHelpers2.Abs<{{ VectorT }}, TScalar>(value);
+}
+
+/// <summary>Restricts a vector between a minimum and a maximum value.</summary>
+/// <param name="value1">The vector to restrict.</param>
+/// <param name="min">The minimum value.</param>
+/// <param name="max">The maximum value.</param>
+/// <returns>The restricted vector.</returns>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static {{ VectorT }} Clamp<TScalar>({{ VectorT }} value1, {{ VectorT }} min, {{ VectorT }} max) where TScalar : {{ ScalarConstraint }}
+{
+    // We must follow HLSL behavior in the case user specified min value is bigger than max value.
+    return SpeedHelpers2.Clamp<{{ VectorT }}, TScalar>(value1, min, max);
+}
+
+/// <summary>Returns the Euclidean distance squared between two specified points.</summary>
+/// <param name="value1">The first point.</param>
+/// <param name="value2">The second point.</param>
+/// <returns>The distance squared.</returns>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static TScalar DistanceSquared<TScalar>({{ VectorT }} value1, {{ VectorT }} value2) where TScalar : {{ ScalarConstraint }}
+{
+    return SpeedHelpers2.DistanceSquared<{{ VectorT }}, TScalar>(value1, value2);
+}
+
+/// <summary>Returns the dot product of two vectors.</summary>
+/// <param name="vector1">The first vector.</param>
+/// <param name="vector2">The second vector.</param>
+/// <returns>The dot product.</returns>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static TScalar Dot<TScalar>({{ VectorT }} vector1, {{ VectorT }} vector2) where TScalar : {{ ScalarConstraint }}
+{
+    return SpeedHelpers2.Dot<{{ VectorT }}, TScalar>(vector1, vector2);
+}
+
+/// <summary>Returns a vector whose elements are the maximum of each of the pairs of elements in two specified vectors.</summary>
+/// <param name="value1">The first vector.</param>
+/// <param name="value2">The second vector.</param>
+/// <returns>The maximized vector.</returns>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static {{ VectorT }} Max<TScalar>({{ VectorT }} value1, {{ VectorT }} value2) where TScalar : {{ ScalarConstraint }}
+{
+    return SpeedHelpers2.Max<{{ VectorT }}, TScalar>(value1, value2);
+}
+
+/// <summary>Returns a vector whose elements are the minimum of each of the pairs of elements in two specified vectors.</summary>
+/// <param name="value1">The first vector.</param>
+/// <param name="value2">The second vector.</param>
+/// <returns>The minimized vector.</returns>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static {{ VectorT }} Min<TScalar>({{ VectorT }} value1, {{ VectorT }} value2) where TScalar : {{ ScalarConstraint }}
+{
+    return SpeedHelpers2.Min<{{ VectorT }}, TScalar>(value1, value2);
+}
+
+// CANNOT BE DONE
+/*
+/// <summary>Transforms a vector by a specified 4x4 matrix.</summary>
+/// <param name="position">The vector to transform.</param>
+/// <param name="matrix">The transformation matrix.</param>
+/// <returns>The transformed vector.</returns>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static {{ VectorT }} Transform<TScalar>({{ VectorT }} position, Matrix4X4<TScalar> matrix) where TScalar : {{ ScalarConstraint }}
+{
+    return ({{ VectorT }})Vector4D.Transform(position, matrix);
+}
+
+/// <summary>Transforms a vector by the specified Quaternion rotation value.</summary>
+/// <param name="value">The vector to rotate.</param>
+/// <param name="rotation">The rotation to apply.</param>
+/// <returns>The transformed vector.</returns>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static {{ Vector }}<TReturn> Transform<TScalar, TQuat, TReturn>({{ VectorT }} value, Quaternion<TQuat> rotation) where TScalar : {{ ScalarConstraint }} where TReturn : INumberBase<TReturn> where TQuat : ITrigonometricFunctions<TQuat>, IRootFunctions<TQuat>
+{
+    var  = rotation.X + rotation.X;
+    var  = rotation.Y + rotation.Y;var x2 = rotation.X + rotation.X;
+    var y2 = rotation.Y + rotation.Y;
+    var z2 = rotation.Z + rotation.Z;
+
+
+    var  = rotation.X + rotation.X;
+    var  = rotation.Y + rotation.Y;var wx2 = TReturn.CreateTruncating(rotation.W * x2);
+    var wy2 = TReturn.CreateTruncating(rotation.W * y2);
+    var wz2 = TReturn.CreateTruncating(rotation.W * z2);
+    var xx2 = TReturn.CreateTruncating(rotation.X * x2);
+    var xy2 = TReturn.CreateTruncating(rotation.X * y2);
+    var xz2 = TReturn.CreateTruncating(rotation.X * z2);
+    var yy2 = TReturn.CreateTruncating(rotation.Y * y2);
+    var yz2 = TReturn.CreateTruncating(rotation.Y * z2);
+    var zz2 = TReturn.CreateTruncating(rotation.Z * z2);
+
+    return new {{ Vector }}<TReturn>(
+        TReturn.Sqrt(TReturn.CreateTruncating(value.X)),
+        TReturn.Sqrt(TReturn.CreateTruncating(value.Y))
+    );
+
+    return new {{ Vector }}<TReturn>(
+        TReturn.CreateTruncating(value.X) * (TReturn.One - yy2 - zz2) + TReturn.CreateTruncating(value.Y) * (xy2 - wz2) + TReturn.CreateTruncating(value.Z) * (xz2 + wy2),
+        TReturn.CreateTruncating(value.X) * (xy2 + wz2) + TReturn.CreateTruncating(value.Y) * (TReturn.One - xx2 - zz2) + TReturn.CreateTruncating(value.Z) * (yz2 - wx2),
+        TReturn.CreateTruncating(value.X) * (xz2 - wy2) + TReturn.CreateTruncating(value.Y) * (yz2 + wx2) + TReturn.CreateTruncating(value.Z) * (TReturn.One - xx2 - yy2)
+    );
+}
+
+// /// <summary>Transforms a vector normal by the given 4x4 matrix.</summary>
+// /// <param name="normal">The source vector.</param>
+// /// <param name="matrix">The matrix.</param>
+// /// <returns>The transformed vector.</returns>
+// [MethodImpl(MethodImplOptions.AggressiveInlining)]
+// internal static {{ VectorT }} TransformNormal<TScalar>({{ VectorT }} normal, in Matrix4x4 matrix) where TScalar : {{ ScalarConstraint }}
+// {
+//     var matrixX = new Vector4(matrix.M11, matrix.M12, matrix.M13, matrix.M14);
+//     var matrixY = new Vector4(matrix.M21, matrix.M22, matrix.M23, matrix.M24);
+//     var matrixZ = new Vector4(matrix.M31, matrix.M32, matrix.M33, matrix.M34);
+//     // var matrixW = new Vector4(matrix.M41, matrix.M42, matrix.M43, matrix.M44);
+//
+//     var result = matrixX * normal.X;
+//     result += matrixY * normal.Y;
+//     result += matrixZ * normal.Z;
+//     return result.AsVector128().AsVector3();
+// }
+*/
+
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static {{ VectorT }} Remainder<TScalar>(this {{ VectorT }} left, {{ VectorT }} right) where TScalar : {{ ScalarConstraint }}, IModulusOperators<TScalar, TScalar, TScalar>
+{
+    return SpeedHelpers2.Remainder<{{ VectorT }}, TScalar>(left, right);
+}
+
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static {{ VectorT }} Remainder<TScalar>(this {{ VectorT }} left, TScalar right) where TScalar : {{ ScalarConstraint }}, IModulusOperators<TScalar, TScalar, TScalar>
+{
+    return SpeedHelpers2.Remainder<{{ VectorT }}, TScalar>(left, right);
+}
+#endregion
+
+#region Specializations
+
+/// <summary>Returns the length of the vector squared.</summary>
+/// <returns>The vector's length squared.</returns>
+/// <remarks>This operation offers better performance than a call to the <see cref="Length{TScalar}" /> method.</remarks>
+/// <altmember cref="Length{TScalar}"/>
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public static TScalar LengthSquared<TScalar>(this {{ VectorT }} vec) where TScalar : {{ ScalarConstraint }}
+{
+    return SpeedHelpers2.LengthSquared<{{ VectorT }}, TScalar>(vec);
+}
+#endregion
+
+// INumber<TScalar>
+public static {{ VectorT }} CopySign<TScalar>({{ VectorT }} value, {{ VectorT }} sign) where TScalar : {{ ScalarConstraint }} => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.CopySign(value.{c}, sign.{c})"; end }});
+public static {{ VectorT }} CopySign<TScalar>({{ VectorT }} value, TScalar sign) where TScalar : {{ ScalarConstraint }} => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.CopySign(value.{c}, sign)"; end }});
+public static {{ VectorT }} MaxNumber<TScalar>({{ VectorT }} x, {{ VectorT }} y) where TScalar : {{ ScalarConstraint }} => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.MaxNumber(x.{c}, y.{c})"; end }});
+public static {{ VectorT }} MinNumber<TScalar>({{ VectorT }} x, {{ VectorT }} y) where TScalar : {{ ScalarConstraint }} => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.MinNumber(x.{c}, y.{c})"; end }});
+public static {{ VectorT }} Sign<TScalar>({{ VectorT }} value) where TScalar : {{ ScalarConstraint }} => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.CreateChecked(TScalar.Sign(value.{c}))"; end }});

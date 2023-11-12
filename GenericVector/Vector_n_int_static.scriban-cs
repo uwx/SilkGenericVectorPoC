@@ -1,0 +1,21 @@
+{{~
+load_file '_IncludeVector.scriban-cs'
+~}}
+
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
+
+namespace GenericVector.Experimental;
+
+public static class {{ Vector }}
+{
+    {{~ ScalarConstraint = 'IBinaryInteger<TScalar>' ~}}
+
+    {{ include 'Vector_n_shared_static.scriban-cs' }}
+
+    // IBinaryInteger<TScalar>
+    public static {{ VectorT }} Log2<TScalar>({{ VectorT }} value) where TScalar : IBinaryInteger<TScalar> => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.Log2(value.{c})"; end }});
+    public static {{ VectorT }} PopCount<TScalar>({{ VectorT }} value) where TScalar : IBinaryInteger<TScalar> => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.PopCount(value.{c})"; end }});
+}

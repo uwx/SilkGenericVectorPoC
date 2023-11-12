@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System.Buffers;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using System.Text;
 using System.Text.Unicode;
 
 namespace GenericVector.Experimental;
@@ -114,7 +116,7 @@ public readonly partial record struct Vector2i<TScalar> :
         handler.AppendLiteral(">");
 
         return handler.ToStringAndClear();
-    };
+    }
 
     public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
     {
@@ -126,7 +128,7 @@ public readonly partial record struct Vector2i<TScalar> :
         // We can't use an interpolated string here because it won't allow us to pass `format`
         var handler = new MemoryExtensions.TryWriteInterpolatedStringHandler(
             4 + (separator.Length * 2),
-            Count,
+            ElementCount,
             destination,
             provider,
             out var shouldAppend
@@ -174,8 +176,6 @@ public readonly partial record struct Vector2i<TScalar> :
 
         // Annoyingly we need to turn the span into a string for the string handler
         string? formatString = format.Length > 0 ? new string(format) : null;
-        
-        formatString.AsSpan()
 
         // JIT will automagically convert literals to utf8
         _ =
@@ -187,14 +187,100 @@ public readonly partial record struct Vector2i<TScalar> :
             handler.AppendLiteral(">");
 
         return Utf8.TryWrite(utf8Destination, ref handler, out bytesWritten);
-    };
+    }
 
-    public static Vector2i<TScalar> Parse(string s, IFormatProvider? provider) => ;
-    public static Vector2i<TScalar> Parse(ReadOnlySpan<char> s, IFormatProvider? provider) => ;
-    public static Vector2i<TScalar> Parse(ReadOnlySpan<byte> utf8Text, IFormatProvider? provider) => ;
-    public static bool TryParse(string? s, IFormatProvider? provider, out Vector2i<TScalar> result) => ;
-    public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out Vector2i<TScalar> result) => ;
-    public static bool TryParse(ReadOnlySpan<byte> utf8Text, IFormatProvider? provider, out Vector2i<TScalar> result) => ;
+    public static Vector2i<TScalar> Parse(string s, IFormatProvider? provider)
+        => Parse(s.AsSpan(), provider);
+
+    public static Vector2i<TScalar> Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
+        => TryParse(s, provider, out var result) ? result : throw new ArgumentException($"Failed to parse {nameof(Vector2i)}<{typeof(TScalar)}>");
+
+    public static Vector2i<TScalar> Parse(ReadOnlySpan<byte> utf8Text, IFormatProvider? provider)
+        => TryParse(utf8Text, provider, out var result) ? result : throw new ArgumentException($"Failed to parse {nameof(Vector2i)}<{typeof(TScalar)}>");
+
+    public static bool TryParse(string? s, IFormatProvider? provider, out Vector2i<TScalar> result)
+        => TryParse(s.AsSpan(), provider, out result);
+
+    public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out Vector2i<TScalar> result)
+    {
+        result = default;
+
+        if (s[0] != '<') return false;
+        if (s[^1] != '>') return false;
+
+        var separator = NumberFormatInfo.GetInstance(provider).NumberGroupSeparator;
+
+        s = s[1..^1];
+
+        TScalar? x, y;
+
+        {
+            if (s.Length == 0) return false;
+
+            var nextNumber = s.IndexOf(separator);
+            if (nextNumber == -1)
+            {
+                return false;
+            }
+
+            if (!TScalar.TryParse(s[..nextNumber], provider, out x)) return false;
+
+            s = s[(nextNumber + separator.Length)..];
+        }
+
+        {
+            if (s.Length == 0) return false;
+
+            if (!TScalar.TryParse(s, provider, out y)) return false;
+        }
+
+        result = new Vector2i<TScalar>(x, y);
+        return true;
+    }
+
+    public static bool TryParse(ReadOnlySpan<byte> s, IFormatProvider? provider, out Vector2i<TScalar> result)
+    {
+        var separator = NumberFormatInfo.GetInstance(provider).NumberGroupSeparator;
+        
+        Span<byte> separatorSpan = stackalloc byte[Encoding.UTF8.GetByteCount(separator)];
+        if (Utf8.FromUtf16(separator, separatorSpan, out var charsRead, out var bytesWritten, isFinalBlock: true) != OperationStatus.Done)
+        {
+            result = default;
+            return false;
+        }
+
+        result = default;
+
+        if (s[0] != (byte)'<') return false;
+        if (s[^1] != (byte)'>') return false;
+
+        s = s[1..^1];
+
+        TScalar? x, y;
+
+        {
+            if (s.Length == 0) return false;
+
+            var nextNumber = s.IndexOf(separatorSpan);
+            if (nextNumber == -1)
+            {
+                return false;
+            }
+
+            if (!TScalar.TryParse(s[..nextNumber], provider, out x)) return false;
+
+            s = s[(nextNumber + separator.Length)..];
+        }
+
+        {
+            if (s.Length == 0) return false;
+
+            if (!TScalar.TryParse(s, provider, out y)) return false;
+        }
+
+        result = new Vector2i<TScalar>(x, y);
+        return true;
+    }
 
     public ReadOnlySpan<TScalar>.Enumerator GetEnumerator() => this.AsSpan().GetEnumerator();
     IEnumerator<TScalar> IEnumerable<TScalar>.GetEnumerator()

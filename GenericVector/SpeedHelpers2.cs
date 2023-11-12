@@ -150,7 +150,7 @@ internal partial class SpeedHelpers2
         where TVector : IVector<TVector, T>
         where T : INumberBase<T>
     {
-        return Unsafe.As<TVector, T>(ref Unsafe.AsRef(in vec));
+        return ref Unsafe.As<TVector, T>(ref Unsafe.AsRef(in vec));
     }
 
 #pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type

@@ -1,0 +1,478 @@
+internal const int ElementCount = {{ element_count }};
+
+{{~ # instance properties ~}}
+
+{{~ for x in 0..<element_count ~}}
+/// <summary>The {{ xyzw[x] }} component of the vector.</summary>
+[DataMember]
+public TScalar {{ xyzw[x] }} { get; }
+{{~ end ~}}
+
+public TScalar this[int index]
+{
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    get => this.AsSpan()[index];
+}
+
+{{~ # static properties ~}}
+
+{{~ for x in 0..<element_count ~}}
+{{
+    # overly convoluted way to generate unit vectors
+    v = ['0'] * element_count
+    v[x] = '1';
+    v = v | array.join ','
+
+    v2 = ['TScalar.Zero'] * element_count
+    v2[x] = 'TScalar.One';
+    v2 = v2 | array.join ', '
+-}}
+/// <summary>Gets the vector ({{v}})).</summary>
+/// <value>The vector <c>({{v}})</c>.</value>
+public static {{ VectorT }} Unit{{ xyzw[x] }} => new({{v2}});
+{{~ end ~}}
+
+/// <summary>Gets a vector whose {{element_count}} elements are equal to zero.</summary>
+/// <value>A vector whose {{ AmountName }} elements are equal to zero (that is, it returns the vector <c>({{ ['0'] * element_count | array.join ',' }})</c>.</value>
+public static {{ VectorT }} Zero => new(T.Zero);
+
+/// <summary>Gets a vector whose {{element_count}} elements are equal to one.</summary>
+/// <value>Returns <see cref="{{ DocName }}" />.</value>
+/// <remarks>A vector whose {{ AmountName }} elements are equal to one (that is, it returns the vector <c>({{ ['1'] * element_count | array.join ',' }})</c>.</remarks>
+public static {{ VectorT }} One => new(T.One);
+
+{{~ # constructors ~}}
+
+{{~ # same number of scalars ~}}
+/// <summary>Creates a vector whose elements have the specified values.</summary>
+{{~ for x in xyzw | slice 0 element_count ~}}
+/// <param name="{{ x | string.downcase }}">The value to assign to the <see cref="{{ x }}" /> field.</param>
+{{~ end ~}}
+public {{ Vector }}({{ wrap forEachDimension ', ' newline:false; $"TScalar {c}"; end }})
+{
+    Unsafe.SkipInit(out this);
+
+    {{~ for x in xyzw | slice 0 element_count ~}}
+    {{ x }} = {{ x | string.downcase }};
+    {{~ end ~}}
+}
+
+{{~ # one scalar repeating ~}}
+/// <summary>Creates a new <see cref="{{ VectorXml }}" /> object whose {{ AmountName }} elements have the same value.</summary>
+/// <param name="value">The value to assign to all {{ AmountName }} elements.</param>
+public {{ Vector }}(TScalar value) : this({{ ['value'] * element_count | array.join ', '}})
+{
+}
+
+{{~ # readonlyspan ~}}
+/// <summary>Constructs a vector from the given <see cref="ReadOnlySpan{TScalar}" />. The span must contain at least 2 elements.</summary>
+/// <param name="values">The span of elements to assign to the vector.</param>
+public {{ Vector }}(ReadOnlySpan<TScalar> values)
+{
+    Unsafe.SkipInit(out this);
+
+    ArgumentOutOfRangeException.ThrowIfLessThan(values.Length, ElementCount, nameof(values));
+
+    this = Unsafe.ReadUnaligned<{{ VectorT }}>(ref Unsafe.As<TScalar, byte>(ref MemoryMarshal.GetReference(values)));
+}
+
+{{~ # smaller vector + extra components; super convoluted ~}}
+
+{{~ for smallerVecN in min_dimensions..<element_count ~}}
+/// <summary>Creates a new <see cref="{{ VectorXml }}" /> object from the specified <see cref="Vector{{element_count}}i{TScalar}" /> object {{ xyzw | array.offset dimensions2 | array.join ' and a ' }} component.</summary>
+/// <param name="value">The vector to use for the {{ xyzw | array.limit dimensions2 | humanize_and }} components.</param>
+    {{~ for x in xyzw | slice smallerVecN element_count ~}}
+/// <param name="{{ x | string.downcase }}">The {{ x }} component.</param>
+    {{~ end ~}}
+public {{ Vector }}(Vector{{smallerVecN}}D<T> value, {{ parameters | slice smallerVecN element_count | array.join ", " }}) : this(
+    {{- xyzwFormat "value." | slice 0 smallerVecN | array.concat (xyzw | slice smallerVecN element_count | array.each @string.downcase) | array.join ', ' -}}
+)
+{
+}
+{{~ end ~}}
+
+public static {{ VectorT }} operator +({{ VectorT }} left, {{ VectorT }} right) => SpeedHelpers2.Add<{{ VectorT }}, TScalar>(left, right);
+public static {{ VectorT }} operator -({{ VectorT }} left, {{ VectorT }} right) => SpeedHelpers2.Subtract<{{ VectorT }}, TScalar>(left, right);
+public static {{ VectorT }} operator *({{ VectorT }} left, {{ VectorT }} right) => SpeedHelpers2.Multiply<{{ VectorT }}, TScalar>(left, right);
+public static {{ VectorT }} operator /({{ VectorT }} left, {{ VectorT }} right) => SpeedHelpers2.Divide<{{ VectorT }}, TScalar>(left, right);
+public static {{ VectorT }} operator %({{ VectorT }} left, {{ VectorT }} right) => SpeedHelpers2.Remainder<{{ VectorT }}, TScalar>(left, right);
+
+public static {{ VectorT }} operator *({{ VectorT }} left, TScalar right) => SpeedHelpers2.Multiply(left, right);
+public static {{ VectorT }} operator /({{ VectorT }} left, TScalar right) => SpeedHelpers2.Divide(left, right);
+public static {{ VectorT }} operator %({{ VectorT }} left, TScalar right) => SpeedHelpers2.Remainder(left, right);
+
+public static {{ VectorT }} operator *(TScalar left, {{ VectorT }} right) => right * left;
+
+public static {{ VectorT }} operator -({{ VectorT }} value) => SpeedHelpers2.Negate<{{ VectorT }}, TScalar>(value);
+public static {{ VectorT }} operator +({{ VectorT }} value) => value;
+
+public static {{ VectorT }} operator &({{ VectorT }} left, {{ VectorT }} right) => SpeedHelpers2.BitwiseAnd<{{ VectorT }}, TScalar>(left, right);
+public static {{ VectorT }} operator |({{ VectorT }} left, {{ VectorT }} right) => SpeedHelpers2.BitwiseOr<{{ VectorT }}, TScalar>(left, right);
+public static {{ VectorT }} operator ^({{ VectorT }} left, {{ VectorT }} right) => SpeedHelpers2.BitwiseXor<{{ VectorT }}, TScalar>(left, right);
+public static {{ VectorT }} operator ~({{ VectorT }} value) => SpeedHelpers2.BitwiseNot<{{ VectorT }}, TScalar>(value);
+
+// public static bool operator ==({{ VectorT }} left, {{ VectorT }} right) => left.Equals(right);
+// public static bool operator !=({{ VectorT }} left, {{ VectorT }} right) => !(left == right);
+
+public override string ToString() => ToString("G", null);
+public string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format) => ToString(format, null);
+
+public string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format, IFormatProvider? formatProvider)
+{
+    var separator = NumberFormatInfo.GetInstance(formatProvider).NumberGroupSeparator;
+
+    Span<char> initialBuffer = stackalloc char[Math.Min((2 + (Count - 1) + (separator.Length * (Count - 1)) + (Count * 2)), 256)];
+
+    // We can't use an interpolated string here because it won't allow us to pass `format`
+    var handler = new DefaultInterpolatedStringHandler(
+        4 + (separator.Length * 2),
+        ElementCount,
+        formatProvider,
+        initialBuffer
+    );
+
+    handler.AppendLiteral("<");
+    {{~ for x in 0..<element_count ~}}
+    handler.AppendFormatted({{ xyzw[x] }}, format);
+        {{~ if !for.last ~}}
+    handler.AppendLiteral(separator);
+    handler.AppendLiteral(" ");
+        {{~ end ~}}
+    {{~ end ~}}
+    handler.AppendLiteral(">");
+
+    return handler.ToStringAndClear();
+}
+
+public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+{
+    // Possible fast path for failure case:
+    // if (destination.Length < 4) return false;
+
+    var separator = NumberFormatInfo.GetInstance(provider).NumberGroupSeparator;
+
+    // We can't use an interpolated string here because it won't allow us to pass `format`
+    var handler = new MemoryExtensions.TryWriteInterpolatedStringHandler(
+        4 + (separator.Length * 2),
+        ElementCount,
+        destination,
+        provider,
+        out var shouldAppend
+    );
+    if (!shouldAppend)
+    {
+        charsWritten = 0;
+        return false;
+    }
+
+    // Annoyingly we need to turn the span into a string for the string handler
+    string? formatString = format.Length > 0 ? new string(format) : null;
+
+    _ =
+        handler.AppendLiteral("<") &&
+        {{~ for x in 0..<element_count ~}}
+        handler.AppendFormatted({{ xyzw[x] }}, formatString) &&
+            {{~ if !for.last ~}}
+        handler.AppendLiteral(separator) &&
+        handler.AppendLiteral(" ") &&
+            {{~ end ~}}
+        {{~ end ~}}
+        handler.AppendLiteral(">");
+
+    return destination.TryWrite(ref handler, out charsWritten);
+}
+
+public bool TryFormat(Span<byte> utf8Destination, out int bytesWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+{
+    // Possible fast path for failure case:
+    // if (destination.Length < 4) return false;
+
+    var separator = NumberFormatInfo.GetInstance(provider).NumberGroupSeparator;
+
+    // We can't use an interpolated string here because it won't allow us to pass `format`
+    var handler = new Utf8.TryWriteInterpolatedStringHandler(
+        4 + (separator.Length * 2),
+        Count,
+        utf8Destination,
+        provider,
+        out var shouldAppend
+    );
+    if (!shouldAppend)
+    {
+        bytesWritten = 0;
+        return false;
+    }
+
+    // Annoyingly we need to turn the span into a string for the string handler
+    string? formatString = format.Length > 0 ? new string(format) : null;
+
+    // JIT will automagically convert literals to utf8
+    _ =
+        handler.AppendLiteral("<") &&
+        {{~ for x in 0..<element_count ~}}
+        handler.AppendFormatted({{ xyzw[x] }}, formatString) &&
+            {{~ if x < dimensionIndex ~}}
+        handler.AppendLiteral(separator) &&
+        handler.AppendLiteral(" ") &&
+            {{~ end ~}}
+        {{~ end ~}}
+        handler.AppendLiteral(">");
+
+    return Utf8.TryWrite(utf8Destination, ref handler, out bytesWritten);
+}
+
+public static {{ VectorT }} Parse(string s, IFormatProvider? provider)
+    => Parse(s.AsSpan(), provider);
+
+public static {{ VectorT }} Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
+    => TryParse(s, provider, out var result) ? result : throw new ArgumentException($"Failed to parse {nameof({{ Vector }})}<{typeof(TScalar)}>");
+
+public static {{ VectorT }} Parse(ReadOnlySpan<byte> utf8Text, IFormatProvider? provider)
+    => TryParse(utf8Text, provider, out var result) ? result : throw new ArgumentException($"Failed to parse {nameof({{ Vector }})}<{typeof(TScalar)}>");
+
+public static bool TryParse(string? s, IFormatProvider? provider, out {{ VectorT }} result)
+    => TryParse(s.AsSpan(), provider, out result);
+
+public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out {{ VectorT }} result)
+{
+    result = default;
+
+    if (s[0] != '<') return false;
+    if (s[^1] != '>') return false;
+
+    var separator = NumberFormatInfo.GetInstance(provider).NumberGroupSeparator;
+
+    s = s[1..^1];
+
+    TScalar? {{ xyzw | array.limit element_count | array.join ', ' | string.downcase }};
+
+    {{~ for x in 0..<dimensionIndex ~}}
+    {
+        if (s.Length == 0) return false;
+
+        var nextNumber = s.IndexOf(separator);
+        if (nextNumber == -1)
+        {
+            return false;
+        }
+
+        if (!TScalar.TryParse(s[..nextNumber], style, provider, out {{ xyzw[x] | string.downcase }})) return false;
+
+        s = s[(nextNumber + separator.Length)..];
+    }
+    {{~ end ~}}
+
+    {
+        if (s.Length == 0) return false;
+
+        if (!TScalar.TryParse(s, style, provider, out {{ xyzw[dimensionIndex] | string.downcase }})) return false;
+    }
+
+    result = new {{VectorT}}({{ wrap forEachDimension ', ' newline:false; cl; end }});
+    return true;
+}
+
+public static bool TryParse(ReadOnlySpan<byte> s, IFormatProvider? provider, out {{ VectorT }} result)
+{
+    var separator = NumberFormatInfo.GetInstance(provider).NumberGroupSeparator;
+
+    Span<byte> separatorSpan = stackalloc byte[Encoding.UTF8.GetByteCount(separator)];
+    if (Utf8.FromUtf16(separator, separatorSpan, out var charsRead, out var bytesWritten, isFinalBlock: true) != OperationStatus.Done)
+    {
+        result = default;
+        return false;
+    }
+
+    result = default;
+
+    if (s[0] != (byte)'<') return false;
+    if (s[^1] != (byte)'>') return false;
+
+    s = s[1..^1];
+
+    TScalar? {{ xyzw | array.limit element_count | array.join ', ' | string.downcase }};
+
+    {{~ for x in 0..<(element_count - 1) ~}}
+    {
+        if (s.Length == 0) return false;
+
+        var nextNumber = s.IndexOf(separatorSpan);
+        if (nextNumber == -1)
+        {
+            return false;
+        }
+
+        if (!TScalar.TryParse(s[..nextNumber], provider, out {{ xyzw[x] | string.downcase }})) return false;
+
+        s = s[(nextNumber + separatorSpan.Length)..];
+    }
+    {{~ end ~}}
+
+    {
+        if (s.Length == 0) return false;
+
+        if (!TScalar.TryParse(s, provider, out {{ xyzw[element_count-1] | string.downcase }})) return false;
+    }
+
+    result = new {{VectorT}}({{ xyzw | array.limit element_count | array.join ', ' | string.downcase }});
+    return true;
+}
+
+public ReadOnlySpan<TScalar>.Enumerator GetEnumerator() => this.AsSpan().GetEnumerator();
+IEnumerator<TScalar> IEnumerable<TScalar>.GetEnumerator()
+{
+    {{ wrap forEachDimension; $"yield return {c};"; end }}
+}
+IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<TScalar>)this).GetEnumerator();
+
+public bool Equals({{ VectorT }} other) => SpeedHelpers2.Equal<{{ VectorT }}, TScalar>(this, other);
+
+static {{ VectorT }} IVectorInternal<{{ VectorT }}, TScalar>.CreateInternal(TScalar x, TScalar y, TScalar z, TScalar w, TScalar v) => new({{ wrap forEachDimension ', ' newline:false; cl; end }});
+
+public override int GetHashCode() => HashCode.Combine({{ wrap forEachDimension ', ' newline:false; c; end }});
+
+TScalar IVector<{{ VectorT }}, TScalar>.LengthSquared() => {{ Vector }}.LengthSquared(this);
+{{ VectorT }} IVectorEquatable<{{ VectorT }}, TScalar>.ScalarsEqual({{ VectorT }} other) => SpeedHelpers2.EqualIntoVector<{{ VectorT }}, TScalar>(this, other);
+
+static ReadOnlySpan<TScalar> IVector<{{ VectorT }}, TScalar>.AsSpan({{ VectorT }} vec) => vec.AsSpan();
+static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.GetUnitVector(uint dimension) => dimension switch
+{
+    {{ wrap forEachDimension ','; $"{x} => Unit{c}"; end }}
+    _ => throw new ArgumentOutOfRangeException(nameof(dimension), dimension, "dimension must be >= 0, <= {{dimension_index}}")
+};
+static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.Clamp({{ VectorT }} value1, {{ VectorT }} min, {{ VectorT }} max) => {{ Vector }}.Clamp(value1, min, max);
+static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.Max({{ VectorT }} value1, {{ VectorT }} value2) => {{ Vector }}.Max(value1, value2);
+static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.Min({{ VectorT }} value1, {{ VectorT }} value2) => {{ Vector }}.Min(value1, value2);
+static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.Abs({{ VectorT }} value) => {{ Vector }}.Abs(value);
+static TScalar IVector<{{ VectorT }}, TScalar>.DistanceSquared({{ VectorT }} value1, {{ VectorT }} value2) => {{ Vector }}.DistanceSquared(value1, value2);
+static TScalar IVector<{{ VectorT }}, TScalar>.Dot({{ VectorT }} vector1, {{ VectorT }} vector2) => {{ Vector }}.Dot(vector1, vector2);
+
+static void IVector<{{ VectorT }}, TScalar>.CopyTo({{ VectorT }} vector, TScalar[] array) => vector.CopyTo(array);
+static void IVector<{{ VectorT }}, TScalar>.CopyTo({{ VectorT }} vector, TScalar[] array, int index) => vector.CopyTo(array, index);
+static void IVector<{{ VectorT }}, TScalar>.CopyTo({{ VectorT }} vector, Span<TScalar> destination) => vector.CopyTo(destination);
+static bool IVector<{{ VectorT }}, TScalar>.TryCopyTo({{ VectorT }} vector, Span<TScalar> destination) => vector.TryCopyTo(destination);
+
+static bool IVector<{{ VectorT }}, TScalar>.TryConvertFromChecked<TOther, TOtherScalar>(TOther value, out {{ VectorT }} result)
+{
+    if (TOther.Count < ElementCount)
+    {
+        result = default;
+        return false;
+    }
+
+    // For Silk.NET.Maths-provided vectors, where the scalars are the exact same type, and the size is at least as
+    // large as the vector type being converted to, we can safely do a bitcast.
+    if (value is IVectorInternal && typeof(TScalar) == typeof(TOtherScalar))
+    {
+        result = Unsafe.As<TOther, {{ VectorT }}>(ref value);
+        return true;
+    }
+
+    if (
+        {{ wrap forEachDimension ' ||'; $"!ShamelessExploit.TryConvertChecked<TOtherScalar, TScalar>(value[{{x}}], out var {{cl}})"; end }}
+    )
+    {
+        result = default;
+        return false;
+    }
+
+    result = new {{ VectorT }}({{ wrap forEachDimension ', ' newline:false; cl; end }});
+    return true;
+}
+static bool IVector<{{ VectorT }}, TScalar>.TryConvertFromSaturating<TOther, TOtherScalar>(TOther value, out {{ VectorT }} result)
+{
+    if (TOther.Count < ElementCount)
+    {
+        result = default;
+        return false;
+    }
+
+    // For Silk.NET.Maths-provided vectors, where the scalars are the exact same type, and the size is at least as
+    // large as the vector type being converted to, we can safely do a bitcast.
+    if (value is IVectorInternal && typeof(TScalar) == typeof(TOtherScalar))
+    {
+        result = Unsafe.As<TOther, {{ VectorT }}>(ref value);
+        return true;
+    }
+
+    if (
+        {{ wrap forEachDimension ' ||'; $"!ShamelessExploit.TryConvertSaturating<TOtherScalar, TScalar>(value[{{x}}], out var {{cl}})"; end }}
+    )
+    {
+        result = default;
+        return false;
+    }
+
+    result = new {{ VectorT }}({{ wrap forEachDimension ', ' newline:false; cl; end }});
+    return true;
+}
+static bool IVector<{{ VectorT }}, TScalar>.TryConvertFromTruncating<TOther, TOtherScalar>(TOther value, out {{ VectorT }} result)
+{
+    if (TOther.Count < ElementCount)
+    {
+        result = default;
+        return false;
+    }
+
+    // For Silk.NET.Maths-provided vectors, where the scalars are the exact same type, and the size is at least as
+    // large as the vector type being converted to, we can safely do a bitcast.
+    if (value is IVectorInternal && typeof(TScalar) == typeof(TOtherScalar))
+    {
+        result = Unsafe.As<TOther, {{ VectorT }}>(ref value);
+        return true;
+    }
+
+    if (
+        {{ wrap forEachDimension ' ||'; $"!ShamelessExploit.TryConvertTruncating<TOtherScalar, TScalar>(value[{{x}}], out var {{cl}})"; end }}
+    )
+    {
+        result = default;
+        return false;
+    }
+
+    result = new {{ VectorT }}({{ wrap forEachDimension ', ' newline:false; cl; end }});
+    return true;
+}
+static bool IVector<{{ VectorT }}, TScalar>.TryConvertToChecked<TOther, TOtherScalar>({{ VectorT }} value, [MaybeNullWhen(false)] out TOther result)
+{
+    if (
+        {{ wrap forEachDimension ' ||'; $"!ShamelessExploit.TryConvertoChecked<TScalar, TOtherScalar>(value.{{c}}, out var {{cl}})"; end }}
+    )
+    {
+        result = default;
+        return false;
+    }
+
+    result = new {{ VectorT }}({{ wrap forEachDimension ', ' newline:false; cl; end }});
+    return true;
+}
+static bool IVector<{{ VectorT }}, TScalar>.TryConvertToSaturating<TOther, TOtherScalar>({{ VectorT }} value, [MaybeNullWhen(false)] out TOther result)
+{
+    if (
+        {{ wrap forEachDimension ' ||'; $"!ShamelessExploit.TryConvertSaturating<TScalar, TOtherScalar>(value.{{c}}, out var {{cl}})"; end }}
+    )
+    {
+        result = default;
+        return false;
+    }
+
+    result = new {{ VectorT }}({{ wrap forEachDimension ', ' newline:false; cl; end }});
+    return true;
+}
+static bool IVector<{{ VectorT }}, TScalar>.TryConvertToTruncating<TOther, TOtherScalar>({{ VectorT }} value, [MaybeNullWhen(false)] out TOther result)
+{
+    if (
+        {{ wrap forEachDimension ' ||'; $"!ShamelessExploit.TryConvertTruncating<TScalar, TOtherScalar>(value.{{c}}, out var {{cl}})"; end }}
+    )
+    {
+        result = default;
+        return false;
+    }
+
+    result = new {{ VectorT }}({{ wrap forEachDimension ', ' newline:false; cl; end }});
+    return true;
+}
+
+static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.Create(TScalar scalar) => new(scalar);
+static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.Create(ReadOnlySpan<TScalar> values) => new(values);
+static {{ VectorT }} IVector{{element_count}}<{{ VectorT }}, TScalar>.Create({{ wrap forEachDimension ', ' newline:false; $"TScalar {cl}"; end }}) => new({{ wrap forEachDimension ', ' newline:false; cl; end }});

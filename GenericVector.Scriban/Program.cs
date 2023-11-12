@@ -63,30 +63,30 @@ using Scriban.Parsing;
 using Scriban.Runtime;
 using Scriban.Syntax;
 
-{
-    unsafe
-    {
-        string s = "fooobar";
-
-        // [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_firstChar")]
-        // static extern ref char GetFirstChar(string s);
-        // ref char _firstChar = ref GetFirstChar(s);
-
-        var span = s.AsSpan();
-        ref readonly char c = ref span.GetPinnableReference();
-        ref char _firstChar = ref Unsafe.AsRef<char>(in c);
-
-        var s1 = Unsafe.AsPointer(ref Unsafe.SubtractByteOffset(ref _firstChar, 
-            + sizeof(nint) // void* methodTable
-            + sizeof(int) // DWORD m_StringLength
-        ));
-        
-        string a = (string)s1;
-
-        var a = *(string*)(&s1);
-        Console.WriteLine(a);
-    }
-}
+// {
+//     unsafe
+//     {
+//         string s = "fooobar";
+//
+//         // [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_firstChar")]
+//         // static extern ref char GetFirstChar(string s);
+//         // ref char _firstChar = ref GetFirstChar(s);
+//
+//         var span = s.AsSpan();
+//         ref readonly char c = ref span.GetPinnableReference();
+//         ref char _firstChar = ref Unsafe.AsRef<char>(in c);
+//
+//         var s1 = Unsafe.AsPointer(ref Unsafe.SubtractByteOffset(ref _firstChar, 
+//             + sizeof(nint) // void* methodTable
+//             + sizeof(int) // DWORD m_StringLength
+//         ));
+//         
+//         string a = (string)s1;
+//
+//         var a = *(string*)(&s1);
+//         Console.WriteLine(a);
+//     }
+// }
 
 const int vectorMin = 2;
 const int vectorMax = 5;
