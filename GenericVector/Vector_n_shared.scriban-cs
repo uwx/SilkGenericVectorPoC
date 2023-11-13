@@ -34,12 +34,12 @@ public static {{ VectorT }} Unit{{ xyzw[x] }} => new({{v2}});
 
 /// <summary>Gets a vector whose {{element_count}} elements are equal to zero.</summary>
 /// <value>A vector whose {{ AmountName }} elements are equal to zero (that is, it returns the vector <c>({{ ['0'] * element_count | array.join ',' }})</c>.</value>
-public static {{ VectorT }} Zero => new(T.Zero);
+public static {{ VectorT }} Zero => new(TScalar.Zero);
 
 /// <summary>Gets a vector whose {{element_count}} elements are equal to one.</summary>
-/// <value>Returns <see cref="{{ DocName }}" />.</value>
+/// <value>Returns <see cref="{{ VectorXml }}" />.</value>
 /// <remarks>A vector whose {{ AmountName }} elements are equal to one (that is, it returns the vector <c>({{ ['1'] * element_count | array.join ',' }})</c>.</remarks>
-public static {{ VectorT }} One => new(T.One);
+public static {{ VectorT }} One => new(TScalar.One);
 
 {{~ # constructors ~}}
 
@@ -48,7 +48,7 @@ public static {{ VectorT }} One => new(T.One);
 {{~ for x in xyzw | slice 0 element_count ~}}
 /// <param name="{{ x | string.downcase }}">The value to assign to the <see cref="{{ x }}" /> field.</param>
 {{~ end ~}}
-public {{ Vector }}({{ wrap forEachDimension ', ' newline:false; $"TScalar {c}"; end }})
+public {{ Vector }}({{ wrap forEachDimension ', ' newline:false; $"TScalar {cl}"; end }})
 {
     Unsafe.SkipInit(out this);
 
@@ -79,13 +79,13 @@ public {{ Vector }}(ReadOnlySpan<TScalar> values)
 {{~ # smaller vector + extra components; super convoluted ~}}
 
 {{~ for smallerVecN in min_dimensions..<element_count ~}}
-/// <summary>Creates a new <see cref="{{ VectorXml }}" /> object from the specified <see cref="Vector{{element_count}}i{TScalar}" /> object {{ xyzw | array.offset dimensions2 | array.join ' and a ' }} component.</summary>
-/// <param name="value">The vector to use for the {{ xyzw | array.limit dimensions2 | humanize_and }} components.</param>
+/// <summary>Creates a new <see cref="{{ VectorXml }}" /> object from the specified <see cref="Vector{{element_count}}i{TScalar}" /> object {{ xyzw | array.offset smallerVecN | array.join ' and a ' }} component.</summary>
+/// <param name="value">The vector to use for the {{ xyzw | array.limit smallerVecN | humanize_and }} components.</param>
     {{~ for x in xyzw | slice smallerVecN element_count ~}}
 /// <param name="{{ x | string.downcase }}">The {{ x }} component.</param>
     {{~ end ~}}
-public {{ Vector }}(Vector{{smallerVecN}}D<T> value, {{ parameters | slice smallerVecN element_count | array.join ", " }}) : this(
-    {{- xyzwFormat "value." | slice 0 smallerVecN | array.concat (xyzw | slice smallerVecN element_count | array.each @string.downcase) | array.join ', ' -}}
+public {{ Vector }}(Vector{{smallerVecN}}D<TScalar> value, {{ parameters | slice smallerVecN element_count | array.join ", " }}) : this(
+    {{- (xyzwFormat "value." | slice 0 smallerVecN | array.join ', ') + (xyzw | slice smallerVecN element_count | array.each @string.downcase | array.join ', ') -}}
 )
 {
 }
@@ -114,14 +114,14 @@ public static {{ VectorT }} operator ~({{ VectorT }} value) => SpeedHelpers2.Bit
 // public static bool operator ==({{ VectorT }} left, {{ VectorT }} right) => left.Equals(right);
 // public static bool operator !=({{ VectorT }} left, {{ VectorT }} right) => !(left == right);
 
-public override string ToString() => ToString("G", null);
-public string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format) => ToString(format, null);
+[MethodImpl(MethodImplOptions.AggressiveInlining)] public override string ToString() => ToString("G", null);
+[MethodImpl(MethodImplOptions.AggressiveInlining)] public string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format) => ToString(format, null);
 
 public string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format, IFormatProvider? formatProvider)
 {
     var separator = NumberFormatInfo.GetInstance(formatProvider).NumberGroupSeparator;
 
-    Span<char> initialBuffer = stackalloc char[Math.Min((2 + (Count - 1) + (separator.Length * (Count - 1)) + (Count * 2)), 256)];
+    Span<char> initialBuffer = stackalloc char[Math.Min((2 + (ElementCount - 1) + (separator.Length * (ElementCount - 1)) + (ElementCount * 2)), 256)];
 
     // We can't use an interpolated string here because it won't allow us to pass `format`
     var handler = new DefaultInterpolatedStringHandler(
@@ -192,7 +192,7 @@ public bool TryFormat(Span<byte> utf8Destination, out int bytesWritten, ReadOnly
     // We can't use an interpolated string here because it won't allow us to pass `format`
     var handler = new Utf8.TryWriteInterpolatedStringHandler(
         4 + (separator.Length * 2),
-        Count,
+        ElementCount,
         utf8Destination,
         provider,
         out var shouldAppend
@@ -211,7 +211,7 @@ public bool TryFormat(Span<byte> utf8Destination, out int bytesWritten, ReadOnly
         handler.AppendLiteral("<") &&
         {{~ for x in 0..<element_count ~}}
         handler.AppendFormatted({{ xyzw[x] }}, formatString) &&
-            {{~ if x < dimensionIndex ~}}
+            {{~ if x < dimension_idx ~}}
         handler.AppendLiteral(separator) &&
         handler.AppendLiteral(" ") &&
             {{~ end ~}}
@@ -221,15 +221,19 @@ public bool TryFormat(Span<byte> utf8Destination, out int bytesWritten, ReadOnly
     return Utf8.TryWrite(utf8Destination, ref handler, out bytesWritten);
 }
 
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
 public static {{ VectorT }} Parse(string s, IFormatProvider? provider)
     => Parse(s.AsSpan(), provider);
 
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
 public static {{ VectorT }} Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
     => TryParse(s, provider, out var result) ? result : throw new ArgumentException($"Failed to parse {nameof({{ Vector }})}<{typeof(TScalar)}>");
 
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
 public static {{ VectorT }} Parse(ReadOnlySpan<byte> utf8Text, IFormatProvider? provider)
     => TryParse(utf8Text, provider, out var result) ? result : throw new ArgumentException($"Failed to parse {nameof({{ Vector }})}<{typeof(TScalar)}>");
 
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
 public static bool TryParse(string? s, IFormatProvider? provider, out {{ VectorT }} result)
     => TryParse(s.AsSpan(), provider, out result);
 
@@ -246,7 +250,7 @@ public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out
 
     TScalar? {{ xyzw | array.limit element_count | array.join ', ' | string.downcase }};
 
-    {{~ for x in 0..<dimensionIndex ~}}
+    {{~ for x in 0..<dimension_idx ~}}
     {
         if (s.Length == 0) return false;
 
@@ -256,7 +260,7 @@ public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out
             return false;
         }
 
-        if (!TScalar.TryParse(s[..nextNumber], style, provider, out {{ xyzw[x] | string.downcase }})) return false;
+        if (!TScalar.TryParse(s[..nextNumber],  provider, out {{ xyzw[x] | string.downcase }})) return false;
 
         s = s[(nextNumber + separator.Length)..];
     }
@@ -265,7 +269,7 @@ public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out
     {
         if (s.Length == 0) return false;
 
-        if (!TScalar.TryParse(s, style, provider, out {{ xyzw[dimensionIndex] | string.downcase }})) return false;
+        if (!TScalar.TryParse(s, provider, out {{ xyzw[dimension_idx] | string.downcase }})) return false;
     }
 
     result = new {{VectorT}}({{ wrap forEachDimension ', ' newline:false; cl; end }});
@@ -318,39 +322,39 @@ public static bool TryParse(ReadOnlySpan<byte> s, IFormatProvider? provider, out
     return true;
 }
 
-public ReadOnlySpan<TScalar>.Enumerator GetEnumerator() => this.AsSpan().GetEnumerator();
+[MethodImpl(MethodImplOptions.AggressiveInlining)] public ReadOnlySpan<TScalar>.Enumerator GetEnumerator() => this.AsSpan().GetEnumerator();
 IEnumerator<TScalar> IEnumerable<TScalar>.GetEnumerator()
 {
     {{ wrap forEachDimension; $"yield return {c};"; end }}
 }
-IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<TScalar>)this).GetEnumerator();
+[MethodImpl(MethodImplOptions.AggressiveInlining)] IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<TScalar>)this).GetEnumerator();
 
 public bool Equals({{ VectorT }} other) => SpeedHelpers2.Equal<{{ VectorT }}, TScalar>(this, other);
 
-static {{ VectorT }} IVectorInternal<{{ VectorT }}, TScalar>.CreateInternal(TScalar x, TScalar y, TScalar z, TScalar w, TScalar v) => new({{ wrap forEachDimension ', ' newline:false; cl; end }});
+[MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IVectorInternal<{{ VectorT }}, TScalar>.CreateInternal(TScalar x, TScalar y, TScalar z, TScalar w, TScalar v) => new({{ wrap forEachDimension ', ' newline:false; cl; end }});
 
-public override int GetHashCode() => HashCode.Combine({{ wrap forEachDimension ', ' newline:false; c; end }});
+[MethodImpl(MethodImplOptions.AggressiveInlining)] public override int GetHashCode() => HashCode.Combine({{ wrap forEachDimension ', ' newline:false; c; end }});
 
-TScalar IVector<{{ VectorT }}, TScalar>.LengthSquared() => {{ Vector }}.LengthSquared(this);
-{{ VectorT }} IVectorEquatable<{{ VectorT }}, TScalar>.ScalarsEqual({{ VectorT }} other) => SpeedHelpers2.EqualIntoVector<{{ VectorT }}, TScalar>(this, other);
+[MethodImpl(MethodImplOptions.AggressiveInlining)] TScalar IVector<{{ VectorT }}, TScalar>.LengthSquared() => {{ Vector }}.LengthSquared(this);
+[MethodImpl(MethodImplOptions.AggressiveInlining)] {{ VectorT }} IVectorEquatable<{{ VectorT }}, TScalar>.ScalarsEqual({{ VectorT }} other) => SpeedHelpers2.EqualIntoVector<{{ VectorT }}, TScalar>(this, other);
 
-static ReadOnlySpan<TScalar> IVector<{{ VectorT }}, TScalar>.AsSpan({{ VectorT }} vec) => vec.AsSpan();
-static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.GetUnitVector(uint dimension) => dimension switch
+[MethodImpl(MethodImplOptions.AggressiveInlining)] static ReadOnlySpan<TScalar> IVector<{{ VectorT }}, TScalar>.AsSpan({{ VectorT }} vec) => vec.AsSpan();
+[MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.GetUnitVector(uint dimension) => dimension switch
 {
-    {{ wrap forEachDimension ','; $"{x} => Unit{c}"; end }}
-    _ => throw new ArgumentOutOfRangeException(nameof(dimension), dimension, "dimension must be >= 0, <= {{dimension_index}}")
+    {{ wrap forEachDimension ','; $"{x} => Unit{c}"; end }},
+    _ => throw new ArgumentOutOfRangeException(nameof(dimension), dimension, "dimension must be >= 0, <= {{dimension_idx}}")
 };
-static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.Clamp({{ VectorT }} value1, {{ VectorT }} min, {{ VectorT }} max) => {{ Vector }}.Clamp(value1, min, max);
-static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.Max({{ VectorT }} value1, {{ VectorT }} value2) => {{ Vector }}.Max(value1, value2);
-static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.Min({{ VectorT }} value1, {{ VectorT }} value2) => {{ Vector }}.Min(value1, value2);
-static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.Abs({{ VectorT }} value) => {{ Vector }}.Abs(value);
-static TScalar IVector<{{ VectorT }}, TScalar>.DistanceSquared({{ VectorT }} value1, {{ VectorT }} value2) => {{ Vector }}.DistanceSquared(value1, value2);
-static TScalar IVector<{{ VectorT }}, TScalar>.Dot({{ VectorT }} vector1, {{ VectorT }} vector2) => {{ Vector }}.Dot(vector1, vector2);
+[MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.Clamp({{ VectorT }} value1, {{ VectorT }} min, {{ VectorT }} max) => {{ Vector }}.Clamp(value1, min, max);
+[MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.Max({{ VectorT }} value1, {{ VectorT }} value2) => {{ Vector }}.Max(value1, value2);
+[MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.Min({{ VectorT }} value1, {{ VectorT }} value2) => {{ Vector }}.Min(value1, value2);
+[MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.Abs({{ VectorT }} value) => {{ Vector }}.Abs(value);
+[MethodImpl(MethodImplOptions.AggressiveInlining)] static TScalar IVector<{{ VectorT }}, TScalar>.DistanceSquared({{ VectorT }} value1, {{ VectorT }} value2) => {{ Vector }}.DistanceSquared(value1, value2);
+[MethodImpl(MethodImplOptions.AggressiveInlining)] static TScalar IVector<{{ VectorT }}, TScalar>.Dot({{ VectorT }} vector1, {{ VectorT }} vector2) => {{ Vector }}.Dot(vector1, vector2);
 
-static void IVector<{{ VectorT }}, TScalar>.CopyTo({{ VectorT }} vector, TScalar[] array) => vector.CopyTo(array);
-static void IVector<{{ VectorT }}, TScalar>.CopyTo({{ VectorT }} vector, TScalar[] array, int index) => vector.CopyTo(array, index);
-static void IVector<{{ VectorT }}, TScalar>.CopyTo({{ VectorT }} vector, Span<TScalar> destination) => vector.CopyTo(destination);
-static bool IVector<{{ VectorT }}, TScalar>.TryCopyTo({{ VectorT }} vector, Span<TScalar> destination) => vector.TryCopyTo(destination);
+[MethodImpl(MethodImplOptions.AggressiveInlining)] static void IVector<{{ VectorT }}, TScalar>.CopyTo({{ VectorT }} vector, TScalar[] array) => vector.CopyTo(array);
+[MethodImpl(MethodImplOptions.AggressiveInlining)] static void IVector<{{ VectorT }}, TScalar>.CopyTo({{ VectorT }} vector, TScalar[] array, int index) => vector.CopyTo(array, index);
+[MethodImpl(MethodImplOptions.AggressiveInlining)] static void IVector<{{ VectorT }}, TScalar>.CopyTo({{ VectorT }} vector, Span<TScalar> destination) => vector.CopyTo(destination);
+[MethodImpl(MethodImplOptions.AggressiveInlining)] static bool IVector<{{ VectorT }}, TScalar>.TryCopyTo({{ VectorT }} vector, Span<TScalar> destination) => vector.TryCopyTo(destination);
 
 static bool IVector<{{ VectorT }}, TScalar>.TryConvertFromChecked<TOther, TOtherScalar>(TOther value, out {{ VectorT }} result)
 {
@@ -369,7 +373,7 @@ static bool IVector<{{ VectorT }}, TScalar>.TryConvertFromChecked<TOther, TOther
     }
 
     if (
-        {{ wrap forEachDimension ' ||'; $"!ShamelessExploit.TryConvertChecked<TOtherScalar, TScalar>(value[{{x}}], out var {{cl}})"; end }}
+        {{ wrap forEachDimension ' ||'; $"!ShamelessExploit.TryConvertChecked<TOtherScalar, TScalar>(value[{x}], out var {cl})"; end }}
     )
     {
         result = default;
@@ -396,7 +400,7 @@ static bool IVector<{{ VectorT }}, TScalar>.TryConvertFromSaturating<TOther, TOt
     }
 
     if (
-        {{ wrap forEachDimension ' ||'; $"!ShamelessExploit.TryConvertSaturating<TOtherScalar, TScalar>(value[{{x}}], out var {{cl}})"; end }}
+        {{ wrap forEachDimension ' ||'; $"!ShamelessExploit.TryConvertSaturating<TOtherScalar, TScalar>(value[{x}], out var {cl})"; end }}
     )
     {
         result = default;
@@ -423,7 +427,7 @@ static bool IVector<{{ VectorT }}, TScalar>.TryConvertFromTruncating<TOther, TOt
     }
 
     if (
-        {{ wrap forEachDimension ' ||'; $"!ShamelessExploit.TryConvertTruncating<TOtherScalar, TScalar>(value[{{x}}], out var {{cl}})"; end }}
+        {{ wrap forEachDimension ' ||'; $"!ShamelessExploit.TryConvertTruncating<TOtherScalar, TScalar>(value[{x}], out var {cl})"; end }}
     )
     {
         result = default;
@@ -435,44 +439,56 @@ static bool IVector<{{ VectorT }}, TScalar>.TryConvertFromTruncating<TOther, TOt
 }
 static bool IVector<{{ VectorT }}, TScalar>.TryConvertToChecked<TOther, TOtherScalar>({{ VectorT }} value, [MaybeNullWhen(false)] out TOther result)
 {
-    if (
-        {{ wrap forEachDimension ' ||'; $"!ShamelessExploit.TryConvertoChecked<TScalar, TOtherScalar>(value.{{c}}, out var {{cl}})"; end }}
-    )
-    {
-        result = default;
-        return false;
-    }
+    // When stackalloc everything is implemented, uncomment the stuff below and use ReadOnlySpan constructor.
+    result = default;
+    return false;
 
-    result = new {{ VectorT }}({{ wrap forEachDimension ', ' newline:false; cl; end }});
-    return true;
+    //if (
+    //    {{ wrap forEachDimension ' ||'; $"!ShamelessExploit.TryConvertChecked<TScalar, TOtherScalar>(value.{c}, out var {cl})"; end }}
+    //)
+    //{
+    //    result = default;
+    //    return false;
+    //}
+    //
+    //result = new {{ Vector }}<TOtherScalar>({{ wrap forEachDimension ', ' newline:false; cl; end }});
+    //return true;
 }
 static bool IVector<{{ VectorT }}, TScalar>.TryConvertToSaturating<TOther, TOtherScalar>({{ VectorT }} value, [MaybeNullWhen(false)] out TOther result)
 {
-    if (
-        {{ wrap forEachDimension ' ||'; $"!ShamelessExploit.TryConvertSaturating<TScalar, TOtherScalar>(value.{{c}}, out var {{cl}})"; end }}
-    )
-    {
-        result = default;
-        return false;
-    }
+    // When stackalloc everything is implemented, uncomment the stuff below and use ReadOnlySpan constructor.
+    result = default;
+    return false;
 
-    result = new {{ VectorT }}({{ wrap forEachDimension ', ' newline:false; cl; end }});
-    return true;
+    //if (
+    //    {{ wrap forEachDimension ' ||'; $"!ShamelessExploit.TryConvertSaturating<TScalar, TOtherScalar>(value.{c}, out var {cl})"; end }}
+    //)
+    //{
+    //    result = default;
+    //    return false;
+    //}
+    //
+    //result = new {{ Vector }}<TOtherScalar>({{ wrap forEachDimension ', ' newline:false; cl; end }});
+    //return true;
 }
 static bool IVector<{{ VectorT }}, TScalar>.TryConvertToTruncating<TOther, TOtherScalar>({{ VectorT }} value, [MaybeNullWhen(false)] out TOther result)
 {
-    if (
-        {{ wrap forEachDimension ' ||'; $"!ShamelessExploit.TryConvertTruncating<TScalar, TOtherScalar>(value.{{c}}, out var {{cl}})"; end }}
-    )
-    {
-        result = default;
-        return false;
-    }
+    // When stackalloc everything is implemented, uncomment the stuff below and use ReadOnlySpan constructor.
+    result = default;
+    return false;
 
-    result = new {{ VectorT }}({{ wrap forEachDimension ', ' newline:false; cl; end }});
-    return true;
+    //if (
+    //    {{ wrap forEachDimension ' ||'; $"!ShamelessExploit.TryConvertTruncating<TScalar, TOtherScalar>(value.{c}, out var {cl})"; end }}
+    //)
+    //{
+    //    result = default;
+    //    return false;
+    //}
+    //
+    //result = new {{ Vector }}<TOtherScalar>({{ wrap forEachDimension ', ' newline:false; cl; end }});
+    //return true;
 }
 
-static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.Create(TScalar scalar) => new(scalar);
-static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.Create(ReadOnlySpan<TScalar> values) => new(values);
-static {{ VectorT }} IVector{{element_count}}<{{ VectorT }}, TScalar>.Create({{ wrap forEachDimension ', ' newline:false; $"TScalar {cl}"; end }}) => new({{ wrap forEachDimension ', ' newline:false; cl; end }});
+[MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.Create(TScalar scalar) => new(scalar);
+[MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IVector<{{ VectorT }}, TScalar>.Create(ReadOnlySpan<TScalar> values) => new(values);
+[MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IVector{{element_count}}<{{ VectorT }}, TScalar>.Create({{ wrap forEachDimension ', ' newline:false; $"TScalar {cl}"; end }}) => new({{ wrap forEachDimension ', ' newline:false; cl; end }});

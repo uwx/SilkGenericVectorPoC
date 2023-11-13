@@ -95,39 +95,47 @@ const int matrixRowMax = 5;
 const int matrixColMin = 1;
 const int matrixColMax = 4;
 
+const string projectDir = "../../../../GenericVector";
 {
-    var template = Template.Parse(File.ReadAllText("../../../../GenericVector/GenericVectors.scriban-cs"));
-    for (var i = vectorMin; i <= vectorMax; i++)
+    var templates = new Dictionary<string, (string name, bool isInt)>
     {
-        var obj = new ScriptObject();
-        obj.Import(new BuiltinFunctions());
-        obj.Import(
-            new
-            {
-                VecN = i,
-                MinDimensions = vectorMin,
-                MaxDimensions = vectorMax,
-                LoadFile = new LoadFileFunction()
-            },
-            renamer: StandardMemberRenamer.Default
-        );
-        obj.Import(typeof(ScribanHelpers));
-        var result = template.Render(
-            new TemplateContext(obj)
-            {
-                TemplateLoader = new MyIncludeFromDisk()
-            }
-        );
+        ["Vector_n_float.scriban-cs"] = ("Vector{0}F.gen.cs", false),
+        ["Vector_n_float_static.scriban-cs"] = ("Vector{0}F.Static.gen.cs", false),
+        ["Vector_n_int.scriban-cs"] = ("Vector{0}I.gen.cs", true),
+        ["Vector_n_int_static.scriban-cs"] = ("Vector{0}I.Static.gen.cs", true),
+    };
+    
+    foreach (var (templateName, (fileName, isInt)) in templates)
+    {
+        var templateF = Template.Parse(File.ReadAllText($"{projectDir}/{templateName}"));
+        for (var i = vectorMin; i <= vectorMax; i++)
+        {
+            var obj = new ScriptObject();
+            obj.Import(new BuiltinFunctions());
+            obj.Import(
+                new
+                {
+                    ElementCount = i,
+                    IsInt = isInt,
+                    MinDimensions = vectorMin,
+                    MaxDimensions = vectorMax,
+                    LoadFile = new LoadFileFunction()
+                },
+                renamer: StandardMemberRenamer.Default
+            );
+            obj.Import(typeof(ScribanHelpers));
+            var result = templateF.Render(new TemplateContext(obj) { TemplateLoader = new MyIncludeFromDisk() });
 
-        // Console.WriteLine(result);
-        File.WriteAllText($"../../../../GenericVector/Vector{i}.gen.cs", result!);
+            // Console.WriteLine(result);
+            File.WriteAllText($"{projectDir}/Vector/{fileName.FormatWith(i)}", result!);
+        }
     }
 }
 {
-    var template = Template.Parse(File.ReadAllText("../../../../GenericVector/SpeedHelpers2.scriban-cs"));
+    var template = Template.Parse(File.ReadAllText($"{projectDir}/SpeedHelpers2.scriban-cs"));
     var result = template.Render();
 
-    File.WriteAllText($"../../../../GenericVector/SpeedHelpers2.gen.cs", result!);
+    File.WriteAllText($"{projectDir}/SpeedHelpers2.gen.cs", result!);
 }
 
 public static class ScribanHelpers

@@ -15,6 +15,7 @@ using System.Text.Unicode;
 
 namespace GenericVector.Experimental;
 
+[Serializable, DataContract]
 public readonly partial record struct {{ VectorT }} :
     IVectorInternal<{{ VectorT }}, TScalar>,
     IBinaryIntegerVector<{{ VectorT }}, TScalar>,
@@ -25,6 +26,7 @@ public readonly partial record struct {{ VectorT }} :
 
     #region Int-specific code
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     static bool IBinaryIntegerVector<{{ VectorT }}, TScalar>.TryReadBigEndian(ReadOnlySpan<byte> source, bool isUnsigned, out {{ VectorT }} value)
     {
         {{~ for x in 0..<element_count ~}}
@@ -39,6 +41,8 @@ public readonly partial record struct {{ VectorT }} :
         value = default;
         return false;
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     static bool IBinaryIntegerVector<{{ VectorT }}, TScalar>.TryReadLittleEndian(ReadOnlySpan<byte> source, bool isUnsigned, out {{ VectorT }} value)
     {
         {{~ for x in 0..<element_count ~}}
@@ -52,6 +56,8 @@ public readonly partial record struct {{ VectorT }} :
         value = default;
         return false;
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     bool IBinaryIntegerVector<{{ VectorT }}, TScalar>.TryWriteBigEndian(Span<byte> destination, out int bytesWritten)
     {
         bytesWritten = 0;
@@ -70,6 +76,8 @@ public readonly partial record struct {{ VectorT }} :
         bytesWritten += b;
         return false;
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     bool IBinaryIntegerVector<{{ VectorT }}, TScalar>.TryWriteLittleEndian(Span<byte> destination, out int bytesWritten)
     {
         bytesWritten = 0;
@@ -89,11 +97,11 @@ public readonly partial record struct {{ VectorT }} :
         return false;
     }
 
-    static {{ VectorT }} INumberVector<{{ VectorT }}, TScalar>.CopySign({{ VectorT }} value, {{ VectorT }} sign) => {{ Vector }}.CopySign(value, sign);
-    static {{ VectorT }} INumberVector<{{ VectorT }}, TScalar>.CopySign({{ VectorT }} value, TScalar sign) => {{ Vector }}.CopySign(value, sign);
-    static {{ VectorT }} INumberVector<{{ VectorT }}, TScalar>.Sign({{ VectorT }} value) => {{ Vector }}.Sign(value);
-    static {{ VectorT }} IBinaryNumberVector<{{ VectorT }}, TScalar>.Log2({{ VectorT }} value) => {{ Vector }}.Log2(value);
-    static {{ VectorT }} IBinaryIntegerVector<{{ VectorT }}, TScalar>.PopCount({{ VectorT }} value) => {{ Vector }}.PopCount(value);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} INumberVector<{{ VectorT }}, TScalar>.CopySign({{ VectorT }} value, {{ VectorT }} sign) => {{ Vector }}.CopySign(value, sign);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} INumberVector<{{ VectorT }}, TScalar>.CopySign({{ VectorT }} value, TScalar sign) => {{ Vector }}.CopySign(value, sign);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} INumberVector<{{ VectorT }}, TScalar>.Sign({{ VectorT }} value) => {{ Vector }}.Sign(value);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IBinaryNumberVector<{{ VectorT }}, TScalar>.Log2({{ VectorT }} value) => {{ Vector }}.Log2(value);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IBinaryIntegerVector<{{ VectorT }}, TScalar>.PopCount({{ VectorT }} value) => {{ Vector }}.PopCount(value);
 
     #endregion
 }

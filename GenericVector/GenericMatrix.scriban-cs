@@ -29,7 +29,7 @@ namespace GenericVector;
             c = xyzw[x]
             cl = c | string.downcase
             for y in 0..<columns
-                column = y+1
+                col = y+1
                 $$
                 if !for.last && sep != null
                     sep
@@ -58,7 +58,7 @@ namespace GenericVector;
 
     func forEachColumn(sep = null, newline = true, endingNewline = false)
         for y in 0..<columns
-            column = y+1
+            col = y+1
             c = xyzw[y]
             cl = c | string.downcase
             $$

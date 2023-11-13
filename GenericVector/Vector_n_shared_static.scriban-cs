@@ -317,8 +317,8 @@ public static TScalar LengthSquared<TScalar>(this {{ VectorT }} vec) where TScal
 #endregion
 
 // INumber<TScalar>
-public static {{ VectorT }} CopySign<TScalar>({{ VectorT }} value, {{ VectorT }} sign) where TScalar : {{ ScalarConstraint }} => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.CopySign(value.{c}, sign.{c})"; end }});
-public static {{ VectorT }} CopySign<TScalar>({{ VectorT }} value, TScalar sign) where TScalar : {{ ScalarConstraint }} => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.CopySign(value.{c}, sign)"; end }});
-public static {{ VectorT }} MaxNumber<TScalar>({{ VectorT }} x, {{ VectorT }} y) where TScalar : {{ ScalarConstraint }} => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.MaxNumber(x.{c}, y.{c})"; end }});
-public static {{ VectorT }} MinNumber<TScalar>({{ VectorT }} x, {{ VectorT }} y) where TScalar : {{ ScalarConstraint }} => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.MinNumber(x.{c}, y.{c})"; end }});
-public static {{ VectorT }} Sign<TScalar>({{ VectorT }} value) where TScalar : {{ ScalarConstraint }} => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.CreateChecked(TScalar.Sign(value.{c}))"; end }});
+[MethodImpl(MethodImplOptions.AggressiveInlining)] public static {{ VectorT }} CopySign<TScalar>({{ VectorT }} value, {{ VectorT }} sign) where TScalar : {{ ScalarConstraint }} => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.CopySign(value.{c}, sign.{c})"; end }});
+[MethodImpl(MethodImplOptions.AggressiveInlining)] public static {{ VectorT }} CopySign<TScalar>({{ VectorT }} value, TScalar sign) where TScalar : {{ ScalarConstraint }} => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.CopySign(value.{c}, sign)"; end }});
+[MethodImpl(MethodImplOptions.AggressiveInlining)] public static {{ VectorT }} MaxNumber<TScalar>({{ VectorT }} x, {{ VectorT }} y) where TScalar : {{ ScalarConstraint }} => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.MaxNumber(x.{c}, y.{c})"; end }});
+[MethodImpl(MethodImplOptions.AggressiveInlining)] public static {{ VectorT }} MinNumber<TScalar>({{ VectorT }} x, {{ VectorT }} y) where TScalar : {{ ScalarConstraint }} => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.MinNumber(x.{c}, y.{c})"; end }});
+[MethodImpl(MethodImplOptions.AggressiveInlining)] public static {{ VectorT }} Sign<TScalar>({{ VectorT }} value) where TScalar : {{ ScalarConstraint }} => new({{ wrap forEachDimension ', ' newline:false; $"TScalar.CreateChecked(TScalar.Sign(value.{c}))"; end }});

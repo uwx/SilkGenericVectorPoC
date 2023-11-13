@@ -1,19 +1,27 @@
 {{
-    # inputs
-    # element_count = the number of components in the vector being generated
-    # min_dimensions = the minimum dimension of vector that will be generated at all in this or other vectors
-    # max_dimensions = the maximum dimension of vector that will be generated at all in this or other vectors
+    ## inputs
+    # rows
+    # cols
+    # min_rows
+    # max_rows
+    # min_cols
+    # max_cols
 
     # convenience for array indexing
-    dimension_idx = element_count - 1
+    row_idx = rows - 1
+    col_idx = cols - 1
 
     # max dimension between this and the System.Numerics supported ones
-    max_numeric_dimensions = min(max_dimensions, 4)
+    max_numeric_rows = min(max_rows, 4)
+    max_numeric_cols = min(max_cols, 4)
 
     # string helpers
-    Vector = $"Vector{element_count}" + (is_int ? 'I' : 'F')
-    VectorT = Vector + '<TScalar>'
-    VectorXml = Vector + '{TScalar}'
+    Matrix = $"Vector{rows}x{cols}{is_int ? 'I' : 'F'}"
+    MatrixT = Matrix + '<TScalar>'
+    MatrixXml = Matrix + '{TScalar}'
+
+    RowVecT = $"Vector{rows}{is_int ? 'I' : 'F'}<TScalar>"
+    ColVecT = $"Vector{columns}{is_int ? 'I' : 'F'}<TScalar>"
 
     xyzw = ["X", "Y", "Z", "W", "V"]
     xyzw_lower = xyzw | array.each @string.downcase
@@ -39,12 +47,44 @@
     end
 
     # use wrap
-    # local variables are c and cl
-    func forEachDimension(sep = null, newline = true, endingNewline = false, dimensionLimit = null, dimensionOffset = null)
-        dimensionLimit = (dimensionLimit ?? element_count) - 1
-        dimensionOffset = dimensionOffset ?? 0
-        for x in dimensionOffset..dimensionLimit
+    # local variables are c and cl and row and col
+    func forEachRowAndColumn(sep = null, newline = true, endingNewline = false)
+        for x in 0..<rows
+            row = x+1
             c = xyzw[x]
+            cl = c | string.downcase
+            for y in 0..<columns
+                col = y+1
+                $$
+                if !for.last && sep != null
+                    sep
+                end
+                if newline && (endingNewline || !for.last)
+                    '\n'
+                end
+            end
+        end
+    end
+
+    func forEachRow(sep = null, newline = true, endingNewline = false)
+        for x in 0..<rows
+            row = x+1
+            c = xyzw[x]
+            cl = c | string.downcase
+            $$
+            if !for.last && sep != null
+                sep
+            end
+            if newline && (endingNewline || !for.last)
+                '\n'
+            end
+        end
+    end
+
+    func forEachColumn(sep = null, newline = true, endingNewline = false)
+        for y in 0..<columns
+            col = y+1
+            c = xyzw[y]
             cl = c | string.downcase
             $$
             if !for.last && sep != null

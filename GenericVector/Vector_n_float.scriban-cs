@@ -15,82 +15,83 @@ using System.Text.Unicode;
 
 namespace GenericVector.Experimental;
 
+[Serializable, DataContract]
 public readonly partial record struct {{ VectorT }} :
     IVectorInternal<{{ VectorT }}, TScalar>,
-    IBinaryIntegerVector<{{ VectorT }}, TScalar>,
+    IFloatingPointVector<{{ VectorT }}, TScalar>,
     IVector{{ element_count }}<{{ VectorT }}, TScalar>
-    where TScalar : IBinaryInteger<TScalar>
+    where TScalar : IBinaryFloatingPointIeee754<TScalar>
 {
     {{ include 'Vector_n_shared.scriban-cs' }}
 
     #region Float-specific code
 
-    static {{ VectorT }} INumberVector<{{ VectorT }}, TScalar>.CopySign({{ VectorT }} value, {{ VectorT }} sign) => {{ Vector }}.CopySign(value, sign);
-    static {{ VectorT }} INumberVector<{{ VectorT }}, TScalar>.CopySign({{ VectorT }} value, TScalar sign) => {{ Vector }}.CopySign(value, sign);
-    static {{ VectorT }} INumberVector<{{ VectorT }}, TScalar>.Sign({{ VectorT }} value) => {{ Vector }}.Sign(value);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Normalize({{ VectorT }} value) => {{ Vector }}.Normalize(value);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Lerp({{ VectorT }} value1, {{ VectorT }} value2, {{ VectorT }} amount) => {{ Vector }}.Lerp(value1, value2, amount);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.LerpClamped({{ VectorT }} value1, {{ VectorT }} value2, {{ VectorT }} amount) => {{ Vector }}.LerpClamped(value1, value2, amount);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Reflect({{ VectorT }} vector, {{ VectorT }} normal) => {{ Vector }}.Reflect(vector, normal);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Sqrt({{ VectorT }} value) => {{ Vector }}.Sqrt(value);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Acosh({{ VectorT }} x) => {{ Vector }}.Acosh(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Asinh({{ VectorT }} x) => {{ Vector }}.Asinh(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Atanh({{ VectorT }} x) => {{ Vector }}.Atanh(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Cosh({{ VectorT }} x) => {{ Vector }}.Cosh(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Sinh({{ VectorT }} x) => {{ Vector }}.Sinh(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Tanh({{ VectorT }} x) => {{ Vector }}.Tanh(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Acos({{ VectorT }} x) => {{ Vector }}.Acos(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.AcosPi({{ VectorT }} x) => {{ Vector }}.AcosPi(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Asin({{ VectorT }} x) => {{ Vector }}.Asin(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.AsinPi({{ VectorT }} x) => {{ Vector }}.AsinPi(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Atan({{ VectorT }} x) => {{ Vector }}.Atan(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.AtanPi({{ VectorT }} x) => {{ Vector }}.AtanPi(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Cos({{ VectorT }} x) => {{ Vector }}.Cos(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.CosPi({{ VectorT }} x) => {{ Vector }}.CosPi(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.DegreesToRadians({{ VectorT }} degrees) => {{ Vector }}.DegreesToRadians(degrees);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.RadiansToDegrees({{ VectorT }} radians) => {{ Vector }}.RadiansToDegrees(radians);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Sin({{ VectorT }} x) => {{ Vector }}.Sin(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.SinPi({{ VectorT }} x) => {{ Vector }}.SinPi(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Tan({{ VectorT }} x) => {{ Vector }}.Tan(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.TanPi({{ VectorT }} x) => {{ Vector }}.TanPi(x);
-    static ({{ VectorT }} Sin, {{ VectorT }} Cos) IFloatingPointVector<{{ VectorT }}, TScalar>.SinCos({{ VectorT }} x) => {{ Vector }}.SinCos(x);
-    static ({{ VectorT }} SinPi, {{ VectorT }} CosPi) IFloatingPointVector<{{ VectorT }}, TScalar>.SinCosPi({{ VectorT }} x) => {{ Vector }}.SinCosPi(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Log({{ VectorT }} x) => {{ Vector }}.Log(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Log({{ VectorT }} x, {{ VectorT }} newBase) => {{ Vector }}.Log(x, newBase);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Log({{ VectorT }} x, TScalar newBase) => {{ Vector }}.Log(x, newBase);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.LogP1({{ VectorT }} x) => {{ Vector }}.LogP1(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Log2({{ VectorT }} x) => {{ Vector }}.Log2(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Log2P1({{ VectorT }} x) => {{ Vector }}.Log2P1(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Log10({{ VectorT }} x) => {{ Vector }}.Log10(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Log10P1({{ VectorT }} x) => {{ Vector }}.Log10P1(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Exp({{ VectorT }} x) => {{ Vector }}.Exp(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.ExpM1({{ VectorT }} x) => {{ Vector }}.ExpM1(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Exp2({{ VectorT }} x) => {{ Vector }}.Exp2(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Exp2M1({{ VectorT }} x) => {{ Vector }}.Exp2M1(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Exp10({{ VectorT }} x) => {{ Vector }}.Exp10(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Exp10M1({{ VectorT }} x) => {{ Vector }}.Exp10M1(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Pow({{ VectorT }} x, {{ VectorT }} y) => {{ Vector }}.Pow(x, y);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Pow({{ VectorT }} x, TScalar y) => {{ Vector }}.Pow(x, y);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Cbrt({{ VectorT }} x) =>
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Hypot({{ VectorT }} x, {{ VectorT }} y) => {{ Vector }}.Hypot(x, y);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Hypot({{ VectorT }} x, TScalar y) => {{ Vector }}.Hypot(x, y);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.RootN({{ VectorT }} x, int n) => {{ Vector }}.RootN(x, n);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Round({{ VectorT }} x) => {{ Vector }}.Round(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Round({{ VectorT }} x, int digits) => {{ Vector }}.Round(x, digits);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Round({{ VectorT }} x, MidpointRounding mode) => {{ Vector }}.Round(x, mode);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Round({{ VectorT }} x, int digits, MidpointRounding mode) => {{ Vector }}.Round(x, digits, mode);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Truncate({{ VectorT }} x) => {{ Vector }}.Truncate(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Atan2({{ VectorT }} x, {{ VectorT }} y) => {{ Vector }}.Atan2(x, y);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Atan2Pi({{ VectorT }} x, {{ VectorT }} y) => {{ Vector }}.Atan2Pi(x, y);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Atan2({{ VectorT }} x, TScalar y) => {{ Vector }}.Atan2(x, y);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Atan2Pi({{ VectorT }} x, TScalar y) => {{ Vector }}.Atan2Pi(x, y);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.BitDecrement({{ VectorT }} x) => {{ Vector }}.BitDecrement(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.BitIncrement({{ VectorT }} x) => {{ Vector }}.BitIncrement(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.FusedMultiplyAdd({{ VectorT }} left, {{ VectorT }} right, {{ VectorT }} addend) => {{ Vector }}.FusedMultiplyAdd(left, right, addend);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.ReciprocalEstimate({{ VectorT }} x) => {{ Vector }}.ReciprocalEstimate(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.ReciprocalSqrtEstimate({{ VectorT }} x) => {{ Vector }}.ReciprocalSqrtEstimate(x);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.ScaleB({{ VectorT }} x, Vector2D<int> n) => {{ Vector }}.ScaleB(x, n);
-    static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.ScaleB({{ VectorT }} x, int n) => {{ Vector }}.ScaleB(x, n);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} INumberVector<{{ VectorT }}, TScalar>.CopySign({{ VectorT }} value, {{ VectorT }} sign) => {{ Vector }}.CopySign(value, sign);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} INumberVector<{{ VectorT }}, TScalar>.CopySign({{ VectorT }} value, TScalar sign) => {{ Vector }}.CopySign(value, sign);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} INumberVector<{{ VectorT }}, TScalar>.Sign({{ VectorT }} value) => {{ Vector }}.Sign(value);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Normalize({{ VectorT }} value) => {{ Vector }}.Normalize(value);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Lerp({{ VectorT }} value1, {{ VectorT }} value2, {{ VectorT }} amount) => {{ Vector }}.Lerp(value1, value2, amount);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.LerpClamped({{ VectorT }} value1, {{ VectorT }} value2, {{ VectorT }} amount) => {{ Vector }}.LerpClamped(value1, value2, amount);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Reflect({{ VectorT }} vector, {{ VectorT }} normal) => {{ Vector }}.Reflect(vector, normal);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Sqrt({{ VectorT }} value) => {{ Vector }}.Sqrt(value);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Acosh({{ VectorT }} x) => {{ Vector }}.Acosh(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Asinh({{ VectorT }} x) => {{ Vector }}.Asinh(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Atanh({{ VectorT }} x) => {{ Vector }}.Atanh(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Cosh({{ VectorT }} x) => {{ Vector }}.Cosh(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Sinh({{ VectorT }} x) => {{ Vector }}.Sinh(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Tanh({{ VectorT }} x) => {{ Vector }}.Tanh(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Acos({{ VectorT }} x) => {{ Vector }}.Acos(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.AcosPi({{ VectorT }} x) => {{ Vector }}.AcosPi(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Asin({{ VectorT }} x) => {{ Vector }}.Asin(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.AsinPi({{ VectorT }} x) => {{ Vector }}.AsinPi(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Atan({{ VectorT }} x) => {{ Vector }}.Atan(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.AtanPi({{ VectorT }} x) => {{ Vector }}.AtanPi(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Cos({{ VectorT }} x) => {{ Vector }}.Cos(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.CosPi({{ VectorT }} x) => {{ Vector }}.CosPi(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.DegreesToRadians({{ VectorT }} degrees) => {{ Vector }}.DegreesToRadians(degrees);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.RadiansToDegrees({{ VectorT }} radians) => {{ Vector }}.RadiansToDegrees(radians);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Sin({{ VectorT }} x) => {{ Vector }}.Sin(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.SinPi({{ VectorT }} x) => {{ Vector }}.SinPi(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Tan({{ VectorT }} x) => {{ Vector }}.Tan(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.TanPi({{ VectorT }} x) => {{ Vector }}.TanPi(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static ({{ VectorT }} Sin, {{ VectorT }} Cos) IFloatingPointVector<{{ VectorT }}, TScalar>.SinCos({{ VectorT }} x) => {{ Vector }}.SinCos(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static ({{ VectorT }} SinPi, {{ VectorT }} CosPi) IFloatingPointVector<{{ VectorT }}, TScalar>.SinCosPi({{ VectorT }} x) => {{ Vector }}.SinCosPi(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Log({{ VectorT }} x) => {{ Vector }}.Log(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Log({{ VectorT }} x, {{ VectorT }} newBase) => {{ Vector }}.Log(x, newBase);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Log({{ VectorT }} x, TScalar newBase) => {{ Vector }}.Log(x, newBase);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.LogP1({{ VectorT }} x) => {{ Vector }}.LogP1(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Log2({{ VectorT }} x) => {{ Vector }}.Log2(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Log2P1({{ VectorT }} x) => {{ Vector }}.Log2P1(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Log10({{ VectorT }} x) => {{ Vector }}.Log10(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Log10P1({{ VectorT }} x) => {{ Vector }}.Log10P1(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Exp({{ VectorT }} x) => {{ Vector }}.Exp(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.ExpM1({{ VectorT }} x) => {{ Vector }}.ExpM1(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Exp2({{ VectorT }} x) => {{ Vector }}.Exp2(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Exp2M1({{ VectorT }} x) => {{ Vector }}.Exp2M1(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Exp10({{ VectorT }} x) => {{ Vector }}.Exp10(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Exp10M1({{ VectorT }} x) => {{ Vector }}.Exp10M1(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Pow({{ VectorT }} x, {{ VectorT }} y) => {{ Vector }}.Pow(x, y);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Pow({{ VectorT }} x, TScalar y) => {{ Vector }}.Pow(x, y);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Cbrt({{ VectorT }} x) => {{ Vector }}.Cbrt(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Hypot({{ VectorT }} x, {{ VectorT }} y) => {{ Vector }}.Hypot(x, y);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Hypot({{ VectorT }} x, TScalar y) => {{ Vector }}.Hypot(x, y);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.RootN({{ VectorT }} x, int n) => {{ Vector }}.RootN(x, n);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Round({{ VectorT }} x) => {{ Vector }}.Round(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Round({{ VectorT }} x, int digits) => {{ Vector }}.Round(x, digits);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Round({{ VectorT }} x, MidpointRounding mode) => {{ Vector }}.Round(x, mode);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Round({{ VectorT }} x, int digits, MidpointRounding mode) => {{ Vector }}.Round(x, digits, mode);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Truncate({{ VectorT }} x) => {{ Vector }}.Truncate(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Atan2({{ VectorT }} x, {{ VectorT }} y) => {{ Vector }}.Atan2(x, y);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Atan2Pi({{ VectorT }} x, {{ VectorT }} y) => {{ Vector }}.Atan2Pi(x, y);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Atan2({{ VectorT }} x, TScalar y) => {{ Vector }}.Atan2(x, y);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.Atan2Pi({{ VectorT }} x, TScalar y) => {{ Vector }}.Atan2Pi(x, y);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.BitDecrement({{ VectorT }} x) => {{ Vector }}.BitDecrement(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.BitIncrement({{ VectorT }} x) => {{ Vector }}.BitIncrement(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.FusedMultiplyAdd({{ VectorT }} left, {{ VectorT }} right, {{ VectorT }} addend) => {{ Vector }}.FusedMultiplyAdd(left, right, addend);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.ReciprocalEstimate({{ VectorT }} x) => {{ Vector }}.ReciprocalEstimate(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.ReciprocalSqrtEstimate({{ VectorT }} x) => {{ Vector }}.ReciprocalSqrtEstimate(x);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.ScaleB({{ VectorT }} x, Vector2D<int> n) => {{ Vector }}.ScaleB(x, n);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)] static {{ VectorT }} IFloatingPointVector<{{ VectorT }}, TScalar>.ScaleB({{ VectorT }} x, int n) => {{ Vector }}.ScaleB(x, n);
 
     #endregion
 }

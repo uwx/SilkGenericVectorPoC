@@ -1786,11 +1786,10 @@ public readonly struct Complex<T> :
         // We have at least 6 more characters for: <0; 0>
         if (destination.Length >= 6)
         {
-            int realChars;
             if (typeof(TChar) == typeof(char)
                     ? m_real.TryFormat(
                         MemoryMarshal.Cast<TChar, char>(destination.Slice(1)),
-                        out realChars,
+                        out var realChars,
                         format,
                         provider
                     )

@@ -36,13 +36,13 @@ public readonly partial struct {{VectorT}} : IVector<{{VectorT}}, T>, IVectorAls
     }
 
     {{~ for smallerVecN in min_dimensions..<element_count ~}}
-    /// <summary>Creates a new <see cref="{{ VectorXml }}" /> object from the specified <see cref="Vector{{element_count}}D{T}" /> object {{ xyzw | array.offset dimensions2 | array.join ' and a ' }} component.</summary>
-    /// <param name="value">The vector to use for the {{ xyzw | array.limit dimensions2 | humanize_and }} components.</param>
+    /// <summary>Creates a new <see cref="{{ VectorXml }}" /> object from the specified <see cref="Vector{{element_count}}D{T}" /> object {{ xyzw | array.offset smallerVecN | array.join ' and a ' }} component.</summary>
+    /// <param name="value">The vector to use for the {{ xyzw | array.limit smallerVecN | humanize_and }} components.</param>
         {{~ for x in xyzw | slice smallerVecN element_count ~}}
     /// <param name="{{ x | string.downcase }}">The {{ x }} component.</param>
         {{~ end ~}}
     public {{ Vector }}(Vector{{smallerVecN}}D<T> value, {{ Parameters | slice smallerVecN element_count | array.join ", " }}) : this(
-        {{- xyzwFormat "value." | slice 0 smallerVecN | array.concat (xyzw | slice smallerVecN element_count | array.each @string.downcase) | array.join ', ' -}}
+        {{- (xyzwFormat "value." | slice 0 smallerVecN | array.join ', ') + (xyzw | slice smallerVecN element_count | array.each @string.downcase | array.join ', ') -}}
     )
     {
     }
